@@ -38,6 +38,12 @@ ruff check .
 
 - 總是使用繁體中文回覆
 
+## Code Style
+
+- Python 使用 4 格縮排
+- 變數命名使用 snake_case（禁止單字母變數）
+- 所有函數必須有 docstring 說明，清楚定義其用途、所有參數、依賴關係、和預期回傳類型
+
 ## Important Notes
 
 - 法律內容必須準確且符合台灣最新勞動法規
