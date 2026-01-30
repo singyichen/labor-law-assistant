@@ -44,6 +44,9 @@ ruff check .
 - Python 使用 4 格縮排
 - 變數命名使用 snake_case（禁止單字母變數）
 - 所有函數必須有 docstring 說明，清楚定義其用途、所有參數、依賴關係、和預期回傳類型
+- 使用 pytest 而非 unittest
+- 函數必須有完整的 type hints
+- 優先使用 f-string 而非 format()
 
 ## Git Workflow
 
