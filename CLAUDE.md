@@ -34,6 +34,10 @@ ruff check .
 
 (To be documented as the project develops)
 
+## Communication
+
+- 總是使用繁體中文回覆
+
 ## Important Notes
 
 - 法律內容必須準確且符合台灣最新勞動法規
