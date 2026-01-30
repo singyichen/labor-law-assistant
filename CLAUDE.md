@@ -36,7 +36,8 @@ ruff check .
 
 ## Communication
 
-- 總是使用繁體中文回覆
+- 對話總是用繁體中文回覆、唯有專有技術名詞以英文呈現（例如 P-value）
+- 程式碼內容（包括 string）以及註解總是以英文撰寫
 
 ## Code Style
 
