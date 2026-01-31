@@ -17,11 +17,11 @@ This document provides a comprehensive overview of all available AI agents for t
 | Infrastructure | 5 | devops, sre, cloud-architect, network, release-manager |
 | Performance | 1 | performance |
 | Accessibility & i18n | 2 | accessibility, i18n |
-| Content & SEO | 3 | technical-writer, content-strategist, seo |
-| Analytics | 1 | analytics |
-| Leadership | 1 | tech-lead |
-| Domain Expert | 1 | legal-expert |
-| End User Support | 6 | customer-support, technical-support, user-advocate, user-researcher, user-support, onboarding-specialist |
+| Content & SEO | 3 | senior-technical-writer, senior-content-strategist, senior-seo |
+| Analytics | 1 | senior-analytics |
+| Leadership | 1 | senior-tech-lead |
+| Domain Expert | 1 | senior-legal-expert |
+| End User Support | 6 | senior-customer-support, senior-technical-support, user-advocate, user-researcher, user-support, senior-onboarding-specialist |
 | **Total** | **45** | |
 
 ---
@@ -49,7 +49,7 @@ This document provides a comprehensive overview of all available AI agents for t
 | `senior-security` | Security Engineer | Security & Compliance | OWASP, penetration testing, security architecture | Audit API endpoints for SQL injection vulnerabilities |
 | `senior-devops` | DevOps Engineer | Infrastructure | CI/CD, Docker, Kubernetes, Infrastructure as Code | Set up CI/CD pipeline for automated testing |
 | `senior-architect` | Software Architect | System Design | System architecture, technology selection, scalability | Design scalable architecture for legal consultation system |
-| `technical-writer` | Technical Writer | Content & SEO | API docs, user guides, README files | Write API documentation for legal query endpoints |
+| `senior-technical-writer` | Technical Writer | Content & SEO | API docs, user guides, README files | Write API documentation for legal query endpoints |
 | `senior-i18n` | i18n Specialist | Accessibility & i18n | Internationalization, localization, multi-language | Implement Traditional Chinese / English language switching |
 | `senior-accessibility` | Accessibility Specialist | Accessibility & i18n | WCAG compliance, screen readers, keyboard navigation | Ensure legal query form is screen reader accessible |
 | `senior-performance` | Performance Engineer | Performance | Load testing, bottleneck analysis, optimization | Optimize database queries for legal case search |
@@ -61,7 +61,7 @@ This document provides a comprehensive overview of all available AI agents for t
 | `senior-sd` | System Designer | System Design | System design, component design, interface design | Create component diagram for legal consultation module |
 | `user-researcher` | User Researcher | End User Support | User interviews, usability testing, behavior analysis | Conduct usability testing for wage calculator interface |
 | `user-advocate` | User Advocate | End User Support | User perspective, usability evaluation, UX advocacy | Evaluate if legal terminology is too complex for users |
-| `onboarding-specialist` | Onboarding Specialist | End User Support | User onboarding, tutorials, welcome sequences | Design tutorial for first-time users of the legal query system |
+| `senior-onboarding-specialist` | Onboarding Specialist | End User Support | User onboarding, tutorials, welcome sequences | Design tutorial for first-time users of the legal query system |
 | `senior-visual-designer` | Visual Designer | UI/UX Design | Visual systems, brand guidelines, typography, colors | Define color palette and typography for the application |
 | `senior-data-scientist` | Data Scientist | Data & AI | ML, statistics, predictive modeling, analysis | Analyze user query patterns to improve search relevance |
 | `senior-data-engineer` | Data Engineer | Data & AI | Data pipelines, ETL, data warehouses, Spark | Build ETL pipeline for importing legal regulation updates |
@@ -71,8 +71,8 @@ This document provides a comprehensive overview of all available AI agents for t
 | `senior-release-manager` | Release Manager | Infrastructure | Release planning, version control, change management | Plan v2.0 release with new overtime calculation features |
 | `senior-cloud-architect` | Cloud Architect | System Design | Cloud architecture, multi-cloud strategy, cost optimization | Design cloud infrastructure on AWS/GCP for scalability |
 | `senior-network` | Network Engineer | Infrastructure | Network architecture, load balancing, DNS | Configure load balancer for high traffic during tax season |
-| `customer-support` | Customer Support | End User Support | Issue handling, FAQ creation, support processes | Create FAQ for common labor law questions |
-| `technical-support` | Technical Support | End User Support | Technical troubleshooting, user guidance | Help user troubleshoot login issues |
+| `senior-customer-support` | Customer Support | End User Support | Issue handling, FAQ creation, support processes | Create FAQ for common labor law questions |
+| `senior-technical-support` | Technical Support | End User Support | Technical troubleshooting, user guidance | Help user troubleshoot login issues |
 | `senior-content-strategist` | Content Strategist | Content & SEO | Content planning, information architecture, editorial | Plan content structure for legal knowledge base |
 | `senior-seo` | SEO Specialist | Content & SEO | Search optimization, content strategy, technical SEO | Optimize site for search terms like "台灣加班費計算" |
 | `senior-analytics` | Analytics Specialist | Analytics | Product analytics, event tracking, dashboards | Track which legal topics users search for most |
@@ -321,7 +321,7 @@ Use senior-architect agent to evaluate PostgreSQL vs MongoDB for legal data stor
 
 ---
 
-#### `technical-writer` - Technical Writer
+#### `senior-technical-writer` - Technical Writer
 **使用時機：**
 - 撰寫 API 文件
 - 建立使用者操作手冊
@@ -331,8 +331,8 @@ Use senior-architect agent to evaluate PostgreSQL vs MongoDB for legal data stor
 
 **範例指令：**
 ```
-Use technical-writer agent to write API documentation for legal query endpoints
-Use technical-writer agent to create user guide for wage calculator
+Use senior-technical-writer agent to write API documentation for legal query endpoints
+Use senior-technical-writer agent to create user guide for wage calculator
 ```
 
 ---
@@ -608,8 +608,8 @@ Use senior-legal-expert agent to verify legal citations
 **Usage Examples:**
 ```
 Use user-researcher agent to design user interview
-Use customer-support agent to create FAQ content
-Use onboarding-specialist agent to design welcome flow
+Use senior-customer-support agent to create FAQ content
+Use senior-onboarding-specialist agent to design welcome flow
 Use user-support agent to answer labor law question
 ```
 
@@ -643,7 +643,7 @@ Use user-support agent to answer labor law question
 | Ensure accessibility | senior-accessibility |
 | Ensure compliance | senior-compliance |
 | Review legal content | senior-legal-expert |
-| Support users | customer-support, technical-support, user-support |
+| Support users | senior-customer-support, senior-technical-support, user-support |
 
 ### By Question Type
 
