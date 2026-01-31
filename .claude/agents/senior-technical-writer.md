@@ -1,5 +1,5 @@
 ---
-name: technical-writer
+name: senior-technical-writer
 description: Senior Technical Writer specialist. Use proactively for API documentation, user guides, README files, and technical specifications.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet

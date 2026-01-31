@@ -1,5 +1,5 @@
 ---
-name: onboarding-specialist
+name: senior-onboarding-specialist
 description: Onboarding Specialist. Use proactively for designing user onboarding flows, creating tutorials, welcome sequences, and new user guidance.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet

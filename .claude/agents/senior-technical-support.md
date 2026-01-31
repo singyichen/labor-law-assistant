@@ -1,5 +1,5 @@
 ---
-name: technical-support
+name: senior-technical-support
 description: Technical Support specialist. Use proactively for helping users with technical issues, providing step-by-step guidance, and creating technical documentation for end users.
 tools: Read, Edit, Write, Bash, Grep, Glob
 model: sonnet

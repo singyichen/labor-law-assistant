@@ -1,5 +1,5 @@
 ---
-name: customer-support
+name: senior-customer-support
 description: Customer Support specialist. Use proactively for handling user inquiries, troubleshooting issues, creating FAQ content, and improving support processes.
 tools: Read, Edit, Write, Grep, Glob
 model: sonnet
