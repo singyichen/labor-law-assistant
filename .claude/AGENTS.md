@@ -28,7 +28,7 @@ This document provides a comprehensive overview of all available AI agents for t
 
 ## Complete Agent Reference
 
-**排序說明**：依照 Labor Law Assistant 專案的使用頻率排列，最常用的 agents 在最前面。
+**Sorting Note**: Ordered by usage frequency in the Labor Law Assistant project, with most frequently used agents listed first.
 
 | Agent Name | Role | Category | Key Expertise | Example Task |
 |------------|------|----------|---------------|--------------|
@@ -80,21 +80,99 @@ This document provides a comprehensive overview of all available AI agents for t
 
 ---
 
+## How to Use Agents
+
+### Basic Syntax
+```
+Use [agent-name] agent to [task description]
+```
+
+### Usage Examples
+```
+Use senior-architect agent to review the current system architecture
+Use senior-code-reviewer agent to check my recent changes
+Use senior-qa agent to create test cases for the authentication module
+Use senior-legal-expert agent to verify the overtime calculation content
+```
+
+### Parallel Invocation
+You can use multiple agents simultaneously for comprehensive review:
+```
+Use senior-security agent and senior-code-reviewer agent to review authentication implementation
+```
+
+### Agent Collaboration
+For complex tasks, use multiple agents in sequence:
+```
+1. Use senior-ba agent to gather requirements
+2. Use senior-sa agent to create technical specification
+3. Use senior-architect agent to design architecture
+4. Use senior-code-reviewer agent to review implementation
+```
+
+---
+
+## Agent Selection Guide
+
+### By Task Type
+
+| Task | Recommended Agent(s) |
+|------|---------------------|
+| Plan new feature | senior-pm, senior-po, senior-ba |
+| Design system | senior-architect, senior-sd, senior-sa |
+| Design UI/UX | senior-uiux, senior-visual-designer |
+| Write frontend code | senior-frontend, senior-full-stack |
+| Write backend code | senior-backend, senior-full-stack |
+| Design API | senior-api-designer, senior-backend |
+| Design database | senior-dba |
+| Build AI feature | senior-ai-engineer |
+| Write tests | senior-qa |
+| Review code | senior-code-reviewer |
+| Fix bugs | senior-debugger, senior-error-resolver |
+| Security audit | senior-security |
+| Deploy application | senior-devops, senior-release-manager |
+| Monitor system | senior-sre |
+| Optimize performance | senior-performance |
+| Write documentation | senior-technical-writer |
+| Improve SEO | senior-seo |
+| Add analytics | senior-analytics |
+| Add i18n | senior-i18n |
+| Ensure accessibility | senior-accessibility |
+| Ensure compliance | senior-compliance |
+| Review legal content | senior-legal-expert |
+| Support users | senior-customer-support, senior-technical-support, user-support |
+
+### By Question Type
+
+| Question | Recommended Agent |
+|----------|-------------------|
+| "How should we architect this?" | senior-architect |
+| "Is this code secure?" | senior-security |
+| "Why is this slow?" | senior-performance |
+| "Why is this failing?" | senior-debugger |
+| "How to fix this error?" | senior-error-resolver |
+| "Is this legally accurate?" | senior-legal-expert |
+| "Is this accessible?" | senior-accessibility |
+| "How to prioritize features?" | senior-po, senior-pm |
+| "What do users need?" | user-researcher, senior-ba |
+
+---
+
 ## Detailed Use Cases by Agent
 
-本區段提供常用 agents 的多個實際使用情境，幫助您更精準地選擇適合的 agent。
+This section provides multiple practical use cases for commonly used agents to help you select the most appropriate agent more precisely.
 
 ### 🔴 High Priority Agents
 
 #### `senior-legal-expert` - Taiwan Labor Law Expert
-**使用時機：**
-- 驗證加班費計算公式是否符合《勞動基準法》
-- 審查資遣費計算邏輯的法律正確性
-- 確認特休假天數計算符合勞基法規定
-- 檢查勞動契約範本的法律合規性
-- 驗證法律免責聲明內容的適當性
+**When to Use:**
+- Verify overtime pay calculation formulas comply with Taiwan Labor Standards Act
+- Review severance pay calculation logic for legal accuracy
+- Confirm annual leave day calculations comply with labor law regulations
+- Check labor contract templates for legal compliance
+- Verify appropriateness of legal disclaimer content
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-legal-expert agent to verify the overtime pay calculation logic complies with Taiwan Labor Standards Act Article 24
 Use senior-legal-expert agent to review the severance pay formula for legal accuracy
@@ -103,14 +181,14 @@ Use senior-legal-expert agent to review the severance pay formula for legal accu
 ---
 
 #### `senior-backend` - Backend Engineer
-**使用時機：**
-- 實作勞動法案例查詢的 API endpoint
-- 設計工資計算引擎的業務邏輯
-- 建立法律條文搜尋功能的後端服務
-- 實作使用者認證與授權系統
-- 整合第三方法律資料庫 API
+**When to Use:**
+- Implement API endpoint for labor law case search
+- Design wage calculation engine business logic
+- Build backend service for legal article search functionality
+- Implement user authentication and authorization system
+- Integrate with third-party legal database APIs
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-backend agent to implement REST API for labor law case search
 Use senior-backend agent to design the wage calculation engine business logic
@@ -120,14 +198,14 @@ Use senior-backend agent to integrate with Taiwan Ministry of Labor API
 ---
 
 #### `senior-frontend` - Frontend Engineer
-**使用時機：**
-- 建立法律諮詢表單的使用者介面
-- 實作工資計算器的互動式表單
-- 開發案例搜尋結果的展示頁面
-- 優化前端效能（減少載入時間）
-- 實作響應式設計（RWD）支援行動裝置
+**When to Use:**
+- Build user interface for legal consultation forms
+- Implement interactive form for wage calculator
+- Develop case search results display page
+- Optimize frontend performance (reduce load time)
+- Implement responsive design (RWD) to support mobile devices
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-frontend agent to build the legal consultation form UI
 Use senior-frontend agent to create an interactive wage calculator interface
@@ -137,14 +215,14 @@ Use senior-frontend agent to optimize page load performance
 ---
 
 #### `senior-full-stack` - Full Stack Engineer
-**使用時機：**
-- 實作完整的特休假計算功能（前端+後端）
-- 開發端對端的案例提交與回覆系統
-- 建立完整的使用者檔案管理功能
-- 實作即時法律諮詢聊天功能
-- 開發法律文件上傳與分析系統
+**When to Use:**
+- Implement complete annual leave calculation feature (frontend + backend)
+- Develop end-to-end case submission and response system
+- Build complete user profile management functionality
+- Implement real-time legal consultation chat feature
+- Develop legal document upload and analysis system
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-full-stack agent to implement end-to-end annual leave calculation feature
 Use senior-full-stack agent to build a complete case submission and response system
@@ -153,14 +231,14 @@ Use senior-full-stack agent to build a complete case submission and response sys
 ---
 
 #### `senior-qa` - QA Engineer
-**使用時機：**
-- 為加班費計算邏輯建立測試案例
-- 設計特休假計算的邊界測試
-- 建立自動化測試腳本
-- 執行迴歸測試確保新功能不影響舊功能
-- 設計效能測試計畫
+**When to Use:**
+- Create test cases for overtime pay calculation logic
+- Design boundary tests for annual leave calculation
+- Build automated test scripts
+- Execute regression tests to ensure new features don't break existing functionality
+- Design performance test plans
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-qa agent to create test cases for overtime pay calculation
 Use senior-qa agent to design boundary tests for annual leave logic
@@ -170,14 +248,14 @@ Use senior-qa agent to build automated test suite for wage calculator
 ---
 
 #### `senior-ai-engineer` - AI/ML Engineer
-**使用時機：**
-- 優化法律文件檢索的 RAG pipeline
-- 設計 prompt engineering 策略提升回答品質
-- 實作法律條文的語意搜尋功能
-- 建立法律問答的 LLM 整合
-- 優化 embedding model 選擇與微調
+**When to Use:**
+- Optimize RAG pipeline for legal document retrieval
+- Design prompt engineering strategies to improve answer quality
+- Implement semantic search for legal articles
+- Build LLM integration for legal Q&A
+- Optimize embedding model selection and fine-tuning
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-ai-engineer agent to improve RAG pipeline for legal document retrieval
 Use senior-ai-engineer agent to design prompt templates for legal Q&A
@@ -189,14 +267,14 @@ Use senior-ai-engineer agent to implement semantic search for labor law articles
 ### 🟡 Medium Priority Agents
 
 #### `senior-code-reviewer` - Code Reviewer
-**使用時機：**
-- 審查認證系統的安全性
-- 檢查新功能的程式碼品質
-- 確保程式碼符合專案風格規範（CLAUDE.md）
-- 發現潛在的效能問題
-- 審查 PR 前的全面檢查
+**When to Use:**
+- Review authentication system security
+- Check code quality of new features
+- Ensure code adheres to project style guidelines (CLAUDE.md)
+- Identify potential performance issues
+- Perform comprehensive review before PR submission
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-code-reviewer agent to review the authentication implementation
 Use senior-code-reviewer agent to check code quality of wage calculation module
@@ -205,14 +283,14 @@ Use senior-code-reviewer agent to check code quality of wage calculation module
 ---
 
 #### `senior-dba` - Database Administrator
-**使用時機：**
-- 設計勞動法案例的資料庫 schema
-- 優化法律條文搜尋的查詢效能
-- 設計索引策略加速查詢
-- 規劃資料庫備份與還原策略
-- 審查 SQL 查詢的效能瓶頸
+**When to Use:**
+- Design database schema for labor law cases
+- Optimize query performance for legal article search
+- Design indexing strategy to accelerate queries
+- Plan database backup and recovery strategy
+- Review SQL query performance bottlenecks
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-dba agent to design database schema for labor law cases
 Use senior-dba agent to optimize query performance for legal article search
@@ -222,14 +300,14 @@ Use senior-dba agent to create indexing strategy for case lookup
 ---
 
 #### `senior-api-designer` - API Designer
-**使用時機：**
-- 設計法律諮詢的 REST API 規格
-- 定義工資計算 API 的 request/response 格式
-- 建立 OpenAPI/Swagger 文件
-- 設計 API 版本控制策略
-- 規劃 API rate limiting 與認證機制
+**When to Use:**
+- Design REST API specification for legal consultation
+- Define request/response format for wage calculation API
+- Create OpenAPI/Swagger documentation
+- Design API versioning strategy
+- Plan API rate limiting and authentication mechanisms
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-api-designer agent to design REST API specification for legal consultation
 Use senior-api-designer agent to create OpenAPI documentation for wage calculator API
@@ -238,14 +316,14 @@ Use senior-api-designer agent to create OpenAPI documentation for wage calculato
 ---
 
 #### `senior-compliance` - Compliance Specialist
-**使用時機：**
-- 確保使用者資料處理符合台灣個資法（PDPA）
-- 審查隱私政策內容的合規性
-- 設計資料加密與存取控制策略
-- 確保 GDPR 合規（如有歐盟使用者）
-- 規劃資料保存與刪除政策
+**When to Use:**
+- Ensure user data processing complies with Taiwan Personal Data Protection Act (PDPA)
+- Review privacy policy content for regulatory compliance
+- Design data encryption and access control strategies
+- Ensure GDPR compliance (if serving EU users)
+- Plan data retention and deletion policies
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-compliance agent to ensure user data handling complies with Taiwan PDPA
 Use senior-compliance agent to review privacy policy for legal compliance
@@ -254,14 +332,14 @@ Use senior-compliance agent to review privacy policy for legal compliance
 ---
 
 #### `senior-uiux` - UI/UX Designer
-**使用時機：**
-- 改善案例查詢的使用者流程
-- 設計簡化的法律表單介面
-- 進行使用者體驗優化
-- 設計資訊架構（IA）
-- 建立互動原型（prototype）
+**When to Use:**
+- Improve user flow for case lookup
+- Design simplified legal form interface
+- Conduct user experience optimization
+- Design information architecture (IA)
+- Create interactive prototypes
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-uiux agent to improve user flow for case lookup feature
 Use senior-uiux agent to design simplified legal consultation form
@@ -271,14 +349,14 @@ Use senior-uiux agent to create information architecture for legal knowledge bas
 ---
 
 #### `senior-debugger` - Debugger
-**使用時機：**
-- 調查為何加班費計算回傳錯誤值
-- 追蹤測試失敗的根本原因
-- 分析效能瓶頸問題
-- 解決複雜的 bug
-- 分析 stack trace 找出錯誤來源
+**When to Use:**
+- Investigate why overtime pay calculation returns incorrect values
+- Trace root cause of test failures
+- Analyze performance bottleneck issues
+- Resolve complex bugs
+- Analyze stack traces to identify error sources
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-debugger agent to investigate why overtime calculation returns incorrect values
 Use senior-debugger agent to trace the root cause of test failures
@@ -287,14 +365,14 @@ Use senior-debugger agent to trace the root cause of test failures
 ---
 
 #### `senior-devops` - DevOps Engineer
-**使用時機：**
-- 建立 CI/CD pipeline 自動化測試與部署
-- 設定 Docker 容器化環境
-- 配置 GitHub Actions 工作流程
-- 建立開發/測試/正式環境
-- 設定自動化部署腳本
+**When to Use:**
+- Build CI/CD pipeline for automated testing and deployment
+- Configure Docker containerized environment
+- Set up GitHub Actions workflows
+- Establish development/testing/production environments
+- Configure automated deployment scripts
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-devops agent to set up CI/CD pipeline for automated testing and deployment
 Use senior-devops agent to configure Docker containers for development environment
@@ -306,14 +384,14 @@ Use senior-devops agent to create GitHub Actions workflow for PR checks
 ### 🟢 Specialized Agents
 
 #### `senior-architect` - Software Architect
-**使用時機：**
-- 設計整體系統架構
-- 選擇技術堆疊（database, framework, etc.）
-- 規劃微服務架構
-- 設計系統擴展性策略
-- 評估架構的優缺點
+**When to Use:**
+- Design overall system architecture
+- Select technology stack (database, framework, etc.)
+- Plan microservices architecture
+- Design system scalability strategy
+- Evaluate architectural trade-offs
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-architect agent to design scalable architecture for legal consultation system
 Use senior-architect agent to evaluate PostgreSQL vs MongoDB for legal data storage
@@ -322,14 +400,14 @@ Use senior-architect agent to evaluate PostgreSQL vs MongoDB for legal data stor
 ---
 
 #### `senior-technical-writer` - Technical Writer
-**使用時機：**
-- 撰寫 API 文件
-- 建立使用者操作手冊
-- 撰寫 README 說明檔
-- 撰寫開發者文件
-- 建立技術規格文件
+**When to Use:**
+- Write API documentation
+- Create user operation manuals
+- Write README files
+- Write developer documentation
+- Create technical specification documents
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-technical-writer agent to write API documentation for legal query endpoints
 Use senior-technical-writer agent to create user guide for wage calculator
@@ -338,14 +416,14 @@ Use senior-technical-writer agent to create user guide for wage calculator
 ---
 
 #### `senior-i18n` - Internationalization Specialist
-**使用時機：**
-- 實作繁體中文/英文語言切換
-- 設計 i18n 架構
-- 處理日期、時間、貨幣格式本地化
-- 建立翻譯檔案管理策略
-- 審查多語言支援的完整性
+**When to Use:**
+- Implement Traditional Chinese/English language switching
+- Design i18n architecture
+- Handle date, time, and currency format localization
+- Establish translation file management strategy
+- Review completeness of multi-language support
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-i18n agent to implement Traditional Chinese / English language switching
 Use senior-i18n agent to design i18n architecture for multi-language support
@@ -354,14 +432,14 @@ Use senior-i18n agent to design i18n architecture for multi-language support
 ---
 
 #### `senior-accessibility` - Accessibility Specialist
-**使用時機：**
-- 確保表單符合 WCAG 無障礙標準
-- 測試 screen reader 相容性
-- 實作鍵盤導航支援
-- 審查色彩對比度
-- 確保 ARIA 標籤正確使用
+**When to Use:**
+- Ensure forms comply with WCAG accessibility standards
+- Test screen reader compatibility
+- Implement keyboard navigation support
+- Review color contrast ratios
+- Ensure correct use of ARIA labels
 
-**範例指令：**
+**Example Commands:**
 ```
 Use senior-accessibility agent to ensure legal query form is screen reader accessible
 Use senior-accessibility agent to audit WCAG 2.1 AA compliance
@@ -370,14 +448,14 @@ Use senior-accessibility agent to audit WCAG 2.1 AA compliance
 ---
 
 #### `user-support` - Domain-Specific User Support
-**使用時機：**
-- 回答使用者關於資遣費計算的問題
-- 解釋加班費計算邏輯
-- 協助使用者理解特休假規則
-- 提供系統操作指引
-- 回答常見法律問題（FAQ）
+**When to Use:**
+- Answer user questions about severance pay calculations
+- Explain overtime pay calculation logic
+- Help users understand annual leave rules
+- Provide system operation guidance
+- Answer frequently asked legal questions (FAQ)
 
-**範例指令：**
+**Example Commands:**
 ```
 Use user-support agent to answer user questions about severance pay calculations
 Use user-support agent to explain overtime pay calculation logic in simple terms
@@ -611,84 +689,6 @@ Use user-researcher agent to design user interview
 Use senior-customer-support agent to create FAQ content
 Use senior-onboarding-specialist agent to design welcome flow
 Use user-support agent to answer labor law question
-```
-
----
-
-## Agent Selection Guide
-
-### By Task Type
-
-| Task | Recommended Agent(s) |
-|------|---------------------|
-| Plan new feature | senior-pm, senior-po, senior-ba |
-| Design system | senior-architect, senior-sd, senior-sa |
-| Design UI/UX | senior-uiux, senior-visual-designer |
-| Write frontend code | senior-frontend, senior-full-stack |
-| Write backend code | senior-backend, senior-full-stack |
-| Design API | senior-api-designer, senior-backend |
-| Design database | senior-dba |
-| Build AI feature | senior-ai-engineer |
-| Write tests | senior-qa |
-| Review code | senior-code-reviewer |
-| Fix bugs | senior-debugger, senior-error-resolver |
-| Security audit | senior-security |
-| Deploy application | senior-devops, senior-release-manager |
-| Monitor system | senior-sre |
-| Optimize performance | senior-performance |
-| Write documentation | senior-technical-writer |
-| Improve SEO | senior-seo |
-| Add analytics | senior-analytics |
-| Add i18n | senior-i18n |
-| Ensure accessibility | senior-accessibility |
-| Ensure compliance | senior-compliance |
-| Review legal content | senior-legal-expert |
-| Support users | senior-customer-support, senior-technical-support, user-support |
-
-### By Question Type
-
-| Question | Recommended Agent |
-|----------|-------------------|
-| "How should we architect this?" | senior-architect |
-| "Is this code secure?" | senior-security |
-| "Why is this slow?" | senior-performance |
-| "Why is this failing?" | senior-debugger |
-| "How to fix this error?" | senior-error-resolver |
-| "Is this legally accurate?" | senior-legal-expert |
-| "Is this accessible?" | senior-accessibility |
-| "How to prioritize features?" | senior-po, senior-pm |
-| "What do users need?" | user-researcher, senior-ba |
-
----
-
-## How to Use Agents
-
-### Basic Invocation
-```
-Use [agent-name] agent to [task description]
-```
-
-### Examples
-```
-Use senior-architect agent to review the current system architecture
-Use senior-code-reviewer agent to check my recent changes
-Use senior-qa agent to create test cases for the authentication module
-Use senior-legal-expert agent to verify the overtime calculation content
-```
-
-### Parallel Invocation
-You can ask Claude to use multiple agents for comprehensive review:
-```
-Use senior-security agent and senior-code-reviewer agent to review authentication implementation
-```
-
-### Agent Collaboration
-For complex tasks, agents can be used in sequence:
-```
-1. Use senior-ba agent to gather requirements
-2. Use senior-sa agent to create technical specification
-3. Use senior-architect agent to design architecture
-4. Use senior-code-reviewer agent to review implementation
 ```
 
 ---
