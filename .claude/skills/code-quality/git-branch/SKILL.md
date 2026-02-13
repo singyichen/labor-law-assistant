@@ -102,8 +102,8 @@ EOF
 
 #### 6. Merge Pull Request
 ```bash
-# After PR approval
-gh pr merge --squash --delete-branch
+# After PR approval (merge commit preserves branch topology in Git Graph)
+gh pr merge --merge --delete-branch
 ```
 
 #### 7. Clean Up Remote Branch (if not auto-deleted)
@@ -117,7 +117,14 @@ git checkout main
 git pull origin main
 ```
 
-#### 9. Delete Local Branch
+#### 9. Prune Stale Remote Tracking Refs
+```bash
+git fetch --prune
+```
+
+> This removes local remote tracking refs for branches already deleted on GitHub, keeping `git branch -a` and Git Graph clean.
+
+#### 10. Delete Local Branch
 ```bash
 git branch -d <prefix>/<short-description>
 ```
@@ -140,7 +147,7 @@ git branch -d <prefix>/<short-description>
 ### Branch Lifecycle Summary
 
 ```
-main (pull) → create branch → develop → commit → code review → push → PR → merge → cleanup
+main (pull) → create branch → develop → commit → code review → push → PR → merge → prune → cleanup
 ```
 
 ### Key Principles
@@ -149,16 +156,16 @@ main (pull) → create branch → develop → commit → code review → push �
 2. **Short-lived branches**: Merge and delete promptly to avoid drift
 3. **Frequent commits**: Commit after each logical unit of work (per CLAUDE.md)
 4. **Descriptive names**: Branch name should clearly indicate the work being done
-5. **Clean history**: Use squash merge to keep main branch history clean
+5. **Visible history**: Use merge commit to preserve branch topology in Git Graph
 6. **Never push to main**: All changes go through PR review
 
 ### When to Use Each Merge Strategy
 
 | Strategy | When to Use |
 |----------|-------------|
-| `--squash` | Default for feature branches (clean history) |
-| `--merge` | When preserving individual commits matters |
-| `--rebase` | When linear history is preferred |
+| `--merge` | **Default** — preserves branch topology and individual commits in Git Graph |
+| `--squash` | When you want a single clean commit on main (hides branch history) |
+| `--rebase` | When linear history is preferred (no merge commit) |
 
 ---
 
