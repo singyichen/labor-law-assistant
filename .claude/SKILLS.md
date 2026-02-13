@@ -12,7 +12,7 @@ This document provides a comprehensive overview of all available Workflow Comman
 │   ├── test.md            # Test planning & execution
 │   ├── release.md         # Release preparation
 │   └── fix.md             # Bug fix
-├── skills/                # Knowledge-Domain Skills (27 total)
+├── skills/                # Knowledge-Domain Skills (28 total)
 │   ├── requirements-engineering/
 │   │   ├── user-story/
 │   │   ├── functional-req/
@@ -34,7 +34,8 @@ This document provides a comprehensive overview of all available Workflow Comman
 │   │   ├── code-review/
 │   │   ├── code-review-checklist/
 │   │   ├── pr-review/
-│   │   └── code-smell/
+│   │   ├── code-smell/
+│   │   └── git-branch/
 │   ├── test-engineering/
 │   │   ├── test-plan/
 │   │   ├── test-coverage/
@@ -121,9 +122,9 @@ Skills for BDD workflow from acceptance criteria to executable tests.
 | `/bdd-scenario` | Design detailed scenarios with Scenario Outlines | `/bdd-scenario edge cases for annual leave` |
 | `/bdd-step-definition` | Implement pytest-bdd step definitions | `/bdd-step-definition overtime calculation steps` |
 
-### Code Quality (4 skills)
+### Code Quality (5 skills)
 
-Skills for code review, PR evaluation, and technical debt management.
+Skills for code review, PR evaluation, technical debt management, and git branch workflow.
 
 | Skill | Purpose | Example Usage |
 |-------|---------|---------------|
@@ -131,6 +132,7 @@ Skills for code review, PR evaluation, and technical debt management.
 | `/code-review-checklist` | Generate project-specific review checklists | `/code-review-checklist legal` |
 | `/pr-review` | Full PR review with breaking changes detection | `/pr-review #123` |
 | `/code-smell` | Detect code smells and suggest refactoring | `/code-smell app/services/` |
+| `/git-branch` | Standardized git branch lifecycle (create, PR, merge, cleanup) | `/git-branch overtime calculator feature` |
 
 See [CODE_REVIEW_GUIDE.md](skills/code-quality/CODE_REVIEW_GUIDE.md) for detailed code review usage guide.
 
@@ -167,10 +169,10 @@ Skills for quality gates, defect management, traceability, and reporting.
 | Requirements Engineering | 4 | user-story, functional-req, acceptance-criteria, requirement-to-ac |
 | System Design | 5 | api-spec, backend-spec, frontend-spec, data-model, flowchart |
 | Behavior-Driven Development | 4 | ac-to-feature, bdd-feature, bdd-scenario, bdd-step-definition |
-| Code Quality | 4 | code-review, code-review-checklist, pr-review, code-smell |
+| Code Quality | 5 | code-review, code-review-checklist, pr-review, code-smell, git-branch |
 | Test Engineering | 6 | test-plan, test-coverage, test-data-strategy, test-tracking, exploratory-testing, regression-suite |
 | Quality Assurance | 4 | quality-gate, defect-report, traceability-matrix, test-report |
-| **Total** | **27** | |
+| **Total** | **28** | |
 
 ---
 
@@ -200,4 +202,4 @@ For the Labor Law Assistant project, these skills have special considerations fo
 ---
 
 *Last Updated: 2026-02-13*
-*Total Skills: 27 | Workflow Commands: 5*
+*Total Skills: 28 | Workflow Commands: 5*
