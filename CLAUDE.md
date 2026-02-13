@@ -8,31 +8,64 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 
 ## Tech Stack
 
-- Language: Python
-- Package Manager: pip / uv / poetry (TBD)
+- Language: Python 3.12+
+- Package Manager: uv
+- Framework: FastAPI
+- Config: pydantic-settings
+- Linting/Formatting: ruff
+- Type Checking: mypy (strict mode)
+- Testing: pytest + pytest-asyncio + httpx
 
 ## Development Commands
 
 ```bash
-# Install dependencies (update when package manager is chosen)
-pip install -r requirements.txt
+# Install dependencies (run from backend/)
+cd backend
+uv sync --dev
 
 # Run the application
-python main.py
+uv run uvicorn app.main:app --reload
 
 # Run tests
-pytest
+uv run pytest
+
+# Run tests with coverage
+uv run pytest --cov=app --cov-report=term-missing
 
 # Type checking
-mypy .
+uv run mypy .
 
 # Linting
-ruff check .
+uv run ruff check .
+
+# Format code
+uv run ruff format .
+
+# Install pre-commit hooks (run from project root)
+uv run pre-commit install
 ```
 
 ## Architecture
 
-(To be documented as the project develops)
+```
+labor-law-assistant/
+├── backend/                 # Python FastAPI backend
+│   ├── app/                 # Application source code
+│   │   ├── api/routes/      # API route handlers
+│   │   ├── core/            # Core business logic
+│   │   ├── models/          # Data models
+│   │   ├── services/        # Service layer
+│   │   ├── utils/           # Utility functions
+│   │   ├── config.py        # Settings (pydantic-settings)
+│   │   └── main.py          # FastAPI entry point
+│   ├── tests/               # Test suite
+│   │   ├── unit/            # Unit tests
+│   │   └── integration/     # Integration tests
+│   └── pyproject.toml       # Dependencies & tool configs
+├── frontend/                # Frontend (planned)
+├── docs/                    # Project documentation
+└── .claude/                 # Claude Code configuration
+```
 
 ## Communication
 
