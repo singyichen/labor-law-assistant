@@ -1,304 +1,176 @@
-# Claude Code Skills Directory
+# Claude Code Skills & Commands Directory
 
-This document provides a comprehensive overview of all available Skills for the Labor Law Assistant project, including when and how to use them.
+This document provides a comprehensive overview of all available Workflow Commands and Knowledge-Domain Skills for the Labor Law Assistant project.
+
+## Directory Structure
+
+```
+.claude/
+├── commands/              # Workflow Commands (orchestrate multiple skills)
+│   ├── write.md           # New feature implementation
+│   ├── review.md          # Code review
+│   ├── test.md            # Test planning & execution
+│   ├── release.md         # Release preparation
+│   └── fix.md             # Bug fix
+├── skills/                # Knowledge-Domain Skills (27 total)
+│   ├── requirements-engineering/
+│   │   ├── user-story/
+│   │   ├── functional-req/
+│   │   ├── acceptance-criteria/
+│   │   └── requirement-to-ac/
+│   ├── system-design/
+│   │   ├── api-spec/
+│   │   ├── backend-spec/
+│   │   ├── frontend-spec/
+│   │   ├── data-model/
+│   │   └── flowchart/
+│   ├── behavior-driven-development/
+│   │   ├── ac-to-feature/
+│   │   ├── bdd-feature/
+│   │   ├── bdd-scenario/
+│   │   └── bdd-step-definition/
+│   ├── code-quality/
+│   │   ├── CODE_REVIEW_GUIDE.md
+│   │   ├── code-review/
+│   │   ├── code-review-checklist/
+│   │   ├── pr-review/
+│   │   └── code-smell/
+│   ├── test-engineering/
+│   │   ├── test-plan/
+│   │   ├── test-coverage/
+│   │   ├── test-data-strategy/
+│   │   ├── test-tracking/
+│   │   ├── exploratory-testing/
+│   │   └── regression-suite/
+│   └── quality-assurance/
+│       ├── quality-gate/
+│       ├── defect-report/
+│       ├── traceability-matrix/
+│       └── test-report/
+└── SKILLS.md              # This file
+```
+
+---
+
+## Workflow Commands
+
+Workflow Commands orchestrate multiple skills in sequence to accomplish common development tasks. Use them as slash commands.
+
+| Command | Purpose | Skills Orchestrated |
+|---------|---------|---------------------|
+| `/write` | Implement a new feature end-to-end | user-story → requirement-to-ac → ac-to-feature → bdd-feature → system-design → code-review |
+| `/review` | Comprehensive code review | code-review-checklist → code-review → code-smell → pr-review |
+| `/test` | Test planning and execution | test-plan → bdd-scenario → test-data-strategy → bdd-step-definition → test-coverage → test-tracking |
+| `/release` | Release readiness verification | regression-suite → traceability-matrix → test-coverage → quality-gate → test-report |
+| `/fix` | Bug investigation and fix | defect-report → exploratory-testing → bdd-scenario → code-review → regression-suite |
+
+### Usage Examples
+
+```bash
+# Implement a new overtime calculation feature
+/write overtime pay calculation for hourly workers
+
+# Review code changes before PR
+/review app/calculators/overtime.py
+
+# Plan and execute tests for a Sprint
+/test Sprint 7 - Annual Leave Features
+
+# Prepare for release v1.2.0
+/release v1.2.0 production
+
+# Fix a bug in severance calculation
+/fix severance pay calculation returns incorrect result for part-time workers
+```
+
+---
+
+## Knowledge-Domain Skills
+
+### Requirements Engineering (4 skills)
+
+Skills for defining, converting, and validating requirements.
+
+| Skill | Purpose | Example Usage |
+|-------|---------|---------------|
+| `/user-story` | Create User Stories with acceptance criteria and story points | `/user-story overtime pay calculation` |
+| `/functional-req` | Write functional and non-functional requirements | `/functional-req annual leave module` |
+| `/acceptance-criteria` | Generate comprehensive AC checklists for verification | `/acceptance-criteria overtime feature` |
+| `/requirement-to-ac` | Convert User Story to testable SMART AC with legal references | `/requirement-to-ac overtime pay calculation` |
+
+### System Design (5 skills)
+
+Skills for designing APIs, services, data models, and architecture.
+
+| Skill | Purpose | Example Usage |
+|-------|---------|---------------|
+| `/api-spec` | Design RESTful API specifications | `/api-spec overtime calculation endpoints` |
+| `/backend-spec` | Generate backend service architecture specs | `/backend-spec overtime calculator service` |
+| `/frontend-spec` | Generate frontend component specifications | `/frontend-spec overtime input form` |
+| `/data-model` | Design database schemas and ER diagrams | `/data-model employee work records` |
+| `/flowchart` | Generate Mermaid flowcharts for business processes | `/flowchart overtime calculation process` |
+
+### Behavior-Driven Development (4 skills)
+
+Skills for BDD workflow from acceptance criteria to executable tests.
+
+| Skill | Purpose | Example Usage |
+|-------|---------|---------------|
+| `/ac-to-feature` | Transform AC into Gherkin feature files | `/ac-to-feature AC-001 overtime calculation` |
+| `/bdd-feature` | Write complete Gherkin Feature files | `/bdd-feature overtime pay calculation` |
+| `/bdd-scenario` | Design detailed scenarios with Scenario Outlines | `/bdd-scenario edge cases for annual leave` |
+| `/bdd-step-definition` | Implement pytest-bdd step definitions | `/bdd-step-definition overtime calculation steps` |
+
+### Code Quality (4 skills)
+
+Skills for code review, PR evaluation, and technical debt management.
+
+| Skill | Purpose | Example Usage |
+|-------|---------|---------------|
+| `/code-review` | Comprehensive code review (quality, security, legal accuracy) | `/code-review app/calculators/overtime.py` |
+| `/code-review-checklist` | Generate project-specific review checklists | `/code-review-checklist legal` |
+| `/pr-review` | Full PR review with breaking changes detection | `/pr-review #123` |
+| `/code-smell` | Detect code smells and suggest refactoring | `/code-smell app/services/` |
+
+See [CODE_REVIEW_GUIDE.md](skills/code-quality/CODE_REVIEW_GUIDE.md) for detailed code review usage guide.
+
+### Test Engineering (6 skills)
+
+Skills for test planning, execution, data management, and coverage analysis.
+
+| Skill | Purpose | Example Usage |
+|-------|---------|---------------|
+| `/test-plan` | Create comprehensive test plans with strategy and risk assessment | `/test-plan Sprint 6` |
+| `/test-coverage` | Analyze test coverage with legal module focus (95% threshold) | `/test-coverage app/calculators/` |
+| `/test-data-strategy` | Define test data management with privacy compliance | `/test-data-strategy overtime module` |
+| `/test-tracking` | Track test execution progress with dashboards | `/test-tracking Sprint 6 dashboard` |
+| `/exploratory-testing` | Guide exploratory testing sessions with charters | `/exploratory-testing overtime edge cases` |
+| `/regression-suite` | Plan risk-based regression testing | `/regression-suite v2.0.0 release` |
+
+### Quality Assurance (4 skills)
+
+Skills for quality gates, defect management, traceability, and reporting.
+
+| Skill | Purpose | Example Usage |
+|-------|---------|---------------|
+| `/quality-gate` | Evaluate quality gates for release readiness (Go/No-Go) | `/quality-gate production v1.0.0` |
+| `/defect-report` | Create standardized defect reports with root cause analysis | `/defect-report overtime calculation error` |
+| `/traceability-matrix` | Build requirement-to-test traceability with legal article mapping | `/traceability-matrix overtime module` |
+| `/test-report` | Generate Sprint/Release test reports | `/test-report sprint Sprint 6 summary` |
+
+---
 
 ## Quick Reference
 
-| Category | Count | Skills |
-|----------|-------|--------|
-| Requirements Conversion | 2 | requirement-to-ac, ac-to-feature |
-| BDD Development | 3 | bdd-feature, bdd-scenario, bdd-step-definition |
-| Quality Control | 5 | test-coverage, quality-gate, defect-report, test-plan, test-report |
-| Tracking & Management | 3 | traceability-matrix, regression-suite, test-tracking |
-| Advanced Testing | 2 | exploratory-testing, test-data-strategy |
-| Code Review | 4 | code-review, code-review-checklist, pr-review, code-smell |
-| Documentation | 8 | user-story, acceptance-criteria, api-spec, backend-spec, frontend-spec, data-model, flowchart, functional-req |
+| Domain | Count | Skills |
+|--------|-------|--------|
+| Requirements Engineering | 4 | user-story, functional-req, acceptance-criteria, requirement-to-ac |
+| System Design | 5 | api-spec, backend-spec, frontend-spec, data-model, flowchart |
+| Behavior-Driven Development | 4 | ac-to-feature, bdd-feature, bdd-scenario, bdd-step-definition |
+| Code Quality | 4 | code-review, code-review-checklist, pr-review, code-smell |
+| Test Engineering | 6 | test-plan, test-coverage, test-data-strategy, test-tracking, exploratory-testing, regression-suite |
+| Quality Assurance | 4 | quality-gate, defect-report, traceability-matrix, test-report |
 | **Total** | **27** | |
-
----
-
-## Skills by Development Phase
-
-### Phase 1: Requirements & Planning
-
-| Skill | Purpose | When to Use | Output |
-|-------|---------|-------------|--------|
-| `/user-story` | Create User Stories | When PM defines new features | User Story in standard format |
-| `/functional-req` | Write functional requirements | When detailing feature specifications | Functional requirements document |
-| `/requirement-to-ac` | Convert User Story to Acceptance Criteria | After User Story is approved | Testable AC with legal references |
-| `/ac-to-feature` | Convert AC to BDD Feature | Before development starts | Gherkin Feature file |
-
-**Workflow:**
-```
-PM Request → /user-story → /requirement-to-ac → /ac-to-feature → Ready for Dev
-```
-
----
-
-### Phase 2: Design & Specification
-
-| Skill | Purpose | When to Use | Output |
-|-------|---------|-------------|--------|
-| `/api-spec` | Design API specifications | When planning new endpoints | OpenAPI/Swagger spec |
-| `/backend-spec` | Backend architecture spec | When designing backend modules | Technical specification |
-| `/frontend-spec` | Frontend component spec | When designing UI components | Component specification |
-| `/data-model` | Database schema design | When planning data structures | ER diagram, schema definition |
-| `/flowchart` | Process flow diagrams | When documenting workflows | Mermaid/ASCII flowcharts |
-
-**Workflow:**
-```
-Feature Approved → /api-spec → /backend-spec + /frontend-spec → /data-model → Ready for Dev
-```
-
----
-
-### Phase 3: BDD Test Development
-
-| Skill | Purpose | When to Use | Output |
-|-------|---------|-------------|--------|
-| `/bdd-feature` | Write Gherkin Feature files | Before implementing feature | .feature file |
-| `/bdd-scenario` | Design test scenarios | When detailing test cases | Scenario/Scenario Outline |
-| `/bdd-step-definition` | Implement step definitions | When coding tests | pytest-bdd step files |
-| `/test-data-strategy` | Plan test data | When preparing test environment | Data generation strategy |
-
-**Workflow:**
-```
-/bdd-feature → /bdd-scenario → /test-data-strategy → /bdd-step-definition → Run Tests
-```
-
----
-
-### Phase 4: Development & Code Review
-
-| Skill | Purpose | When to Use | Frequency |
-|-------|---------|-------------|-----------|
-| `/code-review` | Comprehensive code review | Before submitting PR | 🔴 Daily |
-| `/code-review-checklist` | Generate review checklist | Before self-review | 🔴 Daily |
-| `/pr-review` | Review Pull Requests | When reviewing others' PRs | 🟠 Per PR |
-| `/code-smell` | Identify code smells | During refactoring | 🟡 Weekly |
-
-**Workflow:**
-```
-Code Complete → /code-review-checklist → /code-review → Submit PR → /pr-review → Merge
-```
-
----
-
-### Phase 5: Testing & Quality Assurance
-
-| Skill | Purpose | When to Use | Output |
-|-------|---------|-------------|--------|
-| `/test-plan` | Create test plan | At Sprint start | Test strategy document |
-| `/test-coverage` | Analyze coverage | After test execution | Coverage report |
-| `/exploratory-testing` | Guide exploratory testing | For ad-hoc testing | Charter, session notes |
-| `/defect-report` | Document bugs | When bugs are found | Standardized bug report |
-| `/test-tracking` | Track test progress | During Sprint | Progress dashboard |
-
-**Workflow:**
-```
-Sprint Start → /test-plan → Execute Tests → /test-coverage → /test-tracking → /defect-report (if bugs)
-```
-
----
-
-### Phase 6: Release & Deployment
-
-| Skill | Purpose | When to Use | Output |
-|-------|---------|-------------|--------|
-| `/regression-suite` | Plan regression tests | Before release | Regression test plan |
-| `/traceability-matrix` | Verify requirement coverage | Before release | Traceability report |
-| `/quality-gate` | Check quality criteria | Before deployment | Go/No-Go decision |
-| `/test-report` | Generate test report | At Sprint/Release end | Summary report |
-
-**Workflow:**
-```
-Release Candidate → /regression-suite → /traceability-matrix → /quality-gate → /test-report → Deploy
-```
-
----
-
-## Complete Skill Reference
-
-### Requirements Conversion Skills
-
-| Skill | Description | Example Usage |
-|-------|-------------|---------------|
-| `requirement-to-ac` | Convert User Story to SMART Acceptance Criteria with legal references | `/requirement-to-ac 加班費計算功能` |
-| `ac-to-feature` | Transform AC to Gherkin Feature with traceability tags | `/ac-to-feature AC-001 overtime calculation` |
-
-### BDD Development Skills
-
-| Skill | Description | Example Usage |
-|-------|-------------|---------------|
-| `bdd-feature` | Write complete Gherkin Feature files | `/bdd-feature overtime pay calculation` |
-| `bdd-scenario` | Design scenarios with Scenario Outline and Examples | `/bdd-scenario edge cases for annual leave` |
-| `bdd-step-definition` | Implement pytest-bdd step definitions | `/bdd-step-definition overtime calculation steps` |
-
-### Quality Control Skills
-
-| Skill | Description | Example Usage |
-|-------|-------------|---------------|
-| `test-coverage` | Analyze test coverage with legal module focus (≥95%) | `/test-coverage app/calculators/` |
-| `quality-gate` | Evaluate quality gates with legal compliance check | `/quality-gate production v1.0.0` |
-| `defect-report` | Create standardized defect reports | `/defect-report 加班費計算結果錯誤` |
-| `test-plan` | Generate comprehensive test plans | `/test-plan Sprint 6` |
-| `test-report` | Generate Sprint/Release/Legal compliance reports | `/test-report sprint Sprint 6 summary` |
-
-### Tracking & Management Skills
-
-| Skill | Description | Example Usage |
-|-------|-------------|---------------|
-| `traceability-matrix` | Build requirement-to-test traceability | `/traceability-matrix overtime module` |
-| `regression-suite` | Plan risk-based regression testing | `/regression-suite v2.0.0 release` |
-| `test-tracking` | Track execution progress with dashboards | `/test-tracking Sprint 6 dashboard` |
-
-### Advanced Testing Skills
-
-| Skill | Description | Example Usage |
-|-------|-------------|---------------|
-| `exploratory-testing` | Generate test charters and session templates | `/exploratory-testing 加班費邊界條件` |
-| `test-data-strategy` | Plan test data with privacy compliance | `/test-data-strategy overtime module` |
-
-### Code Review Skills
-
-| Skill | Description | Example Usage |
-|-------|-------------|---------------|
-| `code-review` | Comprehensive code review with security & legal checks | `/code-review app/calculators/overtime.py` |
-| `code-review-checklist` | Generate project-specific checklists | `/code-review-checklist legal` |
-| `pr-review` | Review PRs with breaking changes detection | `/pr-review #123` |
-| `code-smell` | Identify code smells and refactoring opportunities | `/code-smell app/services/` |
-
----
-
-## Usage Frequency Guide
-
-### 🔴 Daily Usage (Most Frequent)
-
-| Skill | Trigger | Time |
-|-------|---------|------|
-| `/code-review` | After completing code changes | Before every PR |
-| `/code-review-checklist` | Before self-review | Before every PR |
-| `/bdd-scenario` | When writing tests | During development |
-
-### 🟠 Weekly Usage
-
-| Skill | Trigger | Time |
-|-------|---------|------|
-| `/pr-review` | When reviewing team PRs | 2-3 times per week |
-| `/test-coverage` | After test updates | Mid-sprint |
-| `/test-tracking` | Progress check | Weekly standup |
-| `/defect-report` | When bugs found | As needed |
-
-### 🟡 Per Sprint Usage
-
-| Skill | Trigger | Time |
-|-------|---------|------|
-| `/test-plan` | Sprint planning | Sprint start |
-| `/test-report` | Sprint review | Sprint end |
-| `/code-smell` | Technical debt review | Sprint end |
-| `/traceability-matrix` | Coverage verification | Before release |
-
-### 🟢 Per Release Usage
-
-| Skill | Trigger | Time |
-|-------|---------|------|
-| `/regression-suite` | Release preparation | Before release |
-| `/quality-gate` | Go/No-Go decision | Before deployment |
-| `/test-report release` | Release documentation | After release |
-
-### 🔵 On-Demand Usage
-
-| Skill | Trigger | Time |
-|-------|---------|------|
-| `/requirement-to-ac` | New feature request | When requirements arrive |
-| `/ac-to-feature` | Feature development start | After AC approval |
-| `/exploratory-testing` | Ad-hoc testing needed | When exploring edge cases |
-| `/test-data-strategy` | New module development | When planning tests |
-
----
-
-## Workflow Examples
-
-### Example 1: New Feature Development
-
-```bash
-# 1. Requirements Phase
-/requirement-to-ac 資遣費計算功能
-
-# 2. Convert to BDD
-/ac-to-feature 資遣費計算 AC
-
-# 3. Write Feature file
-/bdd-feature severance pay calculation
-
-# 4. Design scenarios
-/bdd-scenario 資遣費計算邊界條件
-
-# 5. Plan test data
-/test-data-strategy severance calculation
-
-# 6. Implement steps
-/bdd-step-definition severance calculation steps
-
-# 7. Code review before PR
-/code-review-checklist legal
-/code-review app/calculators/severance.py
-
-# 8. Submit PR and review
-/pr-review #45
-```
-
-### Example 2: Sprint Workflow
-
-```bash
-# Sprint Start
-/test-plan Sprint 7 - Annual Leave Features
-
-# During Sprint
-/test-tracking Sprint 7 progress
-/defect-report 特休計算錯誤    # if bugs found
-
-# Before Release
-/regression-suite v1.2.0
-/traceability-matrix annual leave module
-/test-coverage app/calculators/
-
-# Release Decision
-/quality-gate staging v1.2.0
-
-# Sprint End
-/test-report sprint Sprint 7 summary
-```
-
-### Example 3: Code Review Workflow
-
-```bash
-# Self Review (before PR)
-/code-review-checklist           # General checklist
-/code-review-checklist legal     # Legal module checklist
-/code-review app/calculators/    # Automated review
-
-# Peer Review (reviewing PR)
-/pr-review #123                  # Full PR review
-/code-smell app/services/        # Check for code smells
-
-# Fix issues and re-review
-/code-review app/calculators/overtime.py
-```
-
-### Example 4: Bug Investigation
-
-```bash
-# Document the bug
-/defect-report 加班費計算在跨月時結果錯誤
-
-# Exploratory testing
-/exploratory-testing 加班費跨月計算邊界條件
-
-# After fix - verify coverage
-/test-coverage app/calculators/overtime.py
-/regression-suite overtime module
-```
 
 ---
 
@@ -308,7 +180,7 @@ For the Labor Law Assistant project, these skills have special considerations fo
 
 | Skill | Legal Requirement |
 |-------|-------------------|
-| `/test-coverage` | Legal modules require ≥95% coverage (vs 80% general) |
+| `/test-coverage` | Legal modules require 95% coverage (vs 80% general) |
 | `/code-review` | Must verify law article references and calculations |
 | `/code-review-checklist legal` | Includes government calculator cross-validation |
 | `/quality-gate` | Legal compliance is a blocking criterion |
@@ -319,87 +191,13 @@ For the Labor Law Assistant project, these skills have special considerations fo
 
 ---
 
-## Integration with CI/CD
-
-### Pre-commit Hook
-```bash
-/code-review-checklist
-/code-review ${CHANGED_FILES}
-```
-
-### PR Check
-```bash
-/pr-review ${PR_NUMBER}
-/test-coverage
-```
-
-### Pre-deployment
-```bash
-/quality-gate ${ENVIRONMENT} ${VERSION}
-/regression-suite ${VERSION}
-```
-
-### Post-deployment
-```bash
-/test-report release ${VERSION}
-```
-
----
-
-## Skill Dependencies
-
-```
-User Story
-    ↓
-/requirement-to-ac
-    ↓
-/ac-to-feature ←→ /traceability-matrix
-    ↓
-/bdd-feature
-    ↓
-/bdd-scenario ←→ /test-data-strategy
-    ↓
-/bdd-step-definition
-    ↓
-/test-plan ←→ /test-tracking
-    ↓
-pytest-bdd execution
-    ↓
-/test-coverage → /quality-gate
-    ↓                ↓
-/defect-report   /test-report
-    ↓
-/regression-suite
-    ↓
-Release
-```
-
----
-
-## Quick Command Reference
-
-| Task | Command |
-|------|---------|
-| Start new feature | `/requirement-to-ac [feature description]` |
-| Write BDD tests | `/bdd-feature [feature name]` |
-| Self code review | `/code-review [file path]` |
-| Review a PR | `/pr-review #[number]` |
-| Check coverage | `/test-coverage [module path]` |
-| Sprint test plan | `/test-plan [sprint name]` |
-| Release readiness | `/quality-gate [env] [version]` |
-| Sprint report | `/test-report sprint [sprint name]` |
-| Find code smells | `/code-smell [path]` |
-| Document bug | `/defect-report [description]` |
-
----
-
 ## Related Documentation
 
-- **AGENTS.md**: Reference for available AI agents
-- **CLAUDE.md**: Project coding standards and conventions
-- **CODE_REVIEW_SKILLS.md**: Detailed code review usage guide
+- **[CLAUDE.md](../CLAUDE.md)**: Project coding standards and conventions
+- **[AGENTS.md](AGENTS.md)**: Reference for available AI agents
+- **[CODE_REVIEW_GUIDE.md](skills/code-quality/CODE_REVIEW_GUIDE.md)**: Detailed code review usage guide
 
 ---
 
-*Last Updated: 2026-02-10*
-*Total Skills: 27*
+*Last Updated: 2026-02-13*
+*Total Skills: 27 | Workflow Commands: 5*

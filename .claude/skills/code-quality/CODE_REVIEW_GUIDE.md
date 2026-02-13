@@ -415,7 +415,7 @@ pip install ruff mypy bandit safety radon interrogate vulture
 
 ### 相關文件
 
-- [CLAUDE.md](../../CLAUDE.md) - 專案開發規範
+- [CLAUDE.md](../../../CLAUDE.md) - 專案開發規範
 - [AGENTS.md](../../AGENTS.md) - Agent 使用指南
 - 現有 Skills:
   - `backend-spec` - 後端規格定義
