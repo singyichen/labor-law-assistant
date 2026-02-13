@@ -62,12 +62,30 @@ git commit -m "<type>: <concise description of changes>"
 - Keep commits atomic and focused
 - Message must describe the "why", not just the "what"
 
-#### 3. Push Branch to Remote
+#### 3. Code Review (Before Push)
+
+Run the project's code review skill to verify quality before pushing:
+
+```bash
+# Review all staged and committed changes on the current branch
+/review
+```
+
+**Gate Criteria** (must all pass before proceeding to push):
+- No Critical or High severity issues
+- Legal calculation accuracy verified (if applicable)
+- Test coverage meets targets (95% legal modules, 80% general)
+- No security vulnerabilities introduced
+- Code style compliant with CLAUDE.md
+
+> **Do NOT push until all review issues are resolved.** Fix issues, commit the fixes, and re-run `/review` until the gate criteria are met.
+
+#### 4. Push Branch to Remote
 ```bash
 git push -u origin <prefix>/<short-description>
 ```
 
-#### 4. Create Pull Request
+#### 5. Create Pull Request
 ```bash
 gh pr create --title "<type>: <short description>" --body "$(cat <<'EOF'
 ## Summary
@@ -82,24 +100,24 @@ EOF
 )"
 ```
 
-#### 5. Merge Pull Request
+#### 6. Merge Pull Request
 ```bash
 # After PR approval
 gh pr merge --squash --delete-branch
 ```
 
-#### 6. Clean Up Remote Branch (if not auto-deleted)
+#### 7. Clean Up Remote Branch (if not auto-deleted)
 ```bash
 git push origin --delete <prefix>/<short-description>
 ```
 
-#### 7. Switch Back to Main and Pull
+#### 8. Switch Back to Main and Pull
 ```bash
 git checkout main
 git pull origin main
 ```
 
-#### 8. Delete Local Branch
+#### 9. Delete Local Branch
 ```bash
 git branch -d <prefix>/<short-description>
 ```
@@ -111,6 +129,7 @@ git branch -d <prefix>/<short-description>
 | Rule | Enforcement |
 |------|-------------|
 | Never push to main | Use feature branches + PR workflow |
+| Pass code review before push | Run `/review` and resolve all Critical/High issues |
 | Never force push to shared branches | Use `--force-with-lease` only on personal branches if needed |
 | Always create PR for review | No direct merges to main |
 | Delete branches after merge | Keep repository clean |
@@ -121,7 +140,7 @@ git branch -d <prefix>/<short-description>
 ### Branch Lifecycle Summary
 
 ```
-main (pull) → create branch → develop → commit → push → PR → review → merge → cleanup
+main (pull) → create branch → develop → commit → code review → push → PR → merge → cleanup
 ```
 
 ### Key Principles
