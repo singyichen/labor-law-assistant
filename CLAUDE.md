@@ -31,13 +31,22 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 - Linting: ESLint + Prettier
 
 ### Infrastructure
-- Caching / Session: Redis
+- Caching / Session: Redis (Upstash)
 - Logging: structlog
 - Error Tracking: Sentry
 - Metrics: Prometheus + Grafana
 - Log Aggregation: Grafana Loki
 - Tracing: OpenTelemetry
 - Uptime Monitoring: BetterStack
+
+### Deployment
+- Frontend: Vercel (global CDN)
+- Backend: Fly.io (Hong Kong)
+- Database: Neon Postgres (pgvector)
+- Redis: Upstash (serverless, global edge)
+- CDN / DNS: Cloudflare
+- CI/CD: GitHub Actions
+- Container: Docker Compose (dev) + multi-stage Dockerfile (prod)
 
 ### AI / ML
 - LLM (Primary): Anthropic Claude Sonnet 4.5
