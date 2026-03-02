@@ -8,6 +8,7 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 
 ## Tech Stack
 
+### Backend
 - Language: Python 3.12+
 - Package Manager: uv
 - Framework: FastAPI
@@ -18,6 +19,18 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 - Linting/Formatting: ruff
 - Type Checking: mypy (strict mode)
 - Testing: pytest + pytest-asyncio + httpx
+
+### Frontend
+- Framework: Next.js 15 (App Router)
+- Language: TypeScript (strict mode)
+- Package Manager: pnpm
+- UI: shadcn/ui + Tailwind CSS
+- State: TanStack Query + Zustand
+- Chat/Streaming: Vercel AI SDK + react-markdown
+- Testing: Vitest + Playwright
+- Linting: ESLint + Prettier
+
+### Shared
 - LLM: Anthropic Claude API
 - Vector DB: Pinecone
 
@@ -50,6 +63,22 @@ uv run ruff format .
 
 # Install pre-commit hooks (run from project root)
 uv run pre-commit install
+
+# --- Frontend (run from frontend/) ---
+cd frontend
+pnpm install
+
+# Run dev server
+pnpm dev
+
+# Run tests
+pnpm test
+
+# Type checking
+pnpm tsc --noEmit
+
+# Linting
+pnpm lint
 ```
 
 ## Architecture
@@ -70,7 +99,11 @@ labor-law-assistant/
 │   │   ├── unit/            # Unit tests
 │   │   └── integration/     # Integration tests
 │   └── pyproject.toml       # Dependencies & tool configs
-├── frontend/                # Frontend (planned)
+├── frontend/                # Next.js frontend
+│   ├── app/                 # App Router pages
+│   ├── components/          # React components
+│   ├── lib/                 # Utilities and API client
+│   └── stores/              # Zustand stores
 ├── docs/                    # Project documentation
 │   └── adr/                 # Architecture Decision Records
 └── .claude/                 # Claude Code configuration

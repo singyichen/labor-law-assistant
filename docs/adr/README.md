@@ -22,3 +22,4 @@ Each ADR follows this structure:
 | [001](001-package-manager-uv.md) | Use uv as package manager | Accepted | 2025-02-13 |
 | [002](002-web-framework-fastapi.md) | Use FastAPI as web framework | Accepted | 2025-02-13 |
 | [003](003-orm-sqlalchemy.md) | Use SQLAlchemy 2.0 as ORM | Accepted | 2025-02-13 |
+| [004](004-frontend-nextjs.md) | Use Next.js as frontend framework | Accepted | 2025-02-13 |
