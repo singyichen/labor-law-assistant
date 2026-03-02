@@ -30,9 +30,18 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 - Testing: Vitest + Playwright
 - Linting: ESLint + Prettier
 
+### Infrastructure
+- Caching / Session: Redis
+- Logging: structlog
+- Error Tracking: Sentry
+- Metrics: Prometheus + Grafana
+- Log Aggregation: Grafana Loki
+- Tracing: OpenTelemetry
+- Uptime Monitoring: BetterStack
+
 ### Shared
 - LLM: Anthropic Claude API
-- Vector DB: Pinecone
+- Vector Search: pgvector (PostgreSQL extension, no separate vector DB)
 
 Technical decisions are documented in [docs/adr/](docs/adr/).
 

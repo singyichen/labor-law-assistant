@@ -23,3 +23,5 @@ Each ADR follows this structure:
 | [002](002-web-framework-fastapi.md) | Use FastAPI as web framework | Accepted | 2025-02-13 |
 | [003](003-orm-sqlalchemy.md) | Use SQLAlchemy 2.0 as ORM | Accepted | 2025-02-13 |
 | [004](004-frontend-nextjs.md) | Use Next.js as frontend framework | Accepted | 2025-02-13 |
+| [005](005-caching-redis.md) | Use Redis as caching layer | Accepted | 2025-02-13 |
+| [006](006-observability-stack.md) | Observability stack (Sentry, structlog, Prometheus, Grafana, OpenTelemetry) | Accepted | 2025-02-13 |
