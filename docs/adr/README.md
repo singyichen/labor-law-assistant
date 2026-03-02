@@ -25,3 +25,6 @@ Each ADR follows this structure:
 | [004](004-frontend-nextjs.md) | Use Next.js as frontend framework | Accepted | 2025-02-13 |
 | [005](005-caching-redis.md) | Use Redis as caching layer | Accepted | 2025-02-13 |
 | [006](006-observability-stack.md) | Observability stack (Sentry, structlog, Prometheus, Grafana, OpenTelemetry) | Accepted | 2025-02-13 |
+| [007](007-embedding-model.md) | Use OpenAI text-embedding-3 as embedding model | Accepted | 2025-02-13 |
+| [008](008-llm-provider.md) | Use Anthropic Claude as primary LLM provider | Accepted | 2025-02-13 |
+| [009](009-authentication-strategy.md) | Anonymous-first authentication with optional OAuth2 | Accepted | 2025-02-13 |
