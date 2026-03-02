@@ -39,9 +39,16 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 - Tracing: OpenTelemetry
 - Uptime Monitoring: BetterStack
 
-### Shared
-- LLM: Anthropic Claude API
+### AI / ML
+- LLM (Primary): Anthropic Claude Sonnet 4.5
+- LLM (Fallback): OpenAI GPT-4o-mini
+- Embedding: OpenAI text-embedding-3-large (1536 dims)
 - Vector Search: pgvector (PostgreSQL extension, no separate vector DB)
+
+### Auth
+- Anonymous: UUID session cookie + Redis session
+- Registered: NextAuth.js v5 (Google + Line Login) + JWT
+- Session: Redis (24h TTL) → PostgreSQL (persistent)
 
 Technical decisions are documented in [docs/adr/](docs/adr/).
 
