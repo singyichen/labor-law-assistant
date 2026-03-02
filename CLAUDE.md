@@ -11,10 +11,17 @@ Labor Law Assistant - 台灣勞動法律查詢助手系統
 - Language: Python 3.12+
 - Package Manager: uv
 - Framework: FastAPI
+- ORM: SQLAlchemy 2.0 + asyncpg
+- Database: PostgreSQL + pgvector
+- Migration: Alembic
 - Config: pydantic-settings
 - Linting/Formatting: ruff
 - Type Checking: mypy (strict mode)
 - Testing: pytest + pytest-asyncio + httpx
+- LLM: Anthropic Claude API
+- Vector DB: Pinecone
+
+Technical decisions are documented in [docs/adr/](docs/adr/).
 
 ## Development Commands
 
@@ -52,8 +59,9 @@ labor-law-assistant/
 ├── backend/                 # Python FastAPI backend
 │   ├── app/                 # Application source code
 │   │   ├── api/routes/      # API route handlers
-│   │   ├── core/            # Core business logic
-│   │   ├── models/          # Data models
+│   │   ├── core/            # Core logic, middleware, exceptions
+│   │   ├── models/          # SQLAlchemy models
+│   │   ├── schemas/         # Pydantic request/response schemas
 │   │   ├── services/        # Service layer
 │   │   ├── utils/           # Utility functions
 │   │   ├── config.py        # Settings (pydantic-settings)
@@ -64,6 +72,7 @@ labor-law-assistant/
 │   └── pyproject.toml       # Dependencies & tool configs
 ├── frontend/                # Frontend (planned)
 ├── docs/                    # Project documentation
+│   └── adr/                 # Architecture Decision Records
 └── .claude/                 # Claude Code configuration
 ```
 
