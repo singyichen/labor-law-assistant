@@ -28,3 +28,4 @@ Each ADR follows this structure:
 | [007](007-embedding-model.md) | Use OpenAI text-embedding-3 as embedding model | Accepted | 2025-02-13 |
 | [008](008-llm-provider.md) | Use Anthropic Claude as primary LLM provider | Accepted | 2025-02-13 |
 | [009](009-authentication-strategy.md) | Anonymous-first authentication with optional OAuth2 | Accepted | 2025-02-13 |
+| [010](010-deployment-infrastructure.md) | Deployment infrastructure (Vercel, Fly.io, Neon, Upstash) | Accepted | 2025-02-13 |
