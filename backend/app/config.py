@@ -1,5 +1,8 @@
 """Application configuration via environment variables."""
 
+import logging
+from typing import Literal
+
 from pydantic import SecretStr, model_validator
 from pydantic_settings import BaseSettings
 
@@ -14,13 +17,18 @@ class Settings(BaseSettings):
         app_env: Runtime environment (development / staging / production).
         app_debug: Debug mode flag. Automatically disabled in production.
         app_port: HTTP server port number.
+        log_level: Logging level (DEBUG / INFO / WARNING / ERROR / CRITICAL).
+        cors_origins: Allowed CORS origins for frontend requests.
         anthropic_api_key: Anthropic API key for Claude integration.
             Required in production; optional in development.
     """
 
-    app_env: str = "development"
+    app_env: Literal["development", "staging", "production"] = "development"
     app_debug: bool = True
     app_port: int = 8000
+    log_level: str = "INFO"
+
+    cors_origins: list[str] = ["http://localhost:3000"]
 
     anthropic_api_key: SecretStr = SecretStr("")
 
@@ -44,5 +52,13 @@ class Settings(BaseSettings):
             self.app_debug = False
         return self
 
+    def setup_logging(self) -> None:
+        """Configure logging based on log_level setting."""
+        logging.basicConfig(
+            level=getattr(logging, self.log_level.upper(), logging.INFO),
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        )
+
 
 settings = Settings()
+settings.setup_logging()
