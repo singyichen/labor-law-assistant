@@ -144,6 +144,22 @@ Practical calculation tools that provide immediate, tangible value to users. Thi
 
 ---
 
+## Error Handling & Edge Cases
+
+| Scenario | Handling | User Message |
+|----------|----------|-------------|
+| Salary input below minimum wage | Warning (not blocking), show current minimum wage | "Note: The entered salary (NT$XX,XXX) is below the current minimum wage (NT$27,470). Please verify." |
+| Salary input unreasonably high (>NT$1M/month) | Warning, allow calculation | "The entered salary seems unusually high. Please verify before using the results." |
+| Employment start date in the future | Block calculation | "Employment start date cannot be in the future." |
+| Employment start date > 50 years ago | Warning, allow calculation | "Calculated service period exceeds 50 years. Please verify dates." |
+| Overtime hours exceed legal maximum (46hr/month) | Warning, still calculate | "Note: Monthly overtime exceeds the legal maximum of 46 hours. Your employer may be in violation." |
+| Browser doesn't support Intl.NumberFormat | Fallback to basic number formatting | (Numbers displayed without locale-specific formatting) |
+| Date calculation crosses old/new pension system boundary | Show both calculations with explanation | "Your employment spans the pension system transition (2005-07-01). Showing both calculations." |
+| User enters 0 overtime hours | Show result as NT$0 with explanation | "No overtime pay is due with 0 overtime hours." |
+| Part-time worker with variable hours | Show disclaimer about calculation basis | "This calculator assumes standard full-time employment. Part-time workers should consult their specific contract terms." |
+
+---
+
 ## Technical Dependencies
 
 | Dependency | Component | Notes |
@@ -154,6 +170,17 @@ Practical calculation tools that provide immediate, tangible value to users. Thi
 | Tailwind CSS | Frontend | Responsive styling |
 | date-fns | Frontend | Date calculations (years of service, etc.) |
 | Intl.NumberFormat | Browser API | Currency formatting (NT$) |
+
+## Epic Dependencies
+
+| Relationship | Epic | Reason |
+|-------------|------|--------|
+| **Depends on** | None | Standalone feature, can be developed independently |
+| **Integrates with** | Epic 01 (Chat Interface) | "Ask AI about this" button links calculator results to chat |
+| **Integrates with** | Epic 04 (Action Guide) | Action guides may link to relevant calculators |
+| **Can develop in parallel** | All Epics | Fully independent development |
+
+> **Recommended development order**: Sprint 7-8 or earlier if frontend resources are available. Calculators are high-value, low-risk features that can be shipped independently.
 
 ## Related ADRs
 

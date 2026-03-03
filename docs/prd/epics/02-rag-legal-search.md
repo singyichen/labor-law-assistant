@@ -10,6 +10,7 @@ The retrieval-augmented generation (RAG) engine that powers the Labor Law Assist
 |---|---|---|---|
 | M-02 | RAG Source Tracing System | Must Have | Generate answers based on legal database with source attribution |
 | M-04 | Legal Citation & Links | Must Have | Show cited legal articles in full with official links |
+| M-13 | Legal Database Versioning | Must Have | Version-controlled legal articles with change tracking |
 | S-09 | FAQ Knowledge Base | Should Have | Common questions with standard answers |
 
 ---
@@ -112,6 +113,71 @@ Structured Response (answer + citations + confidence)
 
 ---
 
+### M-13: Legal Database Versioning
+
+**User Story**
+> As a system maintainer, I want legal articles to be version-controlled with change tracking, so that users always see current regulations and can be notified of changes.
+
+**Acceptance Criteria**
+- [ ] Each legal article stores: current text, effective date, last amendment date, previous versions
+- [ ] When a regulation is amended, the old version is archived (not deleted)
+- [ ] Amended articles show a "recently updated" badge in citations (within 30 days of amendment)
+- [ ] Regulation change detection: periodic crawl of law.moj.gov.tw (weekly) or manual trigger
+- [ ] Change detection triggers a review workflow: crawl → diff → legal advisor review → publish
+- [ ] Legal advisor can approve/reject changes before they go live
+- [ ] After publishing an update, all cached responses citing the changed article are invalidated
+- [ ] Change log is publicly accessible: users can see what changed and when
+- [ ] All article embeddings are re-generated when article text changes
+- [ ] Regulation update SLA: P0 Emergency (24 hours), P1 Important (3 days), P2 Routine (7 days)
+
+**Content Pipeline**
+```
+law.moj.gov.tw (weekly crawl)
+    |
+    v
+Diff Detection (compare with stored version)
+    |
+    v
+Change Notification (to legal advisor + content team)
+    |
+    v
+Legal Advisor Review & Approval
+    |
+    v
+Database Update + Re-embedding + Cache Invalidation
+    |
+    v
+User Notification (S-06, if subscribed)
+```
+
+**FAQ Content Source & Review Process**
+| Source | Method | Volume |
+|--------|--------|--------|
+| Phase 0.5 User Research | Extract top questions from interviews & surveys | 20-30 questions |
+| Government FAQ pages | Curate from Ministry of Labor, labor bureaus | 15-20 questions |
+| Legal aid case patterns | Anonymized common inquiry types | 10-15 questions |
+| Legal advisor creation | Expert-authored for complex topics | 5-10 questions |
+
+All FAQ content must be reviewed by legal advisor before publication.
+
+---
+
+## Error Handling & Edge Cases
+
+| Scenario | Handling | User Message |
+|----------|----------|-------------|
+| RAG retrieval returns 0 results (similarity < 0.3) | Skip RAG, use LLM general knowledge with low confidence warning | "I couldn't find a specific legal article matching your question. Here's general guidance — please verify with a professional." |
+| RAG retrieval is slow (>2s) | Return partial results, continue loading | "Loading relevant legal articles..." (show spinner on citations) |
+| RAG retrieval timeout (>5s) | Fall back to FAQ matching, then general LLM | "We're having trouble searching the legal database. Here are some related FAQs..." |
+| Cited article has been amended since last sync | Show stale warning | "Note: This article may have been recently amended. Last synced: [date]. [Check official source]" |
+| Cited article number doesn't exist in DB | Filter out invalid citation, log error | (Citation silently removed, Sentry alert triggered) |
+| Legal database is empty or corrupt | Block all queries, show maintenance page | "System is undergoing maintenance. Please try again later or call 1955." |
+| Embedding API failure | Use cached embeddings if available, else error | "Search functionality is temporarily limited. You can browse our FAQ instead." |
+| FAQ keyword search returns no matches | Suggest related categories, offer AI chat | "No FAQ matches found. Would you like to ask our AI assistant instead?" |
+| User query is in a language not yet supported | Detect language, suggest supported languages | "We currently support Traditional Chinese. Multi-language support is coming soon." |
+
+---
+
 ## Extended Scope (Should Have)
 
 ### S-09: FAQ Knowledge Base
@@ -154,6 +220,18 @@ Structured Response (answer + citations + confidence)
 | PostgreSQL (Neon) | Database | Legal article storage, FAQ storage |
 | Alembic | Database | Migrations for legal database schema |
 | FastAPI | Backend | API endpoints for search and chat |
+
+## Epic Dependencies
+
+| Relationship | Epic | Reason |
+|-------------|------|--------|
+| **Depends on** | None | Foundation epic — legal database and RAG pipeline must be built first |
+| **Required by** | Epic 01 (Chat Interface) | Chat needs RAG for meaningful answers |
+| **Required by** | Epic 03 (Response Quality) | Confidence scoring depends on RAG retrieval metrics |
+| **Required by** | Epic 04 (Action Guide) | Action guides reference legal content from RAG |
+| **Can develop in parallel** | Epic 05 (Accessibility), Epic 06 (Calculators) | No direct dependency |
+
+> **Recommended development order**: This is the foundation epic. Start in Sprint 1-2 with legal DB schema, embedding pipeline, and basic RAG retrieval. Complete M-04 citations in Sprint 3-4.
 
 ## Related ADRs
 

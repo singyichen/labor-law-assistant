@@ -2,7 +2,7 @@
 
 ## Overview
 
-The quality assurance and trust-building layer of the Labor Law Assistant. This epic covers response quality control (confidence scoring, accuracy indicators), the disclaimer system, user feedback mechanisms, and advanced feedback collection. Together these features ensure users can assess answer reliability and the system can continuously improve.
+The quality assurance and trust-building layer of the Labor Law Assistant. This epic covers response quality control (confidence scoring, accuracy indicators), the disclaimer system, user feedback mechanisms, regulation update notifications, and advanced feedback collection. Together these features ensure users can assess answer reliability, stay informed of legal changes, and the system can continuously improve.
 
 ## Feature List
 
@@ -11,6 +11,7 @@ The quality assurance and trust-building layer of the Labor Law Assistant. This 
 | M-07 | Response Quality Control | Must Have | Confidence scores, accuracy indicators |
 | M-08 | Disclaimer System | Must Have | Legal disclaimers on homepage and in responses |
 | M-09 | Feedback Rating | Must Have | Thumbs up/down, error reporting |
+| S-06 | Regulation Update Notifications | Should Have | Push notifications for important regulatory changes |
 | S-07 | Advanced Feedback Collection | Should Have | Surveys, interview recruitment |
 
 ---
@@ -124,7 +125,52 @@ where:
 
 ---
 
+## Error Handling & Edge Cases
+
+| Scenario | Handling | User Message |
+|----------|----------|-------------|
+| Confidence score computation fails | Default to "Medium" with disclaimer | "Confidence score unavailable. Please verify this information independently." |
+| Feedback submission fails (API error) | Retry once, then store locally for later sync | "Your feedback couldn't be submitted right now. It will be sent automatically later." |
+| Error report with empty correction field | Allow submission but prompt for details | "Adding details about the error helps us fix it faster. [Submit anyway] [Add details]" |
+| Spam feedback detected (>10 submissions/minute) | Rate limit, silently drop excess | "Thank you for your feedback." (no additional message) |
+| Disclaimer cookie is cleared/blocked | Show disclaimer banner again | (Disclaimer banner re-appears) |
+| NPS survey shown to first-time user | Suppress survey until 3rd visit minimum | (No survey shown) |
+| LLM self-assessment returns invalid value | Exclude from confidence calc, use 2-factor formula | (No user-facing impact, logged to Sentry) |
+
+---
+
 ## Extended Scope (Should Have)
+
+### S-06: Regulation Update Notifications
+
+**User Story**
+> As an HR specialist, I want to be notified when labor regulations change, so that I can update company policies proactively and stay compliant.
+
+**Acceptance Criteria**
+- [ ] Users can subscribe to regulation update notifications (opt-in)
+- [ ] Subscription categories: by law (e.g., Labor Standards Act) or by topic (e.g., wages, leave)
+- [ ] Notification channels: Web Push API (browser notification) and/or email
+- [ ] Each notification includes: what changed, effective date, impact summary, link to updated content
+- [ ] Notification is triggered by legal database versioning system (M-13 in Epic 02)
+- [ ] Maximum notification frequency: 1 per day (batch if multiple changes)
+- [ ] Users can unsubscribe at any time from notification settings
+- [ ] Notification preference stored in user session (anonymous) or user account (registered)
+- [ ] Push notification requires explicit browser permission (Web Push API standard)
+- [ ] Fallback for browsers without Push API support: in-app notification badge on next visit
+
+**Notification Template**
+```
+[Regulation Update]
+Labor Standards Act, Article 24 has been amended.
+
+What changed: Overtime multiplier for rest days increased from 1.34x to 1.5x
+Effective date: 2026-07-01
+Impact: Affects all employees working overtime on rest days
+
+[View Details] [Update My Calculations]
+```
+
+---
 
 ### S-07: Advanced Feedback Collection
 
@@ -154,6 +200,17 @@ where:
 | Redis (Upstash) | Cache | Rate limiting for feedback submission |
 | Zustand | Frontend | UI state for feedback forms |
 | Next.js API routes | Frontend | Survey popup state management |
+
+## Epic Dependencies
+
+| Relationship | Epic | Reason |
+|-------------|------|--------|
+| **Depends on** | Epic 01 (Chat Interface) | Confidence scores, disclaimers, and feedback UI are part of chat responses |
+| **Depends on** | Epic 02 (RAG Legal Search) | Confidence scoring uses RAG retrieval similarity metrics |
+| **Depends on** | Epic 02 (M-13 Versioning) | S-06 notifications triggered by legal database changes |
+| **Can develop in parallel** | Epic 04, Epic 05, Epic 06 | No direct dependency |
+
+> **Recommended development order**: M-07 (confidence) and M-08 (disclaimer) in Sprint 3-4 alongside Epic 02 completion. M-09 (feedback) in Sprint 5-6 alongside Epic 01 chat UI. S-06 and S-07 in Phase 2.
 
 ## Related ADRs
 

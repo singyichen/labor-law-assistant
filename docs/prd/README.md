@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.0 |
+| **Version** | v2.1 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-02-13 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -346,10 +346,52 @@ Detailed feature specifications are organized into Epic files for Sprint plannin
 |------|-------|----------|------|
 | **Epic 01** | AI Chat Interface | M-05, M-01, M-03, S-02, S-08 | [01-chat-interface.md](epics/01-chat-interface.md) |
 | **Epic 02** | RAG Legal Search & Citation | M-02, M-04, S-09 | [02-rag-legal-search.md](epics/02-rag-legal-search.md) |
-| **Epic 03** | Response Quality & Trust | M-07, M-08, M-09, S-07 | [03-response-quality.md](epics/03-response-quality.md) |
+| **Epic 03** | Response Quality & Trust | M-07, M-08, M-09, S-06, S-07 | [03-response-quality.md](epics/03-response-quality.md) |
 | **Epic 04** | Action Guide & Emergency | M-06, M-10, S-04, S-05 | [04-action-guide-emergency.md](epics/04-action-guide-emergency.md) |
 | **Epic 05** | Accessibility & i18n | M-11, M-12, S-01 | [05-accessibility-i18n.md](epics/05-accessibility-i18n.md) |
 | **Epic 06** | Calculation Tools | S-03 | [06-calculation-tools.md](epics/06-calculation-tools.md) |
+
+> **Note**: Features not assigned to epics (C-01~C-07) are planned for Phase 3+ and will be specified when prioritized. See [Could Have Roadmap](#53-could-have-roadmap) below.
+
+### 5.3 Could Have Roadmap
+
+These advanced features are not yet assigned to epics. Brief planning for future prioritization:
+
+| Feature ID | Feature Name | Potential Epic | Prerequisites | Estimated Effort |
+|---|---|---|---|---|
+| **C-01** | Document Template Library | New Epic or Epic 04 extension | Legal advisor review of templates | 2-3 sprints |
+| **C-02** | Compliance Self-Assessment Tool | New Epic or Epic 06 extension | Legal database complete | 3-4 sprints |
+| **C-03** | Case Database | Epic 02 extension | De-identification pipeline, legal review | 4-5 sprints |
+| **C-04** | Community Forum | New Epic | Moderation system, user accounts (ADR-009) | 4-5 sprints |
+| **C-05** | Expert Referral Service | Epic 04 extension | Partnership agreements with legal aid orgs | 2-3 sprints |
+| **C-06** | Admin Dashboard | New Epic | Feedback system (M-09), FAQ CMS (S-09), analytics infra | 3-4 sprints |
+| **C-07** | CMS Content Management | Merge with C-06 | Legal database versioning, admin auth | Included in C-06 |
+
+**Priority recommendation for Phase 3+**:
+1. **C-06 + C-07** (Admin Dashboard + CMS) — Required for operations team efficiency
+2. **C-05** (Expert Referral) — High user value, extends M-10 emergency flow
+3. **C-03** (Case Database) — Differentiator, requires significant legal content work
+
+### 5.4 Epic Dependency Map
+
+```
+Epic 02 (RAG) ──────────────────────────────┐
+  |                                          |
+  v                                          v
+Epic 01 (Chat) ──> Epic 03 (Quality) ──> Epic 04 (Action Guide)
+                                             |
+Epic 05 (A11y/i18n) ── parallel ────────────-+
+Epic 06 (Calculators) ── independent ────────+
+```
+
+| Epic | Depends On | Can Develop In Parallel With | Integrates With |
+|------|------------|------------------------------|-----------------|
+| Epic 01 | Epic 02 (RAG for meaningful answers) | Epic 05, Epic 06 | Epic 03, Epic 04 |
+| Epic 02 | None (foundation) | Epic 05, Epic 06 | Epic 01, Epic 03 |
+| Epic 03 | Epic 01 (chat UI), Epic 02 (RAG for confidence) | Epic 06 | Epic 01, Epic 02 |
+| Epic 04 | Epic 01 (chat UI), Epic 02 (legal content) | Epic 06 | Epic 01, Epic 10 (emergency) |
+| Epic 05 | None (cross-cutting) | All epics | All epics |
+| Epic 06 | None (standalone) | All epics | Epic 01 (chat integration) |
 
 ---
 
@@ -610,6 +652,18 @@ Layer 5: Extended reading
 | Sprint 7-8 | 13-16 | Frontend development, accessibility implementation |
 | Sprint 9 | 17 | Integration testing, performance optimization |
 
+#### Epic → Sprint Mapping
+
+| Sprint | Weeks | Epic | Features | Milestone |
+|--------|-------|------|----------|-----------|
+| S1-2 | 1-4 | Epic 02 (foundation) | M-02 RAG pipeline, legal DB schema, embedding pipeline | RAG retrieval operational |
+| S3-4 | 5-8 | Epic 02, Epic 03 (partial) | M-04 legal citation, M-07 confidence scoring, M-08 disclaimer | RAG system complete with quality controls |
+| S5-6 | 9-12 | Epic 01, Epic 03 (partial) | M-05 chat UI, M-01 guided Q&A, M-03 layered display, M-09 feedback | Chat interface functional |
+| S7-8 | 13-16 | Epic 04, Epic 05, Epic 06 | M-06 action guide, M-10 emergency, M-11 RWD, M-12 a11y, S-03 calculators | All MVP features complete |
+| S9 | 17 | Cross-epic | Integration testing, PII sanitization, e2e testing, performance tuning | MVP tested and ready |
+
+> **Note**: Epic 05 (Accessibility) and Epic 06 (Calculators) can start earlier if team bandwidth allows. The mapping above is the recommended critical path.
+
 **Milestone**: MVP features complete, passed internal testing
 
 ### 10.5 Phase 2: Beta Testing (7 Weeks)
@@ -619,6 +673,34 @@ Layer 5: Extended reading
 | Week 1-2 | Internal testing optimization | 0 Critical bugs |
 | Week 3 | Beta user recruitment | 100 Beta users |
 | Week 4-7 | Beta testing, collect feedback | 500+ queries, 75%+ satisfaction |
+
+#### Beta Testing Plan
+
+**Recruitment Channels**
+| Channel | Target | Expected Yield |
+|---------|--------|----------------|
+| Legal Aid Foundation partnership | General workers with recent labor disputes | 20-30 users |
+| HR professional communities (LinkedIn, Facebook groups) | HR specialists | 20-30 users |
+| SME associations | Small business owners | 15-20 users |
+| Foreign worker NGOs (e.g., TIWA, SPA) | Foreign workers (Vietnamese, Indonesian) | 15-20 users |
+| University labor law courses | Students with legal knowledge (quality feedback) | 10-15 users |
+
+**Test Focus by Epic**
+| Priority | Epic | Test Scenarios | Key Metrics |
+|----------|------|----------------|-------------|
+| P0 | Epic 01 + 02 | Chat Q&A with real labor law questions | Response relevance, citation accuracy, completion rate |
+| P0 | Epic 03 | Confidence scoring accuracy, disclaimer visibility | False confidence rate, disclaimer comprehension |
+| P0 | Epic 04 | Emergency keyword detection, action guide usefulness | Emergency trigger accuracy, action plan save rate |
+| P1 | Epic 05 | Screen reader navigation, mobile usability | WCAG audit pass rate, mobile task completion rate |
+| P1 | Epic 06 | Calculator accuracy against manual calculation | Calculation correctness rate, user comprehension |
+
+**Feedback Collection**
+| Method | Timing | Questions |
+|--------|--------|-----------|
+| In-app rating | After each query | Thumbs up/down + optional comment |
+| NPS survey | Day 7, Day 14 | "How likely are you to recommend?" (0-10) |
+| Exit survey | End of beta | Satisfaction, missing features, trust level, suggestions |
+| Moderated interviews | Week 5-6 (selected 10 users) | Deep dive on pain points, workflow, comprehension |
 
 **Milestone**: Beta testing report completed
 
@@ -1139,6 +1221,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 1.0 | 2026-02-02 | Initial version (integrating PO, User Support, User Researcher, User Advocate evaluations) | Product Owner |
 | 1.1 | 2026-02-03 | Added Appendices G-J (integrating Technical Writer, Onboarding Specialist, Visual Designer, Customer Support evaluations) | Product Owner |
 | 2.0 | 2026-02-13 | Restructured: extracted detailed feature specs into 6 Epic files, updated Appendix B with ADR-001~010 | Product Owner |
+| 2.1 | 2026-02-13 | PO review fixes: S-06 assigned to Epic 03, Epic dependency map, Sprint mapping, Could Have roadmap, Beta testing plan, error handling & edge cases in all Epics | Product Owner |
 
 ---
 

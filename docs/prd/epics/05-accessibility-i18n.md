@@ -135,11 +135,35 @@ The inclusive design layer ensuring the Labor Law Assistant is usable by all Tai
 | Filipino | ~150K workers | Professional + review | V2 |
 | English | Other foreign nationals | In-house | V3 |
 
-**Translation Quality Process**
+**Translation Quality Assurance**
 1. Professional human translation (native speaker with legal domain knowledge)
 2. Review by bilingual labor rights advocate
 3. User testing with target language speakers (5 users per language)
 4. Continuous feedback loop for improvement
+
+**Additional QA Acceptance Criteria**
+- [ ] Each language has at least 10 core FAQ translations reviewed by native legal professional
+- [ ] Comprehension test: 5 target-language users correctly interpret 80%+ of key legal concepts
+- [ ] "Report translation error" button on every translated response
+- [ ] Translation version control: track when each translation was last updated
+- [ ] Automated CI check: all UI translation keys have values for all enabled languages (no missing keys)
+- [ ] Legal disclaimer translations verified by bilingual legal advisor
+
+---
+
+## Error Handling & Edge Cases
+
+| Scenario | Handling | User Message |
+|----------|----------|-------------|
+| Screen reader cannot parse dynamic chat content | Use ARIA live regions with polite announcements | (Screen reader announces new messages automatically) |
+| High contrast mode breaks chart/diagram readability | Provide text-only alternative for all visual content | "View as text table" link for every chart |
+| Zoom to 200% causes layout overlap | Tested at all breakpoints, single-column reflow | (Layout adjusts gracefully) |
+| Keyboard focus lost after dynamic content update | Programmatic focus management to new content | (Focus moves to latest chat message) |
+| Touch target too small on older Android devices | Minimum 48x48px on mobile, verified via Lighthouse | (Larger touch targets on mobile) |
+| Translation missing for specific legal term | Show original Chinese with annotation | "[Chinese term] (translation pending)" |
+| AI generates response in wrong language | Detect language mismatch, re-prompt LLM | "Regenerating response in your selected language..." |
+| i18n route returns 404 for unsupported locale | Redirect to default locale (zh-TW) | "This language is not yet supported. Showing Traditional Chinese." |
+| PWA offline mode with missing translations | Cache critical translations in service worker | (Cached translations available offline) |
 
 ---
 
@@ -154,6 +178,16 @@ The inclusive design layer ensuring the Labor Law Assistant is usable by all Tai
 | axe-core | Testing | Automated accessibility testing |
 | Playwright | Testing | Cross-browser accessibility testing |
 | Lighthouse CI | CI/CD | Performance and accessibility scoring per PR |
+
+## Epic Dependencies
+
+| Relationship | Epic | Reason |
+|-------------|------|--------|
+| **Depends on** | None | Cross-cutting concern, can start anytime |
+| **Applied to** | All Epics | Accessibility and i18n affect every UI component |
+| **Can develop in parallel** | All Epics | A11y/i18n work is layered on top of features |
+
+> **Recommended development order**: M-11 (RWD) and M-12 (a11y basics) should be established as design system foundations in Sprint 1-2, then enforced throughout all subsequent sprints. S-01 (multi-language) is Phase 2 work.
 
 ## Related ADRs
 

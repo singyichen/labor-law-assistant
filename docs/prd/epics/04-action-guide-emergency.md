@@ -183,6 +183,21 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 
 ---
 
+## Error Handling & Edge Cases
+
+| Scenario | Handling | User Message |
+|----------|----------|-------------|
+| Emergency keyword false positive (e.g., "I was fired up about my project") | Allow dismissal, learn from dismissal patterns | Emergency panel shown with [X] close button |
+| Emergency keyword missed (new slang/expression) | Monthly review of undetected emergency queries via feedback data | (No immediate user impact, process improvement) |
+| Self-harm keywords detected | Immediately show crisis resources BEFORE legal content | "If you are in distress, please call 1925 (24-hour support line). You are not alone." |
+| 1955 hotline is outside business hours | Show hours and alternative: online complaint form | "1955 operates [hours]. You can also file online: [link]" |
+| Action guide generation fails (LLM timeout) | Show generic action template for the scenario | "Here are general steps for your situation: [pre-written template]" |
+| Evidence checklist PDF generation fails | Offer plain-text alternative | "PDF generation failed. [View as text] [Try again]" |
+| User location unknown (can't determine local labor bureau) | Show all 22 county/city labor bureaus with search | "Select your county/city to find your local labor bureau." |
+| Appeal process template download fails | Retry, then link to official government templates | "Template unavailable. Visit the official site: [link]" |
+
+---
+
 ## Technical Dependencies
 
 | Dependency | Component | Notes |
@@ -192,6 +207,17 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 | Redis (Upstash) | Cache | Cache emergency resource data |
 | Next.js | Frontend | Emergency overlay UI, evidence checklist components |
 | react-to-pdf | Frontend | PDF export for evidence checklists (S-04) |
+
+## Epic Dependencies
+
+| Relationship | Epic | Reason |
+|-------------|------|--------|
+| **Depends on** | Epic 01 (Chat Interface) | Action guides are displayed within chat responses |
+| **Depends on** | Epic 02 (RAG Legal Search) | Action guides reference legal content from RAG |
+| **Integrates with** | Epic 03 (Response Quality) | Emergency panel coexists with confidence/disclaimer UI |
+| **Can develop in parallel** | Epic 05 (Accessibility), Epic 06 (Calculators) | No direct dependency |
+
+> **Recommended development order**: Sprint 7-8 after chat UI (Epic 01) and RAG (Epic 02) are functional. M-10 emergency panel can be developed independently of M-06 action guide.
 
 ## Related ADRs
 
