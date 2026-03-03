@@ -41,6 +41,9 @@ Practical calculation tools that provide immediate, tangible value to users. Thi
 - [ ] Input validation: salary must be >= minimum wage, hours must be reasonable (0-100)
 - [ ] Handle edge cases: part-time workers, variable-hour contracts
 - [ ] Show disclaimer: "This calculation assumes standard employment. Special industries may have different rules."
+- [ ] Provide "Simple Mode" toggle: user only enters total overtime hours, system calculates typical distribution automatically
+- [ ] "Why is it calculated this way?" explainer link for each multiplier (expandable, plain language)
+- [ ] Visual progress indicator showing calculation steps (not just final result)
 
 **UI Mockup**
 ```

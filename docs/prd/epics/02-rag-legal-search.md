@@ -206,6 +206,7 @@ All FAQ content must be reviewed by legal advisor before publication.
 | Labor Insurance | Enrollment, benefits, occupational injury | 8+ |
 | Workplace Issues | Bullying, harassment, discrimination | 7+ |
 | Employment Contracts | Contract types, probation, non-compete | 7+ |
+| Risks & Fears | "What if my employer retaliates?", "Is my query anonymous?", "Can I be fired for knowing my rights?", "Will filing a complaint make things worse?" | 5+ |
 
 ---
 

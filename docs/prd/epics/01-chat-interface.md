@@ -12,6 +12,7 @@ The core conversational interaction layer of the Labor Law Assistant. This epic 
 | M-01 | Contextual Question Guidance | Must Have | Guide questions based on user identity and context |
 | M-03 | Layered Information Display | Must Have | Summary first, expandable detailed legal articles |
 | M-14 | PII Auto-Sanitization | Must Have | Detect and mask sensitive personal information in user input |
+| M-15 | Simplified Wizard Mode | Must Have | Step-by-step yes/no guidance for low digital literacy users |
 | S-02 | Voice Input | Should Have | Speech-to-text queries |
 | S-08 | Conversation History | Should Have | Save query history (local storage) |
 
@@ -172,6 +173,51 @@ The core conversational interaction layer of the Labor Law Assistant. This epic 
 
 ---
 
+### M-15: Simplified Wizard Mode
+
+**User Story**
+> As a user with low digital literacy, I want a step-by-step guided process with simple yes/no questions, so that I can get answers without needing to type or describe my problem.
+
+**Acceptance Criteria**
+- [ ] Homepage offers a visible "I don't know how to ask" entry point alongside the identity selector
+- [ ] Wizard uses simple yes/no or multiple-choice questions (e.g., "Do you have a problem with your salary?")
+- [ ] Maximum 5 questions to reach a scenario and generate a relevant response
+- [ ] All questions use 6th-grade reading level language
+- [ ] Wizard provides a visual progress indicator (e.g., "Step 2 of 4")
+- [ ] Users can go back to previous questions or exit to free-form input at any time
+- [ ] Wizard results include the same layered display format (M-03) and action guide (M-06)
+- [ ] Wizard question tree is configurable via admin (not hardcoded)
+- [ ] Wizard tested with low-literacy users (5 participants in Phase 0.5)
+- [ ] Track wizard completion rate and drop-off step for optimization
+
+**UI Mockup**
+```
++---------------------------------+
+|     Labor Law Assistant         |
++---------------------------------+
+|                                 |
+|  What kind of problem are you   |
+|  experiencing?                  |
+|                                 |
+|  +-------------------------+   |
+|  | Salary / Pay issues     |   |
+|  +-------------------------+   |
+|  +-------------------------+   |
+|  | Leave / Time off        |   |
+|  +-------------------------+   |
+|  +-------------------------+   |
+|  | Being fired / Quitting  |   |
+|  +-------------------------+   |
+|  +-------------------------+   |
+|  | Workplace safety        |   |
+|  +-------------------------+   |
+|                                 |
+|  Step 1 of 4    [Skip to chat]  |
++---------------------------------+
+```
+
+---
+
 ## Error Handling & Edge Cases
 
 | Scenario | Handling | User Message |
@@ -205,6 +251,9 @@ The core conversational interaction layer of the Labor Law Assistant. This epic 
 - [ ] Graceful fallback if browser doesn't support Web Speech API
 - [ ] Clear permission prompt for microphone access
 - [ ] Stop recording button and auto-stop after silence (3 seconds)
+- [ ] Support Taiwanese Hokkien and Hakka speech recognition via fallback to Google Cloud Speech-to-Text
+- [ ] Display transcription confidence score; if low (<70%), prompt user to retype or use simpler words
+- [ ] Provide voice input tutorial (30-second guide with captions, accessible without audio)
 
 ---
 
