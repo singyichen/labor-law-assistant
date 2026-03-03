@@ -200,11 +200,26 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 - [ ] Reminder (browser notification or in-app on next visit) asks: "Have you taken action? Do you need further help?"
 - [ ] If user reports "not resolved," system provides escalation options (legal aid, labor union, labor bureau)
 - [ ] If user reports "resolved," show positive reinforcement and invite feedback
-- [ ] Track action completion rate and resolution rate (anonymized aggregate data)
 - [ ] Reminders are opt-in only (never automatic), respecting user privacy
-- [ ] Reminder data stored locally (browser) — no server-side tracking of individual cases
 - [ ] Provide "I no longer need reminders" option to stop all follow-ups
 - [ ] Include emotional support resources in follow-up messages (1980 Teacher Chang, 1925 hotline)
+- [ ] Privacy audit: verify no PII linkage between reminder events and user queries
+
+**Privacy-Preserving Metrics (Two-Tier Architecture)**
+
+| Tier | Storage | Data | Purpose |
+|------|---------|------|---------|
+| **Tier 1: User-Side** | Browser LocalStorage | Reminder settings (dates, opt-in status), action plan save timestamp, self-reported outcome (resolved/not resolved) | User experience only, NO server transmission |
+| **Tier 2: Anonymous Events** | Server-Side Analytics | Event counts only: `action_plan_saved`, `reminder_set`, `followup_completed`, `user_reported_resolved` | Aggregate product metrics |
+
+**Tier 2 Rules**:
+- NO user identification (no session ID, no cookie ID attached to events)
+- NO query content stored with events
+- Events contain only: event type + scenario category (e.g., `overtime`) + timestamp
+- Aggregated weekly in Analytics Dashboard (no individual-level drill-down)
+- Resolution rate measured via optional anonymous survey (not tracked per user)
+
+> This two-tier design ensures User Rights Charter #2 (absolute privacy protection) while enabling aggregate product metrics in §9.4.
 
 ---
 
