@@ -496,56 +496,69 @@ Epic 06 (Calculators) ── independent ────────+
 
 ### 7.1 Main Navigation Structure
 
-```
-Homepage
-+-- My Situation (contextual guidance)
-|   +-- Salary & Overtime
-|   |   +-- Overtime pay calculation
-|   |   +-- Salary deductions
-|   |   +-- Minimum wage
-|   +-- Leave & Rest
-|   |   +-- Annual leave calculation
-|   |   +-- Sick leave rules
-|   |   +-- Leave types
-|   +-- Resignation & Severance
-|   |   +-- Severance pay calculation
-|   |   +-- Resignation notice
-|   |   +-- Illegal dismissal
-|   +-- Workplace Issues
-|   |   +-- Workplace bullying
-|   |   +-- Sexual harassment
-|   |   +-- Occupational accidents
-|   +-- Other Questions
-|       +-- Labor/health insurance
-|       +-- Unions
-|       +-- Employment contracts
-+-- Calculation Tools
-|   +-- Overtime pay calculator
-|   +-- Annual leave calculator
-|   +-- Severance pay calculator
-+-- Emergency Assistance
-|   +-- 1955 Labor Hotline
-|   +-- County/city labor bureaus
-|   +-- Legal aid
-+-- Quick Query (search box)
-+-- About Us
-    +-- User guide
-    +-- Disclaimer
-    +-- Privacy policy
+```mermaid
+graph TD
+    Home["🏠 Homepage"]
+
+    Home --> Situation["My Situation<br/>(contextual guidance)"]
+    Home --> Tools["Calculation Tools"]
+    Home --> Emergency["Emergency Assistance"]
+    Home --> Search["Quick Query<br/>(search box)"]
+    Home --> About["About Us"]
+
+    Situation --> Salary["Salary & Overtime"]
+    Situation --> Leave["Leave & Rest"]
+    Situation --> Resign["Resignation & Severance"]
+    Situation --> Workplace["Workplace Issues"]
+    Situation --> Other["Other Questions"]
+
+    Salary --> S1["Overtime pay calculation"]
+    Salary --> S2["Salary deductions"]
+    Salary --> S3["Minimum wage"]
+
+    Leave --> L1["Annual leave calculation"]
+    Leave --> L2["Sick leave rules"]
+    Leave --> L3["Leave types"]
+
+    Resign --> R1["Severance pay calculation"]
+    Resign --> R2["Resignation notice"]
+    Resign --> R3["Illegal dismissal"]
+
+    Workplace --> W1["Workplace bullying"]
+    Workplace --> W2["Sexual harassment"]
+    Workplace --> W3["Occupational accidents"]
+
+    Other --> O1["Labor/health insurance"]
+    Other --> O2["Unions"]
+    Other --> O3["Employment contracts"]
+
+    Tools --> T1["Overtime pay calculator"]
+    Tools --> T2["Annual leave calculator"]
+    Tools --> T3["Severance pay calculator"]
+
+    Emergency --> E1["1955 Labor Hotline"]
+    Emergency --> E2["County/city labor bureaus"]
+    Emergency --> E3["Legal aid"]
+
+    About --> A1["User guide"]
+    About --> A2["Disclaimer"]
+    About --> A3["Privacy policy"]
 ```
 
 ### 7.2 Information Display Layers
 
-```
-Layer 1: Direct answer (within 30 characters)
-    | expand
-Layer 2: Plain language explanation (within 200 characters)
-    | expand
-Layer 3: Legal article citations
-    | expand
-Layer 4: Related cases
-    | link
-Layer 5: Extended reading
+```mermaid
+flowchart TD
+    L1["Layer 1: Direct Answer<br/>(within 30 characters)"]
+    L2["Layer 2: Plain Language Explanation<br/>(within 200 characters)"]
+    L3["Layer 3: Legal Article Citations"]
+    L4["Layer 4: Related Cases"]
+    L5["Layer 5: Extended Reading"]
+
+    L1 -- "expand" --> L2
+    L2 -- "expand" --> L3
+    L3 -- "expand" --> L4
+    L4 -- "link" --> L5
 ```
 
 ### 7.3 Search & Navigation Design
@@ -1024,24 +1037,35 @@ Level 3: Legal expert review (Legal Team)
 
 #### H.2 First-Use Flow Design
 
-```
-Step 1: Welcome Page (mandatory)
-    -> Empathetic greeting: "We understand workplace issues can be stressful. You're not alone."
-    -> System positioning explanation
-    -> Disclaimer (friendly version)
-    -> User rights explanation (focus on privacy & worker-first stance)
-         |
-Step 2: Identity Selection (skippable)
-    -> "I am a worker" "I am an employer" "I am HR"
-    -> Differentiated experience basis
-         |
-Step 3: Feature Tour (skippable)
-    -> 3 core feature carousel
-    -> Guided Q&A, source traceability, action guide
-         |
-Step 4: First Query Guidance
-    -> Question templates, voice input
-    -> First success celebration
+```mermaid
+flowchart TD
+    S1["Step 1: Welcome Page (mandatory)"]
+    S1_1["Empathetic greeting:<br/>'We understand workplace issues<br/>can be stressful. You are not alone.'"]
+    S1_2["System positioning explanation"]
+    S1_3["Disclaimer (friendly version)"]
+    S1_4["User rights explanation<br/>(privacy & worker-first stance)"]
+
+    S2["Step 2: Identity Selection (skippable)"]
+    S2_W["I am a Worker"]
+    S2_E["I am an Employer"]
+    S2_H["I am HR"]
+
+    S3["Step 3: Feature Tour (skippable)"]
+    S3_1["Guided Q&A"]
+    S3_2["Source Traceability"]
+    S3_3["Action Guide"]
+
+    S4["Step 4: First Query Guidance"]
+    S4_1["Question templates / Voice input"]
+    S4_2["First success celebration"]
+
+    S1 --- S1_1 & S1_2 & S1_3 & S1_4
+    S1 ==> S2
+    S2 --- S2_W & S2_E & S2_H
+    S2 ==> S3
+    S3 --- S3_1 & S3_2 & S3_3
+    S3 ==> S4
+    S4 --- S4_1 & S4_2
 ```
 
 **Goal**: Let users successfully get their first useful answer within 5 minutes
@@ -1214,30 +1238,16 @@ Step 4: First Query Guidance
 
 #### J.1 Four-Layer Support Architecture
 
-```
-+-----------------------------------------------------+
-| L1: Self-Service (40%)                               |
-|     FAQ, knowledge base, question templates          |
-|     Response time: Instant                           |
-+-----------------------------------------------------+
-                        | Cannot resolve
-+-----------------------------------------------------+
-| L2: AI Q&A System (45%)                              |
-|     Guided Q&A, RAG answers, calculation tools       |
-|     Response time: Instant                           |
-+-----------------------------------------------------+
-                        | Cannot resolve
-+-----------------------------------------------------+
-| L3: Human Support (13%)                              |
-|     Error reports, complaint handling, complex consult|
-|     Response time: Within 24 hours (business days)   |
-+-----------------------------------------------------+
-                        | Out of scope
-+-----------------------------------------------------+
-| L4: Professional Referral (2%)                       |
-|     Lawyer referral, government hotlines, labor orgs |
-|     Response time: Per partner                       |
-+-----------------------------------------------------+
+```mermaid
+flowchart TD
+    L1["L1: Self-Service (40%)<br/>FAQ, knowledge base, question templates<br/>Response time: Instant"]
+    L2["L2: AI Q&A System (45%)<br/>Guided Q&A, RAG answers, calculation tools<br/>Response time: Instant"]
+    L3["L3: Human Support (13%)<br/>Error reports, complaint handling, complex consult<br/>Response time: Within 24 hours (business days)"]
+    L4["L4: Professional Referral (2%)<br/>Lawyer referral, government hotlines, labor orgs<br/>Response time: Per partner"]
+
+    L1 -- "Cannot resolve" --> L2
+    L2 -- "Cannot resolve" --> L3
+    L3 -- "Out of scope" --> L4
 ```
 
 #### J.2 Support Team Configuration (MVP)
