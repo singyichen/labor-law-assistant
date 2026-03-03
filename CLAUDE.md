@@ -158,6 +158,12 @@ labor-law-assistant/
 - 提交訊息請涵蓋變更的全部範圍，並保持訊息簡潔
 - 開始實作新功能時建立並切換到新的 Git 分支（例如，使用 git worktree 或直接創建分支）
 - 永遠 *不要* 推送到 main 分支（main 或 master），避免干擾 prod 環境
+- Merge PR 後必須執行完整清理流程：
+  1. `gh pr merge <number> --merge` — merge PR
+  2. `git checkout main && git pull` — 切回 main 並拉取最新
+  3. `git fetch --prune` — 清理已刪除的遠端分支追蹤
+  4. `git branch -d <branch-name>` — 刪除本地分支
+  5. `git push origin --delete <branch-name>` — 刪除遠端分支
 
 ## Code Review
 
