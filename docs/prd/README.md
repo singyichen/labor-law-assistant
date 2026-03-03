@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.2 |
+| **Version** | v2.3 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-02-13 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -39,7 +39,7 @@
   | 8. Risk Assessment        | Product/tech/legal risk matrix & mitigation                  |
   | 9. Success Metrics        | Product health, tech, content quality, user rights KPI       |
   | 10. Timeline              | 19-month 5-phase plan (incl. Phase 0.5 user research 10 wks) |
-  | 11. Appendices            | Legal scope, tech stack, support, research, competitive, etc.|
+  | 11. Appendices            | Legal scope, tech stack, support, research, budget, etc.     |
   +-------------------+--------------------------------------------------------------+
 
 ---
@@ -387,6 +387,30 @@ These advanced features are not yet assigned to epics. Brief planning for future
 2. **C-05** (Expert Referral) — High user value, extends M-10 emergency flow
 3. **C-03** (Case Database) — Differentiator, requires significant legal content work
 
+#### Could Have Decision Framework (Post-Launch)
+
+**Decision Point**: Phase 4, Month 3 (3 months after official launch)
+
+**Evaluation Criteria (RICE Scoring)**:
+
+| Feature | Reach (users/month) | Impact (1-3) | Confidence (%) | Effort (weeks) | RICE Score |
+|---|:---:|:---:|:---:|:---:|:---:|
+| C-06 Admin Dashboard | 3 (ops team) | 3 (critical for ops) | 90% | 12 | 0.68 |
+| C-05 Expert Referral | 500 (est. 2% of MAU) | 3 (high value) | 80% | 8 | 150 |
+| C-03 Case Database | 2,000 (est. 20% of MAU) | 2 (medium) | 60% | 20 | 120 |
+| C-01 Document Templates | 800 (est. 8% of MAU) | 2 (medium) | 70% | 10 | 112 |
+| C-04 Community Forum | 1,000 (est. 10% of MAU) | 2 (medium) | 50% | 18 | 56 |
+| C-02 Compliance Tool | 300 (est. 3% of MAU) | 2 (medium) | 60% | 14 | 26 |
+
+> **Note**: RICE scores above are estimates. Actual scores will be updated based on real MAU, feature request frequency, and support ticket volume at the Phase 4 decision point.
+
+**Go/No-Go Threshold**: RICE >= 100 AND aligns with business goals (§2.3)
+
+**Phase 4 Planning Process**:
+1. Month 2 post-launch: conduct user survey to validate demand for C-01 to C-07
+2. Month 3: update RICE scores with actual usage data
+3. Month 3: Product Owner + Tech Lead select top 2 features for Phase 4 development
+
 ### 5.4 Epic Dependency Map
 
 ```
@@ -634,19 +658,30 @@ Layer 5: Extended reading
 
 ## 10. Timeline
 
-### 10.1 Overall Timeline (18 Months)
+### 10.1 Overall Timeline (21 Months)
 
 ```
-2026 Q1        2026 Q2        2026 Q3        2026 Q4        2027 Q1
-|--------------|--------------|--------------|--------------|
-  Phase 0.5      Phase 0        Phase 1        Phase 2        Phase 3
-  User Research  Tech Prep      MVP Dev        Beta Test      Launch
-  (10 weeks)     (5 weeks)      (17 weeks)     (7 weeks)      (5 weeks)
+2026 Q1         2026 Q2        2026 Q3        2026 Q4        2027 Q1
+|---------------|--------------|--------------|--------------|
+  Phase 0.5       Phase 0        Phase 1        Phase 2        Phase 3
+  User Research   Tech Prep      MVP Dev        Beta Test      Launch
+  (10 weeks)      (5 weeks)      (17 weeks)     (7 weeks)      (5 weeks)
+  Feb-Apr         May-Jun        Jun-Oct        Oct-Nov        Dec
                                                                   |
                                                               Phase 4
                                                               Continuous
                                                               Improvement
 ```
+
+| Phase | Duration | Timeline | Critical Milestone |
+|---|---|---|---|
+| Phase 0.5 | 10 weeks | 2026 Q1 (Feb-Apr) | User research complete, requirements validated |
+| Phase 0 | 5 weeks | 2026 Q2 (May-Jun) | Tech stack confirmed |
+| Phase 1 | 17 weeks | 2026 Q2-Q3 (Jun-Oct) | MVP tested |
+| Phase 2 | 7 weeks | 2026 Q3-Q4 (Oct-Nov) | Beta complete |
+| Phase 3 | 5 weeks | 2026 Q4 (Dec) | Official launch |
+
+**Total**: 44 weeks (~10.5 months) from kickoff to launch. **Launch target**: 2026-12-15
 
 ### 10.2 Phase 0.5: User Research (10 Weeks)
 
@@ -662,6 +697,12 @@ Layer 5: Extended reading
 | Week 9-10 | Low-fidelity prototype testing (9 people, mixed) + report writing | Usability issue list, research report |
 
 **Milestone**: User research report completed, requirement assumptions validated (including vulnerable group needs)
+
+**Go/No-Go Review (Week 8)**:
+- After interviews + card sorting, conduct requirement validation review
+- Decision criteria: if >30% of Must-Have features are invalidated by user research → pivot to alternative feature set
+- Contingency: 2-week buffer reserved; if Phase 0.5 overruns, compress Week 9-10 into a single-week summary sprint
+- Decision authority: Product Owner + Tech Lead joint sign-off
 
 ### 10.3 Phase 0: Technical Preparation (5 Weeks)
 
@@ -685,15 +726,30 @@ Layer 5: Extended reading
 
 #### Epic → Sprint Mapping
 
-| Sprint | Weeks | Epic | Features | Milestone |
-|--------|-------|------|----------|-----------|
-| S1-2 | 1-4 | Epic 02 (foundation) | M-02 RAG pipeline, legal DB schema, embedding pipeline | RAG retrieval operational |
-| S3-4 | 5-8 | Epic 02, Epic 03 (partial) | M-04 legal citation, M-07 confidence scoring, M-08 disclaimer | RAG system complete with quality controls |
-| S5-6 | 9-12 | Epic 01, Epic 03 (partial) | M-05 chat UI, M-01 guided Q&A, M-03 layered display, M-09 feedback | Chat interface functional |
-| S7-8 | 13-16 | Epic 04, Epic 05, Epic 06 | M-06 action guide, M-10 emergency, M-11 RWD, M-12 a11y, S-03 calculators | All MVP features complete |
-| S9 | 17 | Cross-epic | Integration testing, PII sanitization, e2e testing, performance tuning | MVP tested and ready |
+| Sprint | Weeks | Epic | Features | Milestone | Feature-Level Notes |
+|--------|-------|------|----------|-----------|---------------------|
+| S1-2 | 1-4 | Epic 02 (foundation) | M-02 RAG pipeline, legal DB schema, embedding pipeline | RAG retrieval operational | M-13 legal DB versioning schema included |
+| S3-4 | 5-8 | Epic 02, Epic 03 (partial) | M-04 legal citation, M-07 confidence scoring, M-08 disclaimer | RAG system complete with quality controls | M-07 confidence formula depends on M-02 retrieval scores |
+| S5-6 | 9-12 | Epic 01, Epic 03 (partial) | M-05 chat UI, M-01 guided Q&A, M-15 wizard, M-03 layered display, M-09 feedback | Chat interface functional | M-01 uses placeholder templates in S5, integrates RAG responses in S6; M-15 wizard built on M-01 tree in S6 |
+| S7-8 | 13-16 | Epic 04, Epic 05, Epic 06 | M-06 action guide, M-10 emergency, M-14 PII, M-11 RWD, M-12 a11y, S-03 calculators | All MVP features complete | M-06 trauma-informed AC requires content review by legal advisor |
+| S9 | 17 | Cross-epic | Integration testing, e2e testing, performance tuning | MVP tested and ready | Load testing (k6), WCAG audit (axe-core), PII sanitization verification |
 
 > **Note**: Epic 05 (Accessibility) and Epic 06 (Calculators) can start earlier if team bandwidth allows. The mapping above is the recommended critical path.
+
+#### Non-Functional Requirements Testing Schedule
+
+| NFR Category | Test Type | Tool | Frequency | Owner | Blocker? |
+|---|---|---|---|---|:---:|
+| Performance (§6.4) | Lighthouse CI | Lighthouse CLI | Every PR | Frontend lead | Yes (score < 80) |
+| Accessibility (§6.1) | Automated scan | axe-core + Playwright | Every PR | Frontend lead | Yes (critical issues) |
+| Security (§6.3) | PII sanitization test | Custom regex tests | Sprint 6+ (after M-14) | Backend lead | Yes (failure) |
+| i18n (§6.2) | Translation completeness | CI script (missing keys) | Before deploy | Product Owner | No (warn only) |
+| Load testing | Stress test | k6 or Artillery | Sprint 9 (before Beta) | DevOps | No (monitor only) |
+
+**Definition of Done (all sprints)**:
+- All PRs pass Lighthouse CI (performance >= 80, accessibility 100)
+- All PRs pass axe-core (0 critical, 0 serious)
+- All new features have keyboard navigation tests
 
 **Milestone**: MVP features complete, passed internal testing
 
@@ -736,6 +792,28 @@ Layer 5: Extended reading
 | NPS survey | Day 7, Day 14 | "How likely are you to recommend?" (0-10) |
 | Exit survey | End of beta | Satisfaction, missing features, trust level, suggestions |
 | Moderated interviews | Week 5-6 (selected 10 users: 5 general + 2 foreign workers + 2 visually impaired + 1 elderly) | Deep dive on pain points, workflow, comprehension, emotional safety, trust in AI, accessibility barriers |
+
+#### Beta Exit Criteria & Contingency Plan
+
+**Go-Live Criteria** (all must pass):
+
+| Criteria | Target | Measured By |
+|---|---|---|
+| P0 Critical bugs | 0 | Bug tracker |
+| User satisfaction | >= 75% | NPS survey |
+| Total queries executed | >= 500 | Backend log |
+| WCAG 2.1 AA compliance | Pass | axe-core audit |
+| Legal citation accuracy (sample) | >= 95% | Manual review (100 samples) |
+
+**If criteria NOT met**:
+| Scenario | Action |
+|----------|--------|
+| Satisfaction 60-75% | Extend Beta 2 weeks, targeted fixes, retest |
+| Satisfaction < 60% | Halt launch, conduct root cause analysis, pivot decision |
+| < 300 queries | Reassess market fit, user acquisition strategy |
+| P0 bug exists | Immediate fix, regression test, delay launch |
+
+**Decision Authority**: Product Owner + Tech Lead joint sign-off required for launch
 
 **Milestone**: Beta testing report completed
 
@@ -1264,6 +1342,19 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 
 ---
 
+### Appendix K: Phase 0.5 Research Budget
+
+| Item | Cost | Notes |
+|------|------|-------|
+| Researcher personnel (2 people x 10 weeks) | NT$ 280,000 | Research design, interviews, analysis, report |
+| Translators + cultural consultants (4 sessions) | NT$ 60,000 | Vietnamese + Indonesian worker interviews |
+| Participant compensation (35 people x NT$ 800 avg) | NT$ 28,000 | 1-1.5 hour sessions |
+| Accessibility testing tools & venue | NT$ 50,000 | Screen reader licenses, home visit logistics |
+| Online survey platform + incentives | NT$ 32,000 | 150+ respondents, multi-language |
+| **Total** | **NT$ 450,000** | **One-time cost, Phase 0.5 only** |
+
+---
+
 ## Change Log
 
 | Version | Date | Changes | Author |
@@ -1273,6 +1364,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 2.0 | 2026-02-13 | Restructured: extracted detailed feature specs into 6 Epic files, updated Appendix B with ADR-001~010 | Product Owner |
 | 2.1 | 2026-02-13 | PO review fixes: S-06 assigned to Epic 03, Epic dependency map, Sprint mapping, Could Have roadmap, Beta testing plan, error handling & edge cases in all Epics | Product Owner |
 | 2.2 | 2026-02-13 | User Researcher review fixes: trauma-informed design (Charter #11), M-15 Simplified Wizard Mode, S-10 Post-Action Check-In, Phase 0.5 extended to 10 weeks with vulnerable group research & ethics protocols, Beta testing expanded with accessibility/trauma scenarios, Persona dimensions added, Empowerment & Psychological Safety metrics, FAQ Risks & Fears category, Calculator Simple Mode | Product Owner |
+| 2.3 | 2026-02-13 | PO review v2 fixes: Timeline corrected to 21 months with phase table, Phase 0.5 Go/No-Go review + research budget (Appendix K), M-01/M-15 integration strategy (shared decision tree), S-10 privacy-preserving two-tier metrics, Sprint mapping feature-level notes + NFR testing schedule, Beta exit criteria & contingency plan, Could Have RICE decision framework | Product Owner |
 
 ---
 

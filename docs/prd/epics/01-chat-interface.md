@@ -109,6 +109,34 @@ The core conversational interaction layer of the Labor Law Assistant. This epic 
 
 ---
 
+### M-01 & M-15 Integration Strategy
+
+M-01 (Contextual Guidance) and M-15 (Simplified Wizard Mode) share the same underlying infrastructure to avoid maintaining two separate systems.
+
+**Unified Architecture**:
+```
+Homepage Entry
+    |
+    +-- Option A: "I know what to ask" → M-01 Scenario Selector → Free-form chat
+    +-- Option B: "I don't know how to ask" → M-15 Wizard Mode → Guided yes/no flow → Chat
+    +-- Option C: "Quick search" → Direct text input → Chat
+```
+
+**Shared Infrastructure**:
+- Both use a unified Question Configuration DB (single data source)
+- M-01 scenario templates = leaf nodes of the wizard decision tree
+- M-15 wizard questions = intermediate nodes of the decision tree
+- CMS admin interface manages ONE tree structure, generating both UX modes
+
+**Development Order**:
+1. Sprint 5: Build M-01 scenario selector + template library (MVP foundation)
+2. Sprint 6: Add M-15 wizard layer on top (progressive enhancement using the same tree)
+3. Sprint 7: Usability test both modes with low-literacy users (5 participants)
+
+**UX Rule**: M-15 wizard is NOT a separate tool, but an alternative navigation path to the same chat endpoint. Both modes ultimately produce a user query that enters the standard RAG pipeline.
+
+---
+
 ### M-03: Layered Information Display
 
 **User Story**
