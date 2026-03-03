@@ -218,30 +218,37 @@ Homepage Entry
 - [ ] Wizard tested with low-literacy users (5 participants in Phase 0.5)
 - [ ] Track wizard completion rate and drop-off step for optimization
 
-**UI Mockup**
-```
-+---------------------------------+
-|     Labor Law Assistant         |
-+---------------------------------+
-|                                 |
-|  What kind of problem are you   |
-|  experiencing?                  |
-|                                 |
-|  +-------------------------+   |
-|  | Salary / Pay issues     |   |
-|  +-------------------------+   |
-|  +-------------------------+   |
-|  | Leave / Time off        |   |
-|  +-------------------------+   |
-|  +-------------------------+   |
-|  | Being fired / Quitting  |   |
-|  +-------------------------+   |
-|  +-------------------------+   |
-|  | Workplace safety        |   |
-|  +-------------------------+   |
-|                                 |
-|  Step 1 of 4    [Skip to chat]  |
-+---------------------------------+
+**UI Mockup (Wizard Decision Flow)**
+
+```mermaid
+flowchart TD
+    Start["What kind of problem<br/>are you experiencing?<br/>(Step 1 of 4)"]
+
+    Start --> Salary["Salary / Pay issues"]
+    Start --> Leave["Leave / Time off"]
+    Start --> Fired["Being fired / Quitting"]
+    Start --> Safety["Workplace safety"]
+    Start --> Skip["Skip to chat"]
+
+    Salary --> Q2S{"Is it related to<br/>overtime pay?<br/>(Step 2 of 4)"}
+    Q2S -- "Yes" --> ResultOT["Overtime pay calculation<br/>& complaint guide"]
+    Q2S -- "No" --> ResultSalary["Salary deductions<br/>& minimum wage"]
+
+    Leave --> Q2L{"Is it related to<br/>annual leave?<br/>(Step 2 of 4)"}
+    Q2L -- "Yes" --> ResultLeave["Annual leave entitlement<br/>& calculation"]
+    Q2L -- "No" --> ResultOtherLeave["Sick leave, parental leave<br/>& other leave types"]
+
+    Fired --> Q2F{"Did your employer<br/>fire you?<br/>(Step 2 of 4)"}
+    Q2F -- "Yes" --> ResultFired["Illegal dismissal assessment<br/>& severance pay"]
+    Q2F -- "No" --> ResultQuit["Resignation notice period<br/>& procedure"]
+
+    Safety --> Q2W{"Was there an occupational<br/>accident?<br/>(Step 2 of 4)"}
+    Q2W -- "Yes" --> ResultAccident["Occupational accident<br/>claim & compensation"]
+    Q2W -- "No" --> ResultHarassment["Workplace bullying<br/>or harassment"]
+
+    ResultOT & ResultSalary & ResultLeave & ResultOtherLeave --> Chat["Enter AI Chat<br/>with pre-filled context"]
+    ResultFired & ResultQuit & ResultAccident & ResultHarassment --> Chat
+    Skip --> Chat
 ```
 
 ---
