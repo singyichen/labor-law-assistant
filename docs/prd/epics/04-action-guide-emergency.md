@@ -12,6 +12,7 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 | M-10 | Emergency Fast Track | Must Have | Detect emergency keywords, provide hotline links |
 | S-04 | Evidence Collection Guide | Should Have | Tell users what evidence to collect and how to preserve it |
 | S-05 | Appeal Process Guide | Should Have | Step-by-step instructions for various appeal channels |
+| S-10 | Post-Action Check-In | Should Have | Optional follow-up reminders, resolution tracking, escalation options |
 
 ---
 
@@ -32,6 +33,9 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 - [ ] Action steps are tailored to user identity (worker vs employer vs HR)
 - [ ] Each action step includes estimated time/effort
 - [ ] Provide "Save action plan" button (saves to conversation history)
+- [ ] Action steps assess power dynamics: when suggesting "talk to employer," provide safety assessment questions (e.g., "Is it safe to approach your employer directly?")
+- [ ] Include "Do NOT take action if you feel unsafe" warnings for harassment/violence scenarios
+- [ ] For sensitive scenarios (harassment, illegal detention), prioritize third-party intervention options (labor bureau, NGO, legal aid) over direct employer confrontation
 
 **UI Mockup**
 ```
@@ -90,6 +94,8 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 - [ ] Emergency keywords are configurable (admin can add/remove)
 - [ ] System still processes the query normally (emergency panel is additional)
 - [ ] Track emergency trigger frequency for monitoring
+- [ ] Implicit crisis detection: analyze query patterns (e.g., same topic queried > 5 times within 24 hours) and proactively offer support resources
+- [ ] Display empathetic message alongside emergency panel: "We understand this is a difficult situation. You are not alone."
 
 **Emergency Trigger Keywords**
 | Category | Keywords |
@@ -110,6 +116,7 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 | 1925 Suicide Prevention Hotline | 1925 | 24-hour, for self-harm signals |
 | 110 Police Emergency | 110 | For physical threats |
 | 113 Domestic Violence Hotline | 113 | For workplace violence situations |
+| 1980 Teacher Chang Hotline | 1980 | Emotional support, stress counseling |
 
 **UI Mockup**
 ```
@@ -180,6 +187,24 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 | Labor-Management Mediation | 1-3 months | Free | If agreed, legally binding | Negotiable disputes |
 | Arbitration | 3-6 months | Low | Legally binding | Complex disputes |
 | Court (Labor Court) | 6-12 months | Filing fee | Legally binding | Last resort |
+
+---
+
+### S-10: Post-Action Check-In
+
+**User Story**
+> As a worker who has taken action based on the system's guidance, I want optional follow-up support, so that I don't feel abandoned after taking a difficult step.
+
+**Acceptance Criteria**
+- [ ] Action guide includes optional "Remind me in X days" feature (3 / 7 / 14 / 30 days)
+- [ ] Reminder (browser notification or in-app on next visit) asks: "Have you taken action? Do you need further help?"
+- [ ] If user reports "not resolved," system provides escalation options (legal aid, labor union, labor bureau)
+- [ ] If user reports "resolved," show positive reinforcement and invite feedback
+- [ ] Track action completion rate and resolution rate (anonymized aggregate data)
+- [ ] Reminders are opt-in only (never automatic), respecting user privacy
+- [ ] Reminder data stored locally (browser) — no server-side tracking of individual cases
+- [ ] Provide "I no longer need reminders" option to stop all follow-ups
+- [ ] Include emotional support resources in follow-up messages (1980 Teacher Chang, 1925 hotline)
 
 ---
 

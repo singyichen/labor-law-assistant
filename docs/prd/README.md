@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.1 |
+| **Version** | v2.2 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-02-13 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -30,15 +30,15 @@
   |       Section     |                           Contents                           |
   +-------------------+--------------------------------------------------------------+
   | 1. Product Overview       | Problem statement, solution, positioning, value proposition  |
-  | 2. Product Vision & Goals | Vision, mission, business goals, user rights charter (10)    |
+  | 2. Product Vision & Goals | Vision, mission, business goals, user rights charter (11)    |
   | 3. Target Users           | 3 personas + 7 vulnerable groups + 10 hypotheses             |
   | 4. User Journey           | Complete journey map, 6-stage touchpoints & design ops       |
-  | 5. Feature Requirements   | MoSCoW (12 Must + 9 Should + 7 Could) + Epic links          |
+  | 5. Feature Requirements   | MoSCoW (13 Must + 10 Should + 7 Could) + Epic links         |
   | 6. Non-Functional Reqs    | WCAG 2.1 AA, 5 languages, privacy, performance              |
   | 7. Info Architecture      | Navigation, layered info, search design                      |
   | 8. Risk Assessment        | Product/tech/legal risk matrix & mitigation                  |
   | 9. Success Metrics        | Product health, tech, content quality, user rights KPI       |
-  | 10. Timeline              | 18-month 5-phase plan (incl. Phase 0.5 user research)        |
+  | 10. Timeline              | 19-month 5-phase plan (incl. Phase 0.5 user research 10 wks) |
   | 11. Appendices            | Legal scope, tech stack, support, research, competitive, etc.|
   +-------------------+--------------------------------------------------------------+
 
@@ -128,6 +128,7 @@ This product commits to the following principles:
 | 8 | **Emergency support**: Provide human assistance referrals, never let AI handle crisis situations alone |
 | 9 | **Open transparency**: System operation logic and algorithm principles publicly explained |
 | 10 | **Social responsibility**: Proactively promote labor rights education, close information gaps |
+| 11 | **Psychological safety first**: System design follows trauma-informed principles, avoids triggering secondary trauma, provides emotional support resources |
 
 ---
 
@@ -146,6 +147,9 @@ This product commits to the following principles:
 | **Pain points** | Legal language is difficult, doesn't know where to search, afraid to ask the boss, doesn't know the right keywords |
 | **Expectations** | Get answers in plain language, resolve questions within 5 minutes, know what to do next |
 | **Context** | Queries on phone after work, may be anxious or angry |
+| **Past labor disputes** | Has experienced wage theft, skeptical of employer intentions |
+| **Trust in AI** | Medium — willing to try but needs verification |
+| **Emotional state when querying** | Anxious, time-pressured, seeking validation |
 
 #### Persona 2: HR Specialist - Linda
 
@@ -158,6 +162,9 @@ This product commits to the following principles:
 | **Pain points** | Can't keep up with regulation updates, needs to cite articles, complex cases hard to judge |
 | **Expectations** | Professional and accurate, citable sources, similar cases, regulation update notifications |
 | **Context** | Desktop queries during office hours, needs to print or share |
+| **Past labor disputes** | Handles employee disputes regularly, needs accurate legal backing |
+| **Trust in AI** | High — accustomed to AI tools, values efficiency |
+| **Emotional state when querying** | Calm, task-oriented, seeking authoritative sources |
 
 #### Persona 3: Small Business Owner - Boss Wang
 
@@ -170,6 +177,9 @@ This product commits to the following principles:
 | **Pain points** | Doesn't understand law, worried about violations, lawyers too expensive, limited resources |
 | **Expectations** | Simple and clear guidance, tell me what to do |
 | **Context** | Emergency queries when encountering problems |
+| **Past labor disputes** | No direct experience, fears government penalties |
+| **Trust in AI** | Low — prefers human advice, needs simple interface |
+| **Emotional state when querying** | Stressed, overwhelmed, seeking clear "what to do" guidance |
 
 ### 3.2 Vulnerable User Groups
 
@@ -260,10 +270,13 @@ Stages: Discover Problem -> Find Channel -> Use System -> Understand Info -> Tak
                                     |
                                     v
 +---------------------------------------------------------------------+
-| Follow Up (not currently planned)                                    |
+| Follow Up (Phase 2: S-10 Post-Action Check-In)                      |
 +---------------------------------------------------------------------+
-| Need: Track progress, get ongoing support                            |
-| Opportunity: Progress tracking, expert referral, community support   |
+| Need: Track progress, get ongoing support, avoid abandonment         |
+| Emotion: Uncertain -> Supported (if follow-up available)             |
+| Pain point: Feel isolated after taking action, fear retaliation      |
+| Opportunity: Optional reminders, escalation options, resolution      |
+|              tracking, ongoing emotional support resources            |
 +---------------------------------------------------------------------+
 ```
 
@@ -301,6 +314,7 @@ Stages: Discover Problem -> Find Channel -> Use System -> Understand Info -> Tak
 | **M-10** | Emergency Fast Track | Detect emergency keywords, provide hotline links | Handle urgent needs |
 | **M-11** | Mobile-First Design | Mobile-First RWD | Workers primarily use phones |
 | **M-12** | Accessibility Basics | WCAG 2.1 AA compliance | Ensure equal access |
+| **M-15** | Simplified Wizard Mode | Step-by-step yes/no guidance for users who cannot describe problems freely | Serve low digital literacy users |
 
 #### Should Have - Phase 2 Features
 
@@ -315,6 +329,7 @@ Stages: Discover Problem -> Find Channel -> Use System -> Understand Info -> Tak
 | **S-07** | Advanced Feedback Collection | Surveys, interview recruitment | Deep user understanding |
 | **S-08** | Conversation History | Save query history (local storage) | Convenient for future reference |
 | **S-09** | FAQ Knowledge Base | Common questions with standard answers | Reduce AI burden |
+| **S-10** | Post-Action Check-In | Optional follow-up reminders, resolution tracking, escalation options | Reduce abandonment, provide ongoing support |
 
 #### Could Have - Advanced Features
 
@@ -344,10 +359,10 @@ Detailed feature specifications are organized into Epic files for Sprint plannin
 
 | Epic | Scope | Features | Spec |
 |------|-------|----------|------|
-| **Epic 01** | AI Chat Interface | M-05, M-01, M-03, S-02, S-08 | [01-chat-interface.md](epics/01-chat-interface.md) |
+| **Epic 01** | AI Chat Interface | M-05, M-01, M-03, M-15, S-02, S-08 | [01-chat-interface.md](epics/01-chat-interface.md) |
 | **Epic 02** | RAG Legal Search & Citation | M-02, M-04, S-09 | [02-rag-legal-search.md](epics/02-rag-legal-search.md) |
 | **Epic 03** | Response Quality & Trust | M-07, M-08, M-09, S-06, S-07 | [03-response-quality.md](epics/03-response-quality.md) |
-| **Epic 04** | Action Guide & Emergency | M-06, M-10, S-04, S-05 | [04-action-guide-emergency.md](epics/04-action-guide-emergency.md) |
+| **Epic 04** | Action Guide & Emergency | M-06, M-10, S-04, S-05, S-10 | [04-action-guide-emergency.md](epics/04-action-guide-emergency.md) |
 | **Epic 05** | Accessibility & i18n | M-11, M-12, S-01 | [05-accessibility-i18n.md](epics/05-accessibility-i18n.md) |
 | **Epic 06** | Calculation Tools | S-03 | [06-calculation-tools.md](epics/06-calculation-tools.md) |
 
@@ -591,7 +606,21 @@ Layer 5: Extended reading
 | **Completeness** | Regulation coverage | 8 major laws 100% |
 | | FAQ coverage | Common questions 90%+ |
 
-### 9.4 User Rights Metrics
+### 9.4 User Outcome & Empowerment Metrics
+
+| Category | Metric | MVP Target | 6-Month Target | Measurement Tool |
+|------|------|---------|-----------|---------|
+| **User Outcomes** | Action completion rate (% who saved action plan and took at least one step) | 40%+ | 55%+ | Follow-up survey |
+| | Issue resolution rate (% who reported issue resolved) | 30%+ | 45%+ | Follow-up survey |
+| | Legal aid referral click rate | 15%+ | 25%+ | Analytics |
+| **Empowerment** | % of users reporting "I feel more confident about protecting my rights" | — | 75%+ | Survey |
+| | % of users who took at least one action after using the system | — | 50%+ | Follow-up survey |
+| | % of users who shared the system with others | — | 40%+ | Survey |
+| **Psychological Safety** | % of harassment queries receiving trauma-informed responses | 100% | 100% | Content audit |
+| | Emotional support resource view rate (when triggered) | 50%+ | 60%+ | Analytics |
+| | User report: "did not feel re-traumatized" | — | 100% | Beta testing |
+
+### 9.5 User Rights Metrics
 
 | Category | Metric | Target |
 |------|------|--------|
@@ -612,25 +641,27 @@ Layer 5: Extended reading
 |--------------|--------------|--------------|--------------|
   Phase 0.5      Phase 0        Phase 1        Phase 2        Phase 3
   User Research  Tech Prep      MVP Dev        Beta Test      Launch
-  (6 weeks)      (5 weeks)      (17 weeks)     (7 weeks)      (5 weeks)
+  (10 weeks)     (5 weeks)      (17 weeks)     (7 weeks)      (5 weeks)
                                                                   |
                                                               Phase 4
                                                               Continuous
                                                               Improvement
 ```
 
-### 10.2 Phase 0.5: User Research (6 Weeks)
+### 10.2 Phase 0.5: User Research (10 Weeks)
 
-**Goal**: Validate requirement assumptions, ensure correct product direction
+**Goal**: Validate requirement assumptions, ensure correct product direction, include vulnerable group perspectives
 
 | Week | Task | Output |
 |------|------|------|
-| Week 1-2 | Research design, recruit participants | Research plan, 30 participants |
-| Week 3-4 | In-depth interviews (15-18 people) | Pain point map, requirements list |
-| Week 5 | Card sorting, survey | Information architecture, requirement priorities |
-| Week 6 | Low-fidelity prototype testing | Usability issue list |
+| Week 1-2 | Research design, recruit participants (including vulnerable groups) | Research plan, 35 participants (15 general + 20 vulnerable) |
+| Week 3-5 | In-depth interviews (20 people): general workers (7), HR specialists (6), SME owners (5), foreign workers with translators (4: Vietnamese + Indonesian), visually impaired with screen reader (2) | Pain point map, requirements list, accessibility insights |
+| Week 6 | Card sorting (15 people, mixed groups) | Information architecture |
+| Week 7 | Accessibility usability testing (5 people: 2 visually impaired, 2 elderly, 1 low-literacy) | Accessibility issue list |
+| Week 8 | Online survey (150+ respondents, multi-language: zh-TW, Vietnamese, Indonesian) | Requirement priorities |
+| Week 9-10 | Low-fidelity prototype testing (9 people, mixed) + report writing | Usability issue list, research report |
 
-**Milestone**: User research report completed, requirement assumptions validated
+**Milestone**: User research report completed, requirement assumptions validated (including vulnerable group needs)
 
 ### 10.3 Phase 0: Technical Preparation (5 Weeks)
 
@@ -677,13 +708,15 @@ Layer 5: Extended reading
 #### Beta Testing Plan
 
 **Recruitment Channels**
-| Channel | Target | Expected Yield |
-|---------|--------|----------------|
-| Legal Aid Foundation partnership | General workers with recent labor disputes | 20-30 users |
-| HR professional communities (LinkedIn, Facebook groups) | HR specialists | 20-30 users |
-| SME associations | Small business owners | 15-20 users |
-| Foreign worker NGOs (e.g., TIWA, SPA) | Foreign workers (Vietnamese, Indonesian) | 15-20 users |
-| University labor law courses | Students with legal knowledge (quality feedback) | 10-15 users |
+| Channel | Target | Expected Yield | Quality Criteria |
+|---------|--------|----------------|------------------|
+| Legal Aid Foundation partnership | General workers with recent labor disputes | 20-30 users | Recent case (< 6 months) |
+| HR professional communities (LinkedIn, Facebook groups) | HR specialists | 20-30 users | 2+ years experience |
+| SME associations | Small business owners | 15-20 users | 5-50 employees |
+| Foreign worker NGOs (e.g., TIWA, SPA) | Foreign workers (10 Vietnamese, 10 Indonesian, 5 Thai, 5 Filipino) | 25-30 users | Active workers, diverse industries |
+| Accessibility advocacy groups (e.g., TFCB) | Visually impaired users | 8-10 users | Daily screen reader users |
+| Senior centers, community colleges | Elderly workers (55+) | 8-10 users | Low-medium digital literacy |
+| University labor law courses | Students with legal knowledge (quality feedback) | 10-15 users | — |
 
 **Test Focus by Epic**
 | Priority | Epic | Test Scenarios | Key Metrics |
@@ -691,7 +724,9 @@ Layer 5: Extended reading
 | P0 | Epic 01 + 02 | Chat Q&A with real labor law questions | Response relevance, citation accuracy, completion rate |
 | P0 | Epic 03 | Confidence scoring accuracy, disclaimer visibility | False confidence rate, disclaimer comprehension |
 | P0 | Epic 04 | Emergency keyword detection, action guide usefulness | Emergency trigger accuracy, action plan save rate |
-| P1 | Epic 05 | Screen reader navigation, mobile usability | WCAG audit pass rate, mobile task completion rate |
+| P0 | Epic 04 (trauma) | Trauma-sensitive response testing: sexual harassment query, occupational death query, illegal detention query | User report: "felt supported" (>80%), "did not feel re-traumatized" (100%) |
+| P0 | Epic 05 (a11y) | Screen reader full-flow testing, elderly user task completion | Task success rate (>70%), WCAG 2.1 AA audit pass |
+| P1 | Epic 05 | Mobile usability across devices | Mobile task completion rate |
 | P1 | Epic 06 | Calculator accuracy against manual calculation | Calculation correctness rate, user comprehension |
 
 **Feedback Collection**
@@ -700,7 +735,7 @@ Layer 5: Extended reading
 | In-app rating | After each query | Thumbs up/down + optional comment |
 | NPS survey | Day 7, Day 14 | "How likely are you to recommend?" (0-10) |
 | Exit survey | End of beta | Satisfaction, missing features, trust level, suggestions |
-| Moderated interviews | Week 5-6 (selected 10 users) | Deep dive on pain points, workflow, comprehension |
+| Moderated interviews | Week 5-6 (selected 10 users: 5 general + 2 foreign workers + 2 visually impaired + 1 elderly) | Deep dive on pain points, workflow, comprehension, emotional safety, trust in AI, accessibility barriers |
 
 **Milestone**: Beta testing report completed
 
@@ -718,11 +753,11 @@ Layer 5: Extended reading
 
 | Milestone | Expected Time | Deliverable |
 |--------|---------|--------|
-| M0.5 | Week 6 | User research report |
-| M0 | Week 11 | Technology selection confirmed, environment ready |
-| M1 | Week 28 | MVP features complete |
-| M2 | Week 35 | Beta testing complete |
-| M3 | Week 40 | Official launch |
+| M0.5 | Week 10 | User research report (incl. vulnerable group insights) |
+| M0 | Week 15 | Technology selection confirmed, environment ready |
+| M1 | Week 32 | MVP features complete |
+| M2 | Week 39 | Beta testing complete |
+| M3 | Week 44 | Official launch |
 
 ---
 
@@ -773,16 +808,30 @@ MVP should cover 8 major labor laws:
 
 ### Appendix D: User Research Plan
 
-**Phase 0.5 Research Plan (6 Weeks)**
+**Phase 0.5 Research Plan (10 Weeks)**
 
-| Research Method | Target | Sample Size | Output |
-|---------|------|-------|------|
-| In-depth interview | General workers | 7 | Pain point map |
-| In-depth interview | HR specialists | 6 | Workflow |
-| In-depth interview | Small business owners | 5 | Requirements list |
-| Card sorting | Mixed | 15 | Information architecture |
-| Online survey | Broad | 150+ | Requirement priorities |
-| Prototype testing | Mixed | 9 | Usability issues |
+| Research Method | Target | Sample Size | Special Accommodation | Output |
+|---------|------|-------|------|------|
+| In-depth interview | General workers | 7 | — | Pain point map |
+| In-depth interview | HR specialists | 6 | — | Workflow |
+| In-depth interview | Small business owners | 5 | — | Requirements list |
+| In-depth interview | Foreign workers | 4 | Translator + cultural consultant + location at NGO (TIWA/SPA) | Language/cultural barriers |
+| In-depth interview | Visually impaired | 2 | Screen reader setup, home visit option, 1.5hr sessions | A11y requirements |
+| Card sorting | Mixed | 15 | — | Information architecture |
+| Accessibility usability testing | Mixed vulnerable groups | 5 | Screen reader, large font, simplified interface | A11y issue list |
+| Online survey | Broad | 150+ | Multi-language (zh-TW, Vietnamese, Indonesian) | Requirement priorities |
+| Prototype testing | Mixed | 9 | — | Usability issues |
+
+#### Research Ethics & Trauma-Informed Protocols
+
+| Consideration | Protocol |
+|--------------|----------|
+| **Informed consent** | All participants receive plain-language consent form explaining data use, voluntary participation, right to withdraw |
+| **Emotional safety** | Interviewer trained in trauma-informed interviewing, warm-up/cool-down protocols |
+| **Trigger warnings** | Avoid asking participants to re-narrate traumatic workplace experiences in detail; focus on needs, not trauma |
+| **Compensation** | NT$500-1000 per session (1-1.5 hours), provided upfront to honor participants' time |
+| **Confidentiality** | No PII collected, audio recordings deleted after transcription, de-identified data storage |
+| **Cultural sensitivity** | Foreign worker interviews conducted at trusted NGO locations with cultural consultants present |
 
 ### Appendix E: Competitive Analysis
 
@@ -899,9 +948,10 @@ Level 3: Legal expert review (Legal Team)
 
 ```
 Step 1: Welcome Page (mandatory)
+    -> Empathetic greeting: "We understand workplace issues can be stressful. You're not alone."
     -> System positioning explanation
     -> Disclaimer (friendly version)
-    -> User rights explanation
+    -> User rights explanation (focus on privacy & worker-first stance)
          |
 Step 2: Identity Selection (skippable)
     -> "I am a worker" "I am an employer" "I am HR"
@@ -1222,6 +1272,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 1.1 | 2026-02-03 | Added Appendices G-J (integrating Technical Writer, Onboarding Specialist, Visual Designer, Customer Support evaluations) | Product Owner |
 | 2.0 | 2026-02-13 | Restructured: extracted detailed feature specs into 6 Epic files, updated Appendix B with ADR-001~010 | Product Owner |
 | 2.1 | 2026-02-13 | PO review fixes: S-06 assigned to Epic 03, Epic dependency map, Sprint mapping, Could Have roadmap, Beta testing plan, error handling & edge cases in all Epics | Product Owner |
+| 2.2 | 2026-02-13 | User Researcher review fixes: trauma-informed design (Charter #11), M-15 Simplified Wizard Mode, S-10 Post-Action Check-In, Phase 0.5 extended to 10 weeks with vulnerable group research & ethics protocols, Beta testing expanded with accessibility/trauma scenarios, Persona dimensions added, Empowerment & Psychological Safety metrics, FAQ Risks & Fears category, Calculator Simple Mode | Product Owner |
 
 ---
 
