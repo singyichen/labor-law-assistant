@@ -130,7 +130,11 @@ labor-law-assistant/
 │   ├── lib/                 # Utilities and API client
 │   └── stores/              # Zustand stores
 ├── docs/                    # Project documentation
-│   └── adr/                 # Architecture Decision Records
+│   ├── adr/                 # Architecture Decision Records
+│   ├── prd/                 # Product Requirements Document
+│   │   ├── README.md        # Product-level PRD (vision, users, NFR, timeline)
+│   │   └── epics/           # Feature specs per epic (user stories, acceptance criteria)
+│   └── strategy/            # Strategic planning documents
 └── .claude/                 # Claude Code configuration
 ```
 
