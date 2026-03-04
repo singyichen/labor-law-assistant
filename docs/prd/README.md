@@ -749,6 +749,8 @@ flowchart TD
 
 > **Note**: Epic 05 (Accessibility) and Epic 06 (Calculators) can start earlier if team bandwidth allows. The mapping above is the recommended critical path.
 
+> For the complete testing strategy (unit, integration, E2E, performance, security, accessibility, legal accuracy), see [Testing Strategy](../testing/testing-strategy.md).
+
 #### Non-Functional Requirements Testing Schedule
 
 | NFR Category | Test Type | Tool | Frequency | Owner | Blocker? |
