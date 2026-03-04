@@ -149,6 +149,89 @@ The inclusive design layer ensuring the Labor Law Assistant is usable by all Tai
 - [ ] Automated CI check: all UI translation keys have values for all enabled languages (no missing keys)
 - [ ] Legal disclaimer translations verified by bilingual legal advisor
 
+#### Translation Vendor Management
+
+**Vendor Selection Criteria**
+
+| Criteria | Requirement | Weight |
+|----------|-------------|:------:|
+| Legal domain expertise | Demonstrated experience translating legal documents (labor law preferred) | 25% |
+| Native speaker status | Must be native speaker of the target language | 20% |
+| Taiwan labor law familiarity | Basic understanding of Taiwan labor regulations and terminology | 15% |
+| Turnaround time | Initial translation within 10 business days per 5,000 words | 10% |
+| Cost range | Within market rate: NT$ 2-5/word (varies by language pair) | 10% |
+| NDA willingness | Must sign NDA covering all translated content and source materials | 5% |
+| Test translation pass rate | Score >= 85% on a 500-word test translation evaluated by Legal Advisor | 10% |
+| Tool compatibility | Ability to work with i18n JSON key-value format and translation management tools | 5% |
+
+**Vendor SLAs**
+
+| SLA Metric | Target | Measurement |
+|------------|--------|-------------|
+| Initial translation turnaround | 10 business days per 5,000 words | Delivery date vs. agreed deadline |
+| Review turnaround | 5 business days after translator delivery | Review completion date |
+| Urgent turnaround - P0 | 24 hours for critical legal content corrections | Delivery timestamp |
+| Error correction turnaround | 3 business days after error report | Fix delivery date |
+| Availability | Respond to communications within 1 business day | Response timestamp |
+| Communication responsiveness | Acknowledge new project briefs within 4 hours during business hours | Acknowledgment timestamp |
+
+**Translation Cost Budget**
+
+| Language | Estimated Volume | Unit Cost (NT$/word) | Total Cost (NT$) | Timeline |
+|----------|:----------------:|:--------------------:|:----------------:|----------|
+| Simplified Chinese (zh-CN) | 15,000 words | 1.5 (rewrite, not translate) | 22,500 | MVP |
+| Vietnamese (vi) | 15,000 words | 3.5 | 52,500 | V2 |
+| Indonesian (id) | 15,000 words | 3.0 | 45,000 | V2 |
+| Thai (th) | 15,000 words | 3.5 | 52,500 | V2 |
+| Filipino (fil) | 15,000 words | 3.0 | 45,000 | V2 |
+| English (en) | 15,000 words | 2.0 (in-house) | 30,000 | V3 |
+| **Total** | **90,000 words** | | **NT$ 247,500** | |
+
+> **Note**: Costs are estimates for initial translation only. Ongoing maintenance (monthly updates, new content) estimated at ~10% of initial cost per year. See [Appendix L: MVP Development Budget](../README.md#appendix-l-mvp-development-budget) for budget integration.
+
+**Escalation Procedures**
+
+1. **Translation quality dispute**: Translator -> i18n Team Lead -> Legal Advisor -> Product Owner (escalation within 2 business days per level)
+2. **Missed SLA**: Auto-notification at 80% of SLA elapsed -> i18n Team Lead escalation -> vendor penalty clause activation (3 consecutive misses trigger vendor review)
+3. **Legal accuracy concern**: Immediate halt of publication -> Legal Advisor review within 24 hours -> corrective action plan within 48 hours
+
+**Rollback Procedures**
+
+```mermaid
+flowchart TD
+    A["Translation error discovered"] --> B{"Severity assessment"}
+    B -->|Critical: legal meaning changed| C["Immediate rollback to previous version"]
+    B -->|Major: comprehension impaired| D["Rollback within 4 hours"]
+    B -->|Minor: style or formatting| E["Fix in next update cycle"]
+    C --> F["Notify affected language users"]
+    D --> F
+    F --> G["Root cause analysis within 48 hours"]
+    G --> H["Corrective action + vendor feedback"]
+    E --> H
+```
+
+Rollback steps:
+1. Detect error via user report, QA check, or automated CI
+2. Assess severity: Critical / Major / Minor
+3. Execute rollback via translation version control — revert JSON translation file to last tagged version
+4. Notify users viewing affected language: "Translation is being updated. Showing previous version."
+5. Root cause analysis within 48 hours
+6. Vendor feedback and preventive action documented
+
+**Continuous Improvement Metrics**
+
+| Metric | Target | Measurement Frequency | Owner |
+|--------|--------|:---------------------:|-------|
+| Translation error rate | < 2% of translated strings per release | Per release | i18n Team Lead |
+| User comprehension score | > 85% correct interpretation in usability test | Quarterly | UX Designer |
+| Vendor on-time delivery rate | > 95% of deliveries within SLA | Monthly | i18n Team Lead |
+| Translation feedback positive rate | > 80% positive on "Was this translation helpful?" | Monthly | Product Owner |
+| Time-to-fix for reported errors | < 24 hours for Critical, < 72 hours for Major | Per incident | i18n Team Lead |
+| Terminology consistency score | > 98% adherence to glossary terms | Per release (automated) | QA Engineer |
+| Translation coverage | 100% of enabled UI keys have translations | Per deployment (CI check) | DevOps |
+
+> **Cross-reference**: For regulation content update SLA by priority level (P0: 24hr / P1: 3 days / P2: 7 days), see [PRD Appendix G.4](../README.md#appendix-g-content-strategy--update-plan).
+
 ---
 
 ## Error Handling & Edge Cases
