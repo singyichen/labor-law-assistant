@@ -571,6 +571,8 @@ flowchart TD
 | **Breadcrumb navigation** | Show current location | Avoid getting lost |
 | **Related questions** | Recommend after answering | Extended exploration |
 
+> **📐 Wireframes & Interaction Flows**: For detailed page wireframes, responsive layouts, and interaction flow diagrams, see [Design Wireframes](../design/wireframes.md).
+
 ---
 
 ## 8. Risk Assessment
@@ -603,6 +605,68 @@ flowchart TD
 | User takes action based on incorrect info and sues | Low | Very High | Critical | Complete disclaimer, legal review, insurance |
 | Violate Personal Data Protection Act | Low | High | Warning | Regulatory compliance review, minimal collection |
 | Deemed as unauthorized legal practice | Very Low | Very High | Warning | Clearly position as information service, not legal advice |
+
+### 8.4 External Dependencies & Constraints
+
+#### 8.4.1 Third-Party Service Dependencies & SLA
+
+> Consolidated from [ADR-005](../adr/005-caching-redis.md), [ADR-007](../adr/007-embedding-model.md), [ADR-008](../adr/008-llm-provider.md), [ADR-010](../adr/010-deployment-infrastructure.md)
+
+| Service | Provider | Purpose | MVP Cost | SLA / Limits | Degradation Strategy |
+|---------|----------|---------|:--------:|-------------|---------------------|
+| LLM (Primary) | Anthropic Claude Sonnet 4.5 | AI response generation | ~$40-50/mo | Rate limit, no public uptime SLA | GPT-4o-mini fallback |
+| LLM (Fallback) | OpenAI GPT-4o-mini | Fallback LLM | ~$0.0015/query | 99.5% uptime | Show FAQ + error message |
+| Embedding | OpenAI text-embedding-3-large | Vector embedding | <$0.01/mo | Rate limit | Use cached embeddings |
+| Frontend Hosting | Vercel (Free) | Frontend deployment | $0 | 100GB bandwidth/mo | Degrade to static page |
+| Backend Hosting | Fly.io (HK) | API server | $5-10/mo | 1 shared CPU, 256MB | Horizontal scaling |
+| Database | Neon PostgreSQL | Data storage + pgvector | $0 (Free) | 10GB storage, 100hr compute/mo | Upgrade to Pro plan ($19/mo) |
+| Cache | Upstash Redis | FAQ cache, rate limiting | $0 (Free) | 10K commands/day, 256MB | Direct DB query |
+| Observability | Sentry + structlog | Error tracking | $0 (Free) | 5K errors/mo | Degrade to log-only |
+| Legal Data Source | law.moj.gov.tw | Regulation texts | $0 | No SLA, may restructure | Weekly backup, manual scraping contingency |
+
+**Total MVP infrastructure cost**: ~$6-11/month (see [ADR-010 Cost Analysis](../adr/010-deployment-infrastructure.md))
+
+#### 8.4.2 Development Team Resource Plan
+
+> Note: §J.2 covers the customer support team. This section covers the development team.
+
+| Role | Count | Phase | Responsibilities |
+|------|:-----:|-------|-----------------|
+| Product Owner | 1 | All phases | Requirement management, priority decisions, stakeholder communication |
+| Tech Lead / Backend | 1 | Phase 0 onward | Architecture design, API development, RAG pipeline |
+| Backend Developer | 1 | Phase 1 onward | API development, database, testing |
+| Frontend Developer | 1-2 | Phase 1 Sprint 5 onward | Next.js UI, calculators, accessibility |
+| UX/UI Designer | 0.5 | Phase 0.5-1 | Wireframes, design system, usability testing |
+| Legal Advisor | 0.5 | All phases | Legal content review, Golden Data validation |
+| QA Engineer | 1 | Phase 1 Sprint 7 onward | E2E testing, screen reader testing |
+| DevOps | 0.5 | Phase 0 onward | CI/CD, infrastructure, performance testing |
+| **Total** | **6-7** | | |
+
+**Key resource risks**:
+- Legal Advisor: Single point of failure. Mitigation: Pre-identify 2 backup candidates before Phase 0
+- Vietnamese/Indonesian translators: Scarce for legal domain. Mitigation: Engage NGOs (TIWA, SPA) during Phase 0.5
+
+#### 8.4.3 Regulatory Compliance & External Review Timeline
+
+> For regulation update SLA (24hr/3d/7d), see [Appendix G.4](#appendix-g-content-strategy-framework)
+
+| Review Item | Owner | Timeline | Notes |
+|------------|-------|----------|-------|
+| PDPA (Personal Data Protection Act) compliance review | Legal Advisor + External consultant | Phase 0.5 (Week 5-8) | Confirm anonymous-first design is compliant |
+| Legal disclaimer review | Legal Advisor | Before Phase 1 Sprint 4 | M-08 disclaimer content finalized |
+| Legal database first audit | Legal Advisor | Phase 1 Sprint 2 | Verify accuracy of 8 major laws |
+| WCAG 2.1 AA compliance audit | QA + External a11y consultant | Phase 2 (pre-Beta) | External audit required |
+| Pre-launch legal review | Legal Advisor + External lawyer | Phase 3 Week 1-2 | Go/No-Go prerequisite |
+
+#### 8.4.4 Key Constraints
+
+| Constraint | Description | Impact | Contingency |
+|-----------|-------------|--------|-------------|
+| Anthropic has no public uptime SLA | Primary LLM provider has no guaranteed availability | May affect service stability | GPT-4o-mini fallback + Redis cache (70-80% hit rate) |
+| Neon Free Tier compute limit | 100hr/month compute, overage requires paid plan | May be insufficient post-MVP | Monitor usage, budget for Pro upgrade ($19/mo) |
+| No API for legal data source | law.moj.gov.tw is web-only, no structured API | Regulation updates require scraping or manual work | Weekly scheduled scraping + manual verification |
+| Legal translator scarcity | Vietnamese/Indonesian translators with legal expertise are rare | V2 multilingual may be delayed | Engage NGO partners during Phase 0.5 |
+| MVP is anonymous (no auth) | Cannot track individual user behavior | Personalization limited | Session cookie for basic segmentation |
 
 ---
 
