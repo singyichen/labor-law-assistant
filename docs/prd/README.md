@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.3 |
+| **Version** | v2.4 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-02-13 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -365,8 +365,9 @@ Detailed feature specifications are organized into Epic files for Sprint plannin
 | **Epic 04** | Action Guide & Emergency | M-06, M-10, S-04, S-05, S-10 | [04-action-guide-emergency.md](epics/04-action-guide-emergency.md) |
 | **Epic 05** | Accessibility & i18n | M-11, M-12, S-01 | [05-accessibility-i18n.md](epics/05-accessibility-i18n.md) |
 | **Epic 06** | Calculation Tools | S-03 | [06-calculation-tools.md](epics/06-calculation-tools.md) |
+| **Epic 07** | Future Features (Phase 3+) | C-03, C-04, C-05, C-06, C-07 | [07-future-features.md](epics/07-future-features.md) |
 
-> **Note**: Features not assigned to epics (C-01~C-07) are planned for Phase 3+ and will be specified when prioritized. See [Could Have Roadmap](#53-could-have-roadmap) below.
+> **Note**: Features C-01 and C-02 are planned for Phase 3+ and will be specified when prioritized. Features C-03~C-07 are detailed in [Epic 07: Future Features](epics/07-future-features.md). See [Could Have Roadmap](#53-could-have-roadmap) below.
 
 ### 5.3 Could Have Roadmap
 
@@ -376,11 +377,11 @@ These advanced features are not yet assigned to epics. Brief planning for future
 |---|---|---|---|---|
 | **C-01** | Document Template Library | New Epic or Epic 04 extension | Legal advisor review of templates | 2-3 sprints |
 | **C-02** | Compliance Self-Assessment Tool | New Epic or Epic 06 extension | Legal database complete | 3-4 sprints |
-| **C-03** | Case Database | Epic 02 extension | De-identification pipeline, legal review | 4-5 sprints |
-| **C-04** | Community Forum | New Epic | Moderation system, user accounts (ADR-009) | 4-5 sprints |
-| **C-05** | Expert Referral Service | Epic 04 extension | Partnership agreements with legal aid orgs | 2-3 sprints |
-| **C-06** | Admin Dashboard | New Epic | Feedback system (M-09), FAQ CMS (S-09), analytics infra | 3-4 sprints |
-| **C-07** | CMS Content Management | Merge with C-06 | Legal database versioning, admin auth | Included in C-06 |
+| **C-03** | Case Database | [Epic 07](epics/07-future-features.md#c-03-case-database) | De-identification pipeline, legal review | 4-5 sprints |
+| **C-04** | Community Forum | [Epic 07](epics/07-future-features.md#c-04-community-forum) | Moderation system, user accounts (ADR-009) | 4-5 sprints |
+| **C-05** | Expert Referral Service | [Epic 07](epics/07-future-features.md#c-05-expert-referral-service) | Partnership agreements with legal aid orgs | 2-3 sprints |
+| **C-06** | Admin Dashboard | [Epic 07](epics/07-future-features.md#c-06--c-07-admin-dashboard--cms) | Feedback system (M-09), FAQ CMS (S-09), analytics infra | 3-4 sprints |
+| **C-07** | CMS Content Management | [Merged with C-06](epics/07-future-features.md#c-06--c-07-admin-dashboard--cms) | Legal database versioning, admin auth | Included in C-06 |
 
 **Priority recommendation for Phase 3+**:
 1. **C-06 + C-07** (Admin Dashboard + CMS) — Required for operations team efficiency
@@ -421,6 +422,8 @@ Epic 01 (Chat) ──> Epic 03 (Quality) ──> Epic 04 (Action Guide)
                                              |
 Epic 05 (A11y/i18n) ── parallel ────────────-+
 Epic 06 (Calculators) ── independent ────────+
+                                             |
+Epic 07 (Future Features) ── Phase 3+ ──────-+ depends on Epic 02, 03, 04
 ```
 
 | Epic | Depends On | Can Develop In Parallel With | Integrates With |
@@ -431,6 +434,7 @@ Epic 06 (Calculators) ── independent ────────+
 | Epic 04 | Epic 01 (chat UI), Epic 02 (legal content) | Epic 06 | Epic 01, Epic 10 (emergency) |
 | Epic 05 | None (cross-cutting) | All epics | All epics |
 | Epic 06 | None (standalone) | All epics | Epic 01 (chat integration) |
+| Epic 07 | Epic 02 (RAG), Epic 03 (feedback), Epic 04 (emergency referral) | Epic 05, Epic 06 | Epic 01, Epic 02, Epic 04 |
 
 ---
 
@@ -1429,6 +1433,83 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | Online survey platform + incentives | NT$ 32,000 | 150+ respondents, multi-language |
 | **Total** | **NT$ 450,000** | **One-time cost, Phase 0.5 only** |
 
+### Appendix L: MVP Development Budget
+
+> This appendix consolidates all cost data from across the PRD into a single budget summary. All figures cover the full project timeline (Phase 0.5 through Phase 3, approximately 44 weeks / 11 months).
+
+#### L.1 Development Team Salary Costs
+
+| Role | Count | Monthly Salary (NT$) | Duration | Total (NT$) | Phase | Source |
+|------|:-----:|:--------------------:|----------|:-----------:|-------|--------|
+| Product Owner | 1 | 80,000 | 10.5 months | 840,000 | Phase 0-3 | Section 8.4.2 |
+| Tech Lead / Backend | 1 | 90,000 | 10.5 months | 945,000 | Phase 0-3 | Section 8.4.2 |
+| Backend Developer | 1 | 65,000 | 8 months | 520,000 | Phase 1-3 | Section 8.4.2 |
+| Frontend Developer | 1.5 avg | 65,000 | 6 months | 585,000 | Phase 1-3 | Section 8.4.2 |
+| UX/UI Designer | 0.5 | 70,000 | 5 months | 175,000 | Phase 0.5-1 | Section 8.4.2 |
+| Legal Advisor | 0.5 | 60,000 | 10.5 months | 315,000 | Phase 0-3 | Section 8.4.2 |
+| QA Engineer | 1 | 55,000 | 4.5 months | 247,500 | Phase 1-3 | Section 8.4.2 |
+| DevOps | 0.5 | 70,000 | 10.5 months | 367,500 | Phase 0-3 | Section 8.4.2 |
+| **Subtotal** | **6-7 FTE** | | | **NT$ 3,995,000** | | |
+
+> **Note**: Salary figures are estimated median market rates for Taipei (2026). Actual costs may vary +/- 15% based on seniority and market conditions. Figures include employer NHI and labor insurance contributions (~10% markup).
+
+#### L.2 Infrastructure & API Costs
+
+| Item | Monthly Cost (USD) | Duration | Total (USD) | Total (NT$, @32) | Source |
+|------|:------------------:|----------|:-----------:|:-----------------:|--------|
+| LLM API - Claude Sonnet 4.5 | $40-50 | 6 months (Phase 1-3) | $270-300 | ~NT$ 8,640-9,600 | ADR-008 |
+| Hosting - Fly.io, Vercel, Neon, Upstash | $6-11 | 6 months (Phase 1-3) | $36-66 | ~NT$ 1,152-2,112 | Section 8.4.1, ADR-010 |
+| Embedding API - OpenAI | < $1 | 6 months | < $6 | ~NT$ 192 | ADR-007 |
+| Observability - Sentry free tier | $0 | - | $0 | NT$ 0 | ADR-006 |
+| **Subtotal** | | | | **~NT$ 10,000-12,000** | |
+
+#### L.3 Research & Operations Costs
+
+| Item | Cost (NT$) | Phase | Source |
+|------|:----------:|-------|--------|
+| Phase 0.5 User Research | 450,000 | Phase 0.5 | Appendix K |
+| Customer Support Team (10.5 months) | 1,627,500 | Phase 0-3 | Appendix J: NT$ 155,000/month |
+| WCAG Accessibility Audit (external) | 80,000 | Phase 2 | Section 10.5 |
+| Pre-launch Legal Review (external) | 60,000 | Phase 3 | Section 8.4.3 |
+| Beta Testing Incentives (100 users) | 100,000 | Phase 2 | Section 10.5 |
+| **Subtotal** | **NT$ 2,317,500** | | |
+
+#### L.4 Total MVP Budget Summary
+
+| Category | Total (NT$) | Share |
+|----------|:-----------:|:-----:|
+| Development Team Salaries | 3,995,000 | 63.2% |
+| Research & Operations | 2,317,500 | 36.6% |
+| Infrastructure & APIs | ~11,000 | 0.2% |
+| **Subtotal** | **NT$ 6,323,500** | **100%** |
+| Contingency Buffer (10%) | ~632,350 | |
+| **Grand Total** | **~NT$ 6,955,850** | |
+| **Grand Total (USD, @32)** | **~$217,370** | |
+
+#### L.5 Phase-by-Phase Budget Breakdown
+
+| Phase | Duration | Dev Team (NT$) | Research/Ops (NT$) | Infra (NT$) | Phase Total (NT$) |
+|-------|----------|:--------------:|:------------------:|:-----------:|:-----------------:|
+| Phase 0.5: User Research | 10 weeks | 547,500 | 450,000 | 0 | 997,500 |
+| Phase 0: Tech Preparation | 5 weeks | 356,250 | 178,750 | 1,000 | 536,000 |
+| Phase 1: MVP Development | 17 weeks | 2,091,250 | 606,250 | 6,000 | 2,703,500 |
+| Phase 2: Beta Testing | 7 weeks | 712,500 | 787,500 | 3,000 | 1,503,000 |
+| Phase 3: Launch | 5 weeks | 287,500 | 295,000 | 1,000 | 583,500 |
+| Contingency (10%) | - | - | - | - | 632,350 |
+| **Total** | **44 weeks** | **3,995,000** | **2,317,500** | **~11,000** | **~6,955,850** |
+
+#### L.6 Budget Assumptions & Risks
+
+| Assumption | Risk | Mitigation |
+|------------|------|------------|
+| USD/NT$ exchange rate at 32 | Currency fluctuation affects API costs | Budget in both currencies; reassess if rate moves > 10% |
+| Team is fully staffed by Phase 0 | Recruitment delays extend timeline | Start recruiting 8 weeks before Phase 0; identify freelance backups |
+| Free tier services sufficient for MVP | Usage exceeds free tier limits | Monitor usage monthly; budget for upgrades: Neon Pro $19/mo, Sentry Team $26/mo |
+| LLM costs based on 5,000 queries/month | Higher-than-expected usage | Cache hit rate optimization target 70%+; enforce per-user rate limits |
+| Support team ramp-up from Phase 1 | Earlier support needs during research | Phase 0.5 support covered by PO + Legal Advisor |
+
+> **Contingency Buffer**: 10% (~NT$ 632,350) covers recruitment overruns, scope creep, exchange rate changes, unexpected infrastructure upgrades, and Phase 0.5 research extension (2-week buffer noted in Section 10.2).
+
 ---
 
 ## Change Log
@@ -1441,6 +1522,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 2.1 | 2026-02-13 | PO review fixes: S-06 assigned to Epic 03, Epic dependency map, Sprint mapping, Could Have roadmap, Beta testing plan, error handling & edge cases in all Epics | Product Owner |
 | 2.2 | 2026-02-13 | User Researcher review fixes: trauma-informed design (Charter #11), M-15 Simplified Wizard Mode, S-10 Post-Action Check-In, Phase 0.5 extended to 10 weeks with vulnerable group research & ethics protocols, Beta testing expanded with accessibility/trauma scenarios, Persona dimensions added, Empowerment & Psychological Safety metrics, FAQ Risks & Fears category, Calculator Simple Mode | Product Owner |
 | 2.3 | 2026-02-13 | PO review v2 fixes: Timeline corrected to 21 months with phase table, Phase 0.5 Go/No-Go review + research budget (Appendix K), M-01/M-15 integration strategy (shared decision tree), S-10 privacy-preserving two-tier metrics, Sprint mapping feature-level notes + NFR testing schedule, Beta exit criteria & contingency plan, Could Have RICE decision framework | Product Owner |
+| 2.4 | 2026-02-13 | Senior PO review P1 supplements: S-01 translation vendor management in Epic 05, Epic 07 for C-03~C-07 future feature specifications (case database, community forum, expert referral, admin dashboard & CMS), Appendix L MVP development budget (~NT$ 6.96M total) | Product Owner |
 
 ---
 
