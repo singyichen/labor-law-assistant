@@ -130,12 +130,19 @@ labor-law-assistant/
 │   ├── lib/                 # Utilities and API client
 │   └── stores/              # Zustand stores
 ├── docs/                    # Project documentation
-│   ├── adr/                 # Architecture Decision Records
+│   ├── adr/                 # Architecture Decision Records (10 ADRs)
 │   ├── prd/                 # Product Requirements Document
 │   │   ├── README.md        # Product-level PRD (vision, users, NFR, timeline)
-│   │   └── epics/           # Feature specs per epic (user stories, acceptance criteria)
+│   │   └── epics/           # Feature specs per epic (7 epics)
+│   ├── design/              # UX wireframes and interaction flows
+│   ├── testing/             # Testing strategy
 │   └── strategy/            # Strategic planning documents
 └── .claude/                 # Claude Code configuration
+    ├── commands/             # 5 workflow commands (write, review, test, fix, release)
+    ├── skills/               # 28 knowledge-domain skills (6 categories)
+    ├── agents/               # Agent definitions
+    ├── SKILLS.md             # Skills & commands directory
+    └── AGENTS.md             # Agents reference
 ```
 
 ## Communication
@@ -145,36 +152,98 @@ labor-law-assistant/
 
 ## Code Style
 
-- Python 使用 4 格縮排
+### Python (Backend)
+
+- 使用 4 格縮排
 - 變數命名使用 snake_case（禁止單字母變數）
 - 所有函數必須有 docstring 說明，清楚定義其用途、所有參數、依賴關係、和預期回傳類型
 - 使用 pytest 而非 unittest
 - 函數必須有完整的 type hints
 - 優先使用 f-string 而非 format()
 
+### TypeScript (Frontend)
+
+- 使用 2 格縮排
+- 變數命名使用 camelCase，React 元件使用 PascalCase
+- 使用 TypeScript strict mode，禁止 `any` 類型
+- 優先使用 functional components + hooks
+- 使用 `interface` 定義 props，使用 `type` 定義聯合/交叉類型
+
 ## Git Workflow
 
-- 頻繁提交：每次完成一組功能後必須 commit，需要根據提交給相對應正確的 type
+### Commit 規範
+
+- 頻繁提交：每次完成一組功能後必須 commit
 - 提交訊息請涵蓋變更的全部範圍，並保持訊息簡潔
-- 開始實作新功能時建立並切換到新的 Git 分支（例如，使用 git worktree 或直接創建分支）
+- Commit message 格式：`<type>: <description>`，type 必須使用以下之一：
+
+| Type | 用途 | 範例 |
+|------|------|------|
+| `feat` | 新功能 | `feat: add overtime calculator component` |
+| `fix` | 修復 bug | `fix: correct leave calculation for part-time workers` |
+| `docs` | 文件變更 | `docs: add API endpoint documentation` |
+| `refactor` | 重構（不改變功能） | `refactor: extract PII detection into service class` |
+| `test` | 測試相關 | `test: add unit tests for severance calculator` |
+| `style` | 格式化（不影響邏輯） | `style: apply ruff formatting to api routes` |
+| `chore` | 建構/工具/依賴 | `chore: upgrade FastAPI to 0.115` |
+| `perf` | 效能優化 | `perf: add Redis caching for FAQ queries` |
+| `ci` | CI/CD 變更 | `ci: add Playwright E2E tests to GitHub Actions` |
+
+### 分支命名規範
+
+- 格式：`<type>/<short-description>`，使用小寫英文和 `-` 連接
+- type 與 commit type 對應：
+
+| 分支前綴 | 用途 | 範例 |
+|---------|------|------|
+| `feat/` | 新功能開發 | `feat/overtime-calculator` |
+| `fix/` | Bug 修復 | `fix/pii-regex-false-positive` |
+| `docs/` | 文件更新 | `docs/testing-strategy` |
+| `refactor/` | 重構 | `refactor/rag-pipeline` |
+| `test/` | 測試補充 | `test/legal-accuracy-golden-data` |
+| `chore/` | 建構/依賴 | `chore/upgrade-dependencies` |
+
+### PR 完整流程
+
+開發完成後，依序執行以下步驟（全部自動完成，不需等待使用者指示）：
+
+1. **Commit** — 使用正確的 type 提交變更
+2. **Code Review** — 執行 `/review` command 審查所有變更（組合 code-review-checklist → code-review → code-smell → pr-review 四個 skill），根據審查結果修正問題
+3. **測試驗證**（程式碼變更時）— 執行 `/test` command 驗證測試覆蓋率和品質（組合 test-plan → bdd-scenario → test-data-strategy → test-coverage 等六個 skill）
+4. **Push** — 推送到遠端分支
+5. **建立 PR** — Test Plan 中每個檢查項必須逐一驗證，已通過標記為 `[x]`，未通過保留 `[ ]` 並說明原因
+6. **Merge + 清理** — 自動執行以下步驟：
+   1. `gh pr merge <number> --merge` — merge PR
+   2. `git checkout main && git pull` — 切回 main 並拉取最新
+   3. `git fetch --prune` — 清理已刪除的遠端分支追蹤
+   4. `git branch -d <branch-name>` — 刪除本地分支
+   5. `git push origin --delete <branch-name>` — 刪除遠端分支
+
+> **純文件變更**（僅 `.md` 檔案）：可跳過步驟 3（`/test`），但仍需執行步驟 2（`/review`）確認交叉引用和內容一致性。
+
+### 保護規則
+
 - 永遠 *不要* 推送到 main 分支（main 或 master），避免干擾 prod 環境
-- 建立 PR 時，Test Plan 中的每個檢查項必須在建立前逐一驗證，已通過的項目標記為 `[x]`，未通過的保留 `[ ]` 並說明原因
-- Merge PR 後必須執行完整清理流程：
-  1. `gh pr merge <number> --merge` — merge PR
-  2. `git checkout main && git pull` — 切回 main 並拉取最新
-  3. `git fetch --prune` — 清理已刪除的遠端分支追蹤
-  4. `git branch -d <branch-name>` — 刪除本地分支
-  5. `git push origin --delete <branch-name>` — 刪除遠端分支
+- 開始實作新功能時必須建立並切換到新的 Git 分支
 
-## Code Review
+## Workflow Commands
 
-請審查所有暫存的變更，檢查：
-- 是否符合專案程式碼風格標準
-- 評估其潛在的安全漏洞、依賴關係問題、和錯誤的權限配置
-- 是否有效能問題
-- 專注檢查 $ARGUMENTS 中指定的特定檔案或模組
+本專案提供 5 個 workflow commands，每個 command 會自動組合多個 skill 執行。詳細說明見 [.claude/SKILLS.md](.claude/SKILLS.md)。
 
-以 Markdown 表格形式輸出結果
+| Command | 用途 | 觸發時機 |
+|---------|------|---------|
+| `/write` | 新功能實作（需求 → 設計 → BDD → Code Review） | 開發新功能時 |
+| `/review` | 程式碼審查（checklist → review → code smell → PR review） | PR 前自動執行 |
+| `/test` | 測試規劃與執行（test plan → BDD → coverage → tracking） | 程式碼變更時自動執行 |
+| `/fix` | Bug 修復（defect report → 探索測試 → regression） | 修復 bug 時 |
+| `/release` | 發布準備（regression → traceability → quality gate） | 版本發布前 |
+
+### 法律模組特殊要求
+
+- `/test` 法律模組 coverage 門檻為 95%（一般為 80%）
+- `/review` 必須驗證法條引用和計算正確性
+- `/fix` 法律計算錯誤自動分類為 Critical
+- `/release` 法律合規為阻斷性品質門檻
 
 ## Important Notes
 
