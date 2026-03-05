@@ -4,17 +4,61 @@
 
 Advanced features planned for Phase 3+ that extend the Labor Law Assistant beyond core Q&A into case learning, community support, expert connections, and operational management. These features will be evaluated for development at the Phase 4 decision point (3 months post-launch) using the RICE scoring framework defined in PRD Section 5.3.
 
-> **Note**: C-01 (Document Template Library) and C-02 (Compliance Self-Assessment Tool) remain at roadmap level in PRD Section 5.3. They will be specified in detail when prioritized at the Phase 4 decision point.
-
 ## Feature List
 
 | Feature ID | Name | Priority | Description |
 |---|---|---|---|
+| C-01 | Document Template Library | Could Have | Labor contract and regulation templates download |
+| C-02 | Compliance Self-Assessment Tool | Could Have | Enterprise labor law compliance check |
 | C-03 | Case Database | Could Have | De-identified real case analysis and learning |
 | C-04 | Community Forum | Could Have | Anonymous experience sharing and mutual support |
 | C-05 | Expert Referral Service | Could Have | Lawyer and labor organization connections |
 | C-06 | Analytics Dashboard | Could Have | Usage data visualization and system operations |
 | C-07 | CMS Content Management | Could Have | Backend legal content management (merged with C-06) |
+
+---
+
+## C-01: Document Template Library (Placeholder)
+
+> Detailed specification will be created at Phase 4 decision point after RICE scoring with real usage data (PRD Section 5.3).
+
+**User Story**
+> As an HR staff or small business owner, I want to download standard labor contract and regulation templates, so that I can ensure my employment documents comply with Taiwan labor law.
+
+**Brief Description**: Downloadable templates including labor contracts, salary statements, leave request forms, termination notices, and workplace safety checklists. All templates reviewed by Legal Advisor for accuracy.
+
+**Estimated Effort**: 2-3 sprints
+
+**Prerequisites**:
+- Legal Advisor review of all templates for compliance
+- Template version control system (reuse C-07 CMS infrastructure)
+- PDF generation capability
+
+**RICE Score (Estimated)**: Reach 800, Impact 2, Confidence 70%, Effort 10 weeks → RICE = 112 (see PRD Section 5.3)
+
+**Epic Assignment**: TBD at Phase 4 — may create new Epic or extend Epic 04
+
+---
+
+## C-02: Compliance Self-Assessment Tool (Placeholder)
+
+> Detailed specification will be created at Phase 4 decision point after RICE scoring with real usage data (PRD Section 5.3).
+
+**User Story**
+> As a small business owner, I want to check if my company complies with major labor regulations, so that I can identify and fix compliance gaps before they become legal problems.
+
+**Brief Description**: Interactive checklist covering key areas of Taiwan labor law compliance (working hours, overtime, leave, salary, insurance, workplace safety). Generates a compliance score and identifies specific gaps with links to relevant legal articles.
+
+**Estimated Effort**: 3-4 sprints
+
+**Prerequisites**:
+- Legal database complete (Epic 02 M-13)
+- Legal Advisor review of assessment criteria and scoring logic
+- Integration with RAG pipeline for contextual explanations
+
+**RICE Score (Estimated)**: Reach 300, Impact 2, Confidence 60%, Effort 14 weeks → RICE = 26 (see PRD Section 5.3)
+
+**Epic Assignment**: TBD at Phase 4 — may create new Epic or extend Epic 06
 
 ---
 

@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.4 |
+| **Version** | v2.5 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-02-13 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -641,7 +641,7 @@ flowchart TD
 | Backend Developer | 1 | Phase 1 onward | API development, database, testing |
 | Frontend Developer | 1-2 | Phase 1 Sprint 5 onward | Next.js UI, calculators, accessibility |
 | UX/UI Designer | 0.5 | Phase 0.5-1 | Wireframes, design system, usability testing |
-| Legal Advisor | 0.5 | All phases | Legal content review, Golden Data validation |
+| Legal Advisor | 0.5 | All phases | Legal content review, Golden Data validation, Golden Data fixture creation (Sprint 1-2) |
 | QA Engineer | 1 | Phase 1 Sprint 7 onward | E2E testing, screen reader testing |
 | DevOps | 0.5 | Phase 0 onward | CI/CD, infrastructure, performance testing |
 | **Total** | **6-7** | | |
@@ -809,7 +809,7 @@ flowchart TD
 
 | Sprint | Weeks | Epic | Features | Milestone | Feature-Level Notes |
 |--------|-------|------|----------|-----------|---------------------|
-| S1-2 | 1-4 | Epic 02 (foundation) | M-02 RAG pipeline, legal DB schema, embedding pipeline | RAG retrieval operational | M-13 legal DB versioning schema included |
+| S1-2 | 1-4 | Epic 02 (foundation) | M-02 RAG pipeline, legal DB schema, embedding pipeline | RAG retrieval operational | M-13 legal DB versioning schema included; Week 2: Legal Advisor collects MOL official examples and builds Golden Data fixtures for 8 major laws |
 | S3-4 | 5-8 | Epic 02, Epic 03 (partial) | M-04 legal citation, M-07 confidence scoring, M-08 disclaimer | RAG system complete with quality controls | M-07 confidence formula depends on M-02 retrieval scores |
 | S5-6 | 9-12 | Epic 01, Epic 03 (partial) | M-05 chat UI, M-01 guided Q&A, M-15 wizard, M-03 layered display, M-09 feedback | Chat interface functional | M-01 uses placeholder templates in S5, integrates RAG responses in S6; M-15 wizard built on M-01 tree in S6 |
 | S7-8 | 13-16 | Epic 04, Epic 05, Epic 06 | M-06 action guide, M-10 emergency, M-14 PII, M-11 RWD, M-12 a11y, S-03 calculators | All MVP features complete | M-06 trauma-informed AC requires content review by legal advisor |
@@ -1498,6 +1498,11 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | Contingency (10%) | - | - | - | - | 632,350 |
 | **Total** | **44 weeks** | **3,995,000** | **2,317,500** | **~11,000** | **~6,955,850** |
 
+> **Note on Phase 0.5 costs**: The NT$ 997,500 total includes:
+> - Dev Team salaries (NT$ 547,500): PO + Tech Lead + Legal Advisor + UX Designer working during research phase (2.5 months)
+> - Research project costs (NT$ 450,000): Per [Appendix K](#appendix-k-phase-05-research-budget), includes researcher personnel, translators, participant compensation, accessibility testing tools, and survey platform
+> - Infrastructure (NT$ 0): No hosting costs during research phase
+
 #### L.6 Budget Assumptions & Risks
 
 | Assumption | Risk | Mitigation |
@@ -1523,6 +1528,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 2.2 | 2026-02-13 | User Researcher review fixes: trauma-informed design (Charter #11), M-15 Simplified Wizard Mode, S-10 Post-Action Check-In, Phase 0.5 extended to 10 weeks with vulnerable group research & ethics protocols, Beta testing expanded with accessibility/trauma scenarios, Persona dimensions added, Empowerment & Psychological Safety metrics, FAQ Risks & Fears category, Calculator Simple Mode | Product Owner |
 | 2.3 | 2026-02-13 | PO review v2 fixes: Timeline corrected to 21 months with phase table, Phase 0.5 Go/No-Go review + research budget (Appendix K), M-01/M-15 integration strategy (shared decision tree), S-10 privacy-preserving two-tier metrics, Sprint mapping feature-level notes + NFR testing schedule, Beta exit criteria & contingency plan, Could Have RICE decision framework | Product Owner |
 | 2.4 | 2026-02-13 | Senior PO review P1 supplements: S-01 translation vendor management in Epic 05, Epic 07 for C-03~C-07 future feature specifications (case database, community forum, expert referral, admin dashboard & CMS), Appendix L MVP development budget (~NT$ 6.96M total) | Product Owner |
+| 2.5 | 2026-02-13 | PO review round 2 P1 fixes: C-01/C-02 placeholder specs in Epic 07, Golden Data timeline in Sprint 1-2 mapping, Phase 0.5 budget breakdown clarification in Appendix L, ADR cross-references added to wireframes.md and testing-strategy.md, Epic 07 testing strategy preview in testing-strategy.md §14.4 | Product Owner |
 
 ---
 

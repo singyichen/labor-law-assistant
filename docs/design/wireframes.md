@@ -621,5 +621,9 @@ Reference: [PRD Appendix I.5](../prd/README.md#appendix-i-visual-design-system)
 | Epic 04: Action Guide | [`docs/prd/epics/04-action-guide-emergency.md`](../prd/epics/04-action-guide-emergency.md) | M-06, M-10 wireframes |
 | Epic 05: Accessibility | [`docs/prd/epics/05-accessibility-i18n.md`](../prd/epics/05-accessibility-i18n.md) | M-11, M-12 responsive + a11y |
 | Epic 06: Calculators | [`docs/prd/epics/06-calculation-tools.md`](../prd/epics/06-calculation-tools.md) | S-03a/b/c calculator wireframes |
+| Epic 07: Future Features | [`docs/prd/epics/07-future-features.md`](../prd/epics/07-future-features.md) | C-03~C-07 Phase 3+ features |
+| ADR-004: Frontend Framework | [`docs/adr/004-frontend-nextjs.md`](../adr/004-frontend-nextjs.md) | Next.js 15, App Router, responsive design |
+| ADR-006: Observability Stack | [`docs/adr/006-observability-stack.md`](../adr/006-observability-stack.md) | Sentry error tracking, performance monitoring |
+| ADR-009: Authentication Strategy | [`docs/adr/009-authentication-strategy.md`](../adr/009-authentication-strategy.md) | Anonymous-first, optional OAuth2 |
 | UI Text Guide | [`docs/style-guides/ui-text-guide.md`](../style-guides/ui-text-guide.md) | Button labels, error messages, tone |
 | Mermaid Flowchart Guide | [`docs/style-guides/mermaid-flowchart-guide.md`](../style-guides/mermaid-flowchart-guide.md) | Diagram conventions |
