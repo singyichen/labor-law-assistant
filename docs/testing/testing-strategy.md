@@ -586,6 +586,23 @@ Reference: [PRD SS10.5 Beta Testing Plan](../prd/README.md)
 - User reports "felt supported": > 80%
 - User reports "did not feel re-traumatized": 100%
 
+### 14.4 Future Features Testing (Epic 07)
+
+Testing strategies for C-01 (Document Templates), C-02 (Compliance Tool), C-03 (Case Database), C-04 (Community Forum), C-05 (Expert Referral), C-06 + C-07 (Admin Dashboard + CMS) will be documented at the Phase 4 decision point when these features are prioritized.
+
+**Anticipated testing areas**:
+
+| Feature | Key Testing Focus |
+|---------|------------------|
+| C-01 Document Templates | Template legal accuracy, PDF generation, download functionality |
+| C-02 Compliance Tool | Assessment scoring accuracy, question completeness, result interpretation |
+| C-03 Case Database | PII de-identification validation (automated + manual), legal reviewer approval workflow, categorization accuracy |
+| C-04 Community Forum | Content moderation accuracy (Layer 1-4), spam detection rate, crisis keyword detection, PII auto-removal |
+| C-05 Expert Referral | Partner vetting process validation, referral satisfaction tracking, directory data accuracy |
+| C-06 + C-07 Admin Dashboard + CMS | Role-based access control (RBAC) security, content version control integrity, audit trail completeness |
+
+> Refer to [Epic 07: Future Features](../prd/epics/07-future-features.md) for full specifications.
+
 ---
 
 ## 15. Testing Schedule & Milestones
@@ -633,7 +650,9 @@ Aligned with [PRD SS10.1 Timeline](../prd/README.md) (44 weeks)
 | Epic 05: Accessibility | [`docs/prd/epics/05-accessibility-i18n.md`](../prd/epics/05-accessibility-i18n.md) | M-11, M-12, S-01, Accessibility Testing Plan |
 | Epic 06: Calculators | [`docs/prd/epics/06-calculation-tools.md`](../prd/epics/06-calculation-tools.md) | S-03a/b/c, Error Handling |
 | ADR-004: Frontend | [`docs/adr/004-frontend-nextjs.md`](../adr/004-frontend-nextjs.md) | Vitest + Playwright decision |
+| ADR-006: Observability | [`docs/adr/006-observability-stack.md`](../adr/006-observability-stack.md) | Sentry integration, structlog, monitoring |
 | ADR-010: Deployment | [`docs/adr/010-deployment-infrastructure.md`](../adr/010-deployment-infrastructure.md) | CI/CD pipeline, container strategy |
+| Epic 07: Future Features | [`docs/prd/epics/07-future-features.md`](../prd/epics/07-future-features.md) | C-03~C-07 testing (Phase 4+) |
 | CLAUDE.md | [`CLAUDE.md`](../../CLAUDE.md) | pytest, mypy, ruff configuration |
 
 ### Appendix B: Testing Tool Inventory
