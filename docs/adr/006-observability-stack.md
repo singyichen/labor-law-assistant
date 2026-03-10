@@ -108,7 +108,7 @@ Adopt a **layered observability stack** using open-source and free-tier tools:
 
 ## Referenced by
 
-- [PRD README.md](../prd/README.md) — §8 Tech Stack, §8.4.1 Cost Alert Thresholds, Appendix B ADR Summary
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack, §8.4 Cost Monitoring & Alert Thresholds
 - [Epic 03: Response Quality](../prd/epics/03-response-quality.md) — Related ADRs
 - [Wireframes](../design/wireframes.md) — Cross-References
 - [Testing Strategy](../testing/testing-strategy.md) — ADR References

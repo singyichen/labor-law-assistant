@@ -98,7 +98,7 @@ Error response + Sentry alert
 
 ## Referenced by
 
-- [PRD README.md](../prd/README.md) — §8 Tech Stack, §8.4.1 Cost Alert Thresholds, Appendix B ADR Summary
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack, §8.4 Cost Monitoring & Alert Thresholds
 - [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies
 - [Epic 02: RAG Legal Search](../prd/epics/02-rag-legal-search.md) — Related ADRs
 - [Epic 03: Response Quality](../prd/epics/03-response-quality.md) — Related ADRs

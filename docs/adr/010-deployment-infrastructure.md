@@ -138,9 +138,9 @@ Merge to main
 
 ## Referenced by
 
-- [PRD README.md](../prd/README.md) — §8 Tech Stack, §8.4.1 Infrastructure Costs, Appendix B ADR Summary
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack, §8.4.1 Third-Party Service Dependencies
 - [Epic 02: RAG Legal Search](../prd/epics/02-rag-legal-search.md) — Related ADRs
-- [Epic 05: Accessibility & i18n](../prd/epics/05-accessibility-i18n.md) — PWA Offline Scope, Related ADRs
+- [Epic 05: Accessibility & i18n](../prd/epics/05-accessibility-i18n.md) — Offline Capability Scope, Related ADRs
 - [Epic 07: Future Features](../prd/epics/07-future-features.md) — Technical Dependencies
 - [Wireframes](../design/wireframes.md) — Cross-References
 - [Testing Strategy](../testing/testing-strategy.md) — ADR References

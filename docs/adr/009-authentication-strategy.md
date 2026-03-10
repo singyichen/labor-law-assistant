@@ -107,7 +107,7 @@ Returning User:
 
 ## Referenced by
 
-- [PRD README.md](../prd/README.md) — §8 Tech Stack, Appendix B ADR Summary
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack
 - [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies
 - [Epic 03: Response Quality](../prd/epics/03-response-quality.md) — Related ADRs
 - [Epic 04: Action Guide & Emergency](../prd/epics/04-action-guide-emergency.md) — Reminder Implementation (S-10)

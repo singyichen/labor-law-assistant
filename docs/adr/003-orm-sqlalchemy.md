@@ -57,6 +57,6 @@ Supporting libraries:
 
 ## Referenced by
 
-- [PRD README.md](../prd/README.md) — §8 Tech Stack, Appendix B ADR Summary
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack
 - [Epic 02: RAG Legal Search](../prd/epics/02-rag-legal-search.md) — Technical Dependencies
 - [Epic 07: Future Features](../prd/epics/07-future-features.md) — Technical Dependencies

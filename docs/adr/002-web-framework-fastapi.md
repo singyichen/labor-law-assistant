@@ -38,5 +38,5 @@ Use **FastAPI** as the web framework.
 
 ## Referenced by
 
-- [PRD README.md](../prd/README.md) — §8 Tech Stack, Appendix B ADR Summary
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack
 - [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies
