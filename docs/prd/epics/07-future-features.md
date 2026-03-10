@@ -145,6 +145,16 @@ The automated NER scan in the De-identification Pipeline (Layer 1) requires a mo
 
 **Fallback**: If automated NER Recall < 95% on validation set, all cases undergo full manual de-identification by Legal Advisor until model is retrained or replaced.
 
+**Fallback Execution by Recall Level**:
+
+| Recall Level | Action | Timeline | Owner |
+|:------------:|--------|:--------:|-------|
+| 90-95% | Add supplementary regex rules for missed patterns; quarterly model retraining with expanded training data | Within 1 month | AI Engineer |
+| 85-90% | Hybrid approach: automated NER + mandatory manual review by 2 reviewers (four-eyes principle) | Immediate | Legal Advisor + Content Manager |
+| < 85% | Suspend automated pipeline; full manual de-identification; evaluate alternative models (e.g., BERT-based Chinese NER, CKIP Transformers) | Immediate | Tech Lead + Legal Advisor |
+
+> **Escalation**: If Recall remains below 90% after 2 quarterly retraining cycles, escalate to Tech Lead for model replacement decision at the next Phase 4 Decision Meeting.
+
 ### Categorization Scheme
 
 | Dimension | Categories | Example |

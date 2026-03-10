@@ -220,6 +220,8 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 - Resolution rate measured via optional anonymous survey (not tracked per user)
 
 > This two-tier design ensures User Rights Charter #2 (absolute privacy protection) while enabling aggregate product metrics in §9.4.
+>
+> **§9.4 Metric Mapping**: "Action completion rate" uses Tier 2 `action_plan_saved` event count. "Issue resolution rate" uses optional anonymous survey via S-10 reminder banner (opt-in, no user tracking). See [PRD §9.4](../README.md) for targets.
 
 #### Reminder Implementation Approach
 
