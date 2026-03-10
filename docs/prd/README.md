@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.7 |
+| **Version** | v2.8 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-03-10 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -365,7 +365,7 @@ Detailed feature specifications are organized into Epic files for Sprint plannin
 | **Epic 04** | Action Guide & Emergency | M-06, M-10, S-04, S-05, S-10 | [04-action-guide-emergency.md](epics/04-action-guide-emergency.md) |
 | **Epic 05** | Accessibility & i18n | M-11, M-12, S-01 | [05-accessibility-i18n.md](epics/05-accessibility-i18n.md) |
 | **Epic 06** | Calculation Tools | S-03 | [06-calculation-tools.md](epics/06-calculation-tools.md) |
-| **Epic 07** | Future Features (Phase 3+) | C-03, C-04, C-05, C-06, C-07 | [07-future-features.md](epics/07-future-features.md) |
+| **Epic 07** | Future Features (Phase 3+) | C-03, C-04, C-05, C-06 (includes C-07) | [07-future-features.md](epics/07-future-features.md) |
 
 > **Note**: Features C-01 and C-02 are planned for Phase 3+ and will be specified when prioritized. Features C-03~C-07 are detailed in [Epic 07: Future Features](epics/07-future-features.md). See [Could Have Roadmap](#53-could-have-roadmap) below.
 
@@ -763,8 +763,8 @@ MVP LLM budget baseline: ~$40-50/month (per [ADR-008](../adr/008-llm-provider.md
 
 | Category | Metric | MVP Target | 6-Month Target | Measurement Tool |
 |------|------|---------|-----------|---------|
-| **User Outcomes** | Action completion rate (% who saved action plan and took at least one step) | 40%+ | 55%+ | Follow-up survey |
-| | Issue resolution rate (% who reported issue resolved) | 30%+ | 45%+ | Follow-up survey |
+| **User Outcomes** | Action completion rate (% who saved action plan and took at least one step) | 40%+ | 55%+ | Tier 2 anonymous event count (`action_plan_saved`) — see [S-10 Two-Tier Architecture](epics/04-action-guide-emergency.md) |
+| | Issue resolution rate (% who reported issue resolved) | 30%+ | 45%+ | Optional anonymous survey via S-10 in-app reminder (opt-in only, no user tracking) |
 | | Legal aid referral click rate | 15%+ | 25%+ | Analytics |
 | **Empowerment** | % of users reporting "I feel more confident about protecting my rights" | — | 75%+ | Survey |
 | | % of users who took at least one action after using the system | — | 50%+ | Follow-up survey |
@@ -772,6 +772,8 @@ MVP LLM budget baseline: ~$40-50/month (per [ADR-008](../adr/008-llm-provider.md
 | **Psychological Safety** | % of harassment queries receiving trauma-informed responses | 100% | 100% | Content audit |
 | | Emotional support resource view rate (when triggered) | 50%+ | 60%+ | Analytics |
 | | User report: "did not feel re-traumatized" | — | 100% | Beta testing |
+
+> **Privacy Implementation Note**: "Action completion rate" and "Issue resolution rate" are measured using [Epic 04 S-10's Two-Tier Privacy Architecture](epics/04-action-guide-emergency.md). No individual-level user tracking is performed. Action completion is counted via Tier 2 anonymous server-side events; issue resolution relies on an optional anonymous survey displayed via the S-10 reminder banner (users may dismiss without responding). This ensures compliance with User Rights Charter #2 (absolute privacy protection).
 
 ### 9.5 User Rights Metrics
 
@@ -1050,6 +1052,23 @@ MVP should cover 8 major labor laws:
 | Deployment | Vercel + Fly.io (HK) + Neon + Upstash | [ADR-010](../adr/010-deployment-infrastructure.md) | Low cost (~$6/mo), APAC latency optimized |
 | Database | PostgreSQL + pgvector | [ADR-003](../adr/003-orm-sqlalchemy.md), [ADR-010](../adr/010-deployment-infrastructure.md) | ACID, vector search, serverless (Neon) |
 | Vector Search | pgvector (PostgreSQL extension) | [ADR-007](../adr/007-embedding-model.md) | No separate vector DB needed for ~2,500 vectors |
+
+#### ADR Index
+
+For detailed rationale and technical trade-offs, refer to the Architecture Decision Records:
+
+| ADR | Title | Status | Date |
+|-----|-------|:------:|------|
+| [ADR-001](../adr/001-package-manager-uv.md) | Use uv as Package Manager | Accepted | 2025-02-13 |
+| [ADR-002](../adr/002-web-framework-fastapi.md) | Use FastAPI as Web Framework | Accepted | 2025-02-13 |
+| [ADR-003](../adr/003-orm-sqlalchemy.md) | Use SQLAlchemy 2.0 as ORM | Accepted | 2025-02-13 |
+| [ADR-004](../adr/004-frontend-nextjs.md) | Use Next.js 15 as Frontend | Accepted | 2025-02-13 |
+| [ADR-005](../adr/005-caching-redis.md) | Use Redis as Caching Layer | Accepted | 2025-02-13 |
+| [ADR-006](../adr/006-observability-stack.md) | Observability Stack | Accepted | 2025-02-13 |
+| [ADR-007](../adr/007-embedding-model.md) | Use OpenAI text-embedding-3 as Embedding Model | Accepted | 2025-02-13 |
+| [ADR-008](../adr/008-llm-provider.md) | Use Anthropic Claude as Primary LLM Provider | Accepted | 2025-02-13 |
+| [ADR-009](../adr/009-authentication-strategy.md) | Anonymous-first Authentication with Optional OAuth2 | Accepted | 2025-02-13 |
+| [ADR-010](../adr/010-deployment-infrastructure.md) | Deployment Infrastructure | Accepted | 2025-02-13 |
 
 ### Appendix C: User Support Architecture
 
@@ -1620,6 +1639,13 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 
 > **Contingency Buffer**: 10% (~NT$ 632,350) covers recruitment overruns, scope creep, exchange rate changes, unexpected infrastructure upgrades, and Phase 0.5 research extension (2-week buffer noted in Section 10.2).
 
+### Appendix M: Related Design Documents
+
+| Document | Path | Purpose | Status |
+|----------|------|---------|--------|
+| Wireframes & Interaction Flows | [`docs/design/wireframes.md`](../design/wireframes.md) | Detailed UI mockups, responsive layouts, user flow diagrams | Draft |
+| Design System Guidelines | TBD | Component library, color tokens, typography scale | Phase 1 Sprint 1-2 |
+
 ---
 
 ## Document Maintenance
@@ -1666,6 +1692,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 2.5 | 2026-02-13 | PO review round 2 P1 fixes: C-01/C-02 placeholder specs in Epic 07, Golden Data timeline in Sprint 1-2 mapping, Phase 0.5 budget breakdown clarification in Appendix L, ADR cross-references added to wireframes.md and testing-strategy.md, Epic 07 testing strategy preview in testing-strategy.md §14.4 | Product Owner |
 | 2.6 | 2026-03-10 | PO review P2 supplements (15 items): PWA offline scope (M-11), FAQ update workflow (S-09), Phase 0.5 research quality metrics, translation rollback CI/CD, confidence score continuous improvement (M-07), trauma-informed evaluation rubric, Phase 4 decision meeting protocol, Golden Data maintenance ownership, reminder implementation approach (S-10), RBAC audit trail (C-06), cross-lingual UI testing, NER model selection (C-03), Beta recruitment contingency, cost alert thresholds, cross-epic integration testing in testing-strategy.md | Product Owner |
 | 2.7 | 2026-03-10 | PO review P2 round 2 (10 items): ADR bidirectional Referenced by sections (10 ADRs), multilingual edge cases (Epic 05), calculator input validation rules (Epic 06), screen reader compatibility matrix (testing-strategy), psychological safety measurement survey (testing-strategy), SLA escalation matrix (Appendix G.4.1), Phase 0.5 mid-point review (§10.2), Golden Data source verification (testing-strategy), regulation update regression test matrix (testing-strategy), document maintenance & review cadence | Product Owner |
+| 2.8 | 2026-03-10 | PO review round 3 (7 items): §9.4 privacy metrics aligned with S-10 Two-Tier Architecture (E-01), regulation-bound constants in test data (E-02), Appendix B ADR Index (E-03), C-03 NER fallback by recall level (E-04), Appendix M design documents (E-05), testing-strategy Appendix A Epic 07 detail (E-06), §5.2 C-07 merge clarification (E-07) | Product Owner |
 
 ---
 

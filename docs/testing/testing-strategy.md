@@ -10,7 +10,7 @@
 | **Status** | Draft |
 | **Owner** | QA Lead |
 | **Reviewers** | Tech Lead, Product Owner, Legal Advisor |
-| **PRD Reference** | [PRD README.md](../prd/README.md) v2.7 |
+| **PRD Reference** | [PRD README.md](../prd/README.md) v2.8 |
 | **ADR References** | [ADR-004 Frontend](../adr/004-frontend-nextjs.md), [ADR-010 Deployment](../adr/010-deployment-infrastructure.md) |
 
 ---
@@ -590,6 +590,7 @@ When i18n is enabled (Phase 2, after Epic 05 S-01 implementation):
 | **Boundary Data** | Edge case testing (min/max values, transitions) | Manual design | Every Sprint |
 | **Error Data** | Invalid input validation | Manual + fuzzing | Every Sprint |
 | **Legal Fixtures** | Legal article texts (8 major laws, full text by article) | law.moj.gov.tw | Weekly sync |
+| **Regulation-Bound Constants** | Configurable legal thresholds (minimum wage, overtime cap, etc.) | Ministry of Labor regulations | Annually (January, when minimum wage adjusts) |
 
 ### Test Fixtures Directory Structure
 
@@ -832,7 +833,7 @@ When regulations are amended or content is updated, the following regression tes
 | ADR-004: Frontend | [`docs/adr/004-frontend-nextjs.md`](../adr/004-frontend-nextjs.md) | Vitest + Playwright decision |
 | ADR-006: Observability | [`docs/adr/006-observability-stack.md`](../adr/006-observability-stack.md) | Sentry integration, structlog, monitoring |
 | ADR-010: Deployment | [`docs/adr/010-deployment-infrastructure.md`](../adr/010-deployment-infrastructure.md) | CI/CD pipeline, container strategy |
-| Epic 07: Future Features | [`docs/prd/epics/07-future-features.md`](../prd/epics/07-future-features.md) | C-03~C-07 testing (Phase 4+) |
+| Epic 07: Future Features | [`docs/prd/epics/07-future-features.md`](../prd/epics/07-future-features.md) | C-03 NER de-identification, C-04~C-07 testing (Phase 4+), §14.4 |
 | CLAUDE.md | [`CLAUDE.md`](../../CLAUDE.md) | pytest, mypy, ruff configuration |
 
 ### Appendix B: Testing Tool Inventory
