@@ -197,6 +197,28 @@ All FAQ content must be reviewed by legal advisor before publication.
 - [ ] FAQ reduces LLM API calls for common questions (cost optimization)
 - [ ] Minimum 50 FAQs covering top questions from each legal category at launch
 
+#### FAQ Update Workflow
+
+When the legal database is updated (via M-13 versioning pipeline), FAQ entries that cite the affected articles must be flagged and reviewed.
+
+**Trigger**: Legal data update (M-13) -> system auto-flags affected FAQs by scanning citation cross-references in FAQ answer content.
+
+**Notification Workflow**:
+1. System identifies FAQs citing the updated legal article(s)
+2. Affected FAQs are marked as `STALE` in the FAQ management system
+3. Content Manager receives notification with list of affected FAQs and the specific article changes
+4. Content Manager updates FAQ content and submits for Legal Advisor review
+5. Legal Advisor approves updated FAQ -> status changes to `CURRENT`
+
+**FAQ Update SLA** (aligned with legal data SLA per [Appendix G.4](../README.md)):
+| Priority | Legal Update Type | FAQ Update Deadline |
+|:--------:|-------------------|:-------------------:|
+| P0 | Emergency (e.g., court ruling overturns interpretation) | 24 hours |
+| P1 | Important amendment (affects common scenarios) | 3 business days |
+| P2 | Routine update (minor wording, non-substantive) | 7 business days |
+
+**Stale FAQ Warning**: While an FAQ is in `STALE` status, users see a banner: _"The legal article referenced in this FAQ was recently updated. This answer is under review and may not reflect the latest regulations."_
+
 **FAQ Categories**
 | Category | Sample Questions | Count |
 |----------|-----------------|-------|

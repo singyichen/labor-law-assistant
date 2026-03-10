@@ -48,6 +48,31 @@ where:
   llm_self_assessment = LLM's self-reported confidence (0-1, via structured output)
 ```
 
+#### Confidence Score Continuous Improvement
+
+The confidence scoring formula weights are not static. They are tuned through a monthly human evaluation loop to ensure calibration remains accurate as the legal database and user query patterns evolve.
+
+**Monthly Sampling Protocol**:
+1. Sample 100 responses: ~33 from each confidence tier (Low / Medium / High)
+2. Legal Advisor performs human evaluation of each sampled response
+3. Compare system confidence vs. human judgment
+
+**Evaluation Metrics & Thresholds**:
+| Metric | Definition | Threshold | Action if Below |
+|--------|-----------|:---------:|-----------------|
+| Precision | % of High-confidence responses that are actually correct | >= 90% | Raise High threshold or reduce `llm_self_assessment` weight |
+| Recall | % of correct responses that receive High confidence | >= 85% | Lower High threshold or increase `retrieval_similarity_avg` weight |
+| False High Rate | % of incorrect responses rated High confidence | < 5% | Immediate weight adjustment + incident review |
+
+**Weight Adjustment Procedure**:
+1. Compute Precision/Recall from monthly sample
+2. If below threshold: propose weight adjustments to `retrieval_similarity_avg` (currently 0.4), `citation_count_score` (currently 0.3), `llm_self_assessment` (currently 0.3)
+3. Tech Lead + Legal Advisor approve adjustment
+4. Deploy updated weights, re-run evaluation on same sample to verify improvement
+5. Log all changes in `confidence-tuning-log.md` with date, old weights, new weights, and Precision/Recall before/after
+
+> **Cross-reference**: See [testing-strategy.md §9](../../testing/testing-strategy.md) for confidence score calibration testing procedures and Golden Data validation methodology.
+
 ---
 
 ### M-08: Disclaimer System

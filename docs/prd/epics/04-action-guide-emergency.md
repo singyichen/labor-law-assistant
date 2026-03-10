@@ -221,6 +221,28 @@ The actionable assistance layer that bridges knowledge to action. This epic cove
 
 > This two-tier design ensures User Rights Charter #2 (absolute privacy protection) while enabling aggregate product metrics in §9.4.
 
+#### Reminder Implementation Approach
+
+**Phase 2 (V2) -- Client-Side Only**:
+- Reminder data stored entirely in browser LocalStorage (reminder date, generic reminder type)
+- In-app notification: on next visit after reminder date, display a non-intrusive banner: _"You set a reminder X days ago. Have you taken action? [Yes, resolved] [Need more help] [Dismiss]"_
+- No server-side tracking of reminder events (100% client-side)
+- If user clears browser data, reminders are lost (acceptable trade-off for privacy)
+
+**Future (V3+, Registered Users)**:
+- For users who opt into accounts (per [ADR-009](../../adr/009-authentication-strategy.md)): Web Push API browser notifications
+- Push notification content: date + generic message only (e.g., "You have a labor law follow-up reminder")
+- No query content, no legal topic, no case details included in push payload
+
+**Privacy Constraints**:
+- Reminder data never contains query content, legal topics, or any PII
+- Reminder content limited to: reminder ID (UUID), set date, trigger date, status (pending/dismissed/actioned)
+- No correlation between reminder events and conversation history on the server
+
+**Frequency Capping**: Maximum 1 reminder notification per 7 calendar days per browser session to prevent notification fatigue.
+
+> **Cross-reference**: See [ADR-009: Authentication Strategy](../../adr/009-authentication-strategy.md) for the anonymous-first to optional-registration progression that governs reminder capability tiers.
+
 ---
 
 ## Error Handling & Edge Cases
