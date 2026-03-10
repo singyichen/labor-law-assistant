@@ -10,7 +10,7 @@
 | **Status** | Draft |
 | **Owner** | QA Lead |
 | **Reviewers** | Tech Lead, Product Owner, Legal Advisor |
-| **PRD Reference** | [PRD README.md](../prd/README.md) v2.3 |
+| **PRD Reference** | [PRD README.md](../prd/README.md) v2.6 |
 | **ADR References** | [ADR-004 Frontend](../adr/004-frontend-nextjs.md), [ADR-010 Deployment](../adr/010-deployment-infrastructure.md) |
 
 ---
