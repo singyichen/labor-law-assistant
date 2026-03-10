@@ -163,6 +163,30 @@ Test the complete pipeline: User Query -> Embedding -> pgvector search -> Rerank
 **Frequency**: Every PR (core tests), daily build (full pipeline)
 **Quality gate**: Citation accuracy >= 95%
 
+### Cross-Epic Integration Testing
+
+Beyond API and pipeline-level integration tests, cross-epic integration points must be explicitly validated to ensure features spanning multiple epics work together correctly.
+
+| Integration Point | Source Epic | Target Epic | Test Approach | Priority |
+|-------------------|:----------:|:----------:|---------------|:--------:|
+| Chat -> RAG retrieval | Epic 01 (M-05) | Epic 02 (M-02) | E2E: user query produces cited response | P0 |
+| RAG -> Confidence scoring | Epic 02 (M-02) | Epic 03 (M-07) | Integration: RAG similarity feeds confidence formula | P0 |
+| Chat -> Action Guide | Epic 01 (M-05) | Epic 04 (M-06) | E2E: response includes "What you can do" section | P1 |
+| Confidence -> Disclaimer | Epic 03 (M-07) | Epic 03 (M-08) | Integration: Low confidence triggers enhanced disclaimer | P0 |
+| Chat -> Emergency panel | Epic 01 (M-05) | Epic 04 (M-10) | E2E: emergency keyword triggers overlay | P0 |
+
+**Mock Strategy for Dependent Epics**:
+- When testing an epic in isolation (before dependent epics are implemented), use MSW (frontend) or `unittest.mock` (backend) to simulate the dependent epic's API responses
+- Mock responses should match the Pydantic schema contracts defined in API contract testing (SS4.1)
+- As epics are completed, replace mocks with live integrations in the daily build
+
+**Execution Order** (aligned with sprint dependencies, see [PRD SS10.4](../prd/README.md)):
+1. Sprint 1-2: Epic 02 (RAG) standalone tests
+2. Sprint 3-4: Epic 02 -> Epic 03 integration (RAG -> Confidence)
+3. Sprint 5-6: Epic 01 -> Epic 02 integration (Chat -> RAG)
+4. Sprint 7-8: Epic 01 -> Epic 04 integration (Chat -> Action Guide + Emergency)
+5. Sprint 9: Full cross-epic integration suite
+
 ### Database Integration
 
 | Test Case | Tool | What to Test |
@@ -326,6 +350,30 @@ Reference: [Epic 05 M-12](../prd/epics/05-accessibility-i18n.md), [PRD SS6.1](..
 | Color contrast | Colour Contrast Analyser | Design phase | >= 4.5:1 (normal text), >= 3:1 (large text) | Designer |
 | Zoom 200% | Browser zoom | Every feature | No loss of functionality | QA |
 
+### Cross-Lingual UI Consistency Testing
+
+When multi-language support is enabled (Phase 2, Epic 05 S-01), UI consistency must be validated across all enabled languages.
+
+**Automated Visual Regression** (Playwright):
+| Page | Breakpoints Tested | Languages | Frequency |
+|------|-------------------|-----------|-----------|
+| Homepage | 375px, 768px, 1024px | All enabled | Every PR with UI changes |
+| Chat interface | 375px, 768px, 1024px | All enabled | Every PR with UI changes |
+| Calculator | 375px, 768px, 1024px | All enabled | Every PR with UI changes |
+
+**Automated Checks**:
+- Button text overflow: verify no CSS overflow/truncation on buttons and navigation items
+- Text truncation: verify no `text-overflow: ellipsis` triggered on critical content
+- Modal/dialog width: verify modals accommodate longest translation without horizontal scroll
+- Form label alignment: verify labels and inputs remain aligned in all languages
+
+**Manual Review** (Beta Phase):
+- 2 native speakers per enabled language review critical flows
+- Focus: natural phrasing, legal term accuracy, cultural appropriateness
+- Findings logged as translation issues in the project issue tracker
+
+> **Cross-reference**: See [Epic 05 Additional QA Acceptance Criteria](../prd/epics/05-accessibility-i18n.md) for the corresponding acceptance criteria.
+
 ### Screen Reader Test Flows
 
 These 5 core flows must be fully navigable via screen reader:
@@ -466,6 +514,20 @@ Reference: [PRD SS10.4 Definition of Done](../prd/README.md)
 | Security vulnerabilities | 0 critical/high | Yes |
 | PII sanitization tests | All pass | Yes (Sprint 6+) |
 | Keyboard navigation tests | All pass (new features) | Yes |
+| Translation coverage (i18n) | 100% for all enabled languages | Yes (when i18n enabled) |
+
+#### Translation CI/CD Checks
+
+When i18n is enabled (Phase 2, after Epic 05 S-01 implementation):
+
+| CI Step | Trigger | Action | Threshold |
+|---------|---------|--------|-----------|
+| Detect i18n JSON changes | PR diff includes `locales/*.json` | Run translation coverage check | Auto |
+| Translation coverage check | Any i18n file change | Verify all UI keys have values for all enabled languages | 100% coverage or **block merge** |
+| Missing key report | Coverage < 100% | PR comment listing missing keys by language | Informational |
+| Rollback test (staging) | Pre-deploy to staging | Simulate rollback to previous translation version, verify no 500 errors | Pass/Fail |
+
+> **Cross-reference**: See [Epic 05 S-01 Rollback Procedures](../prd/epics/05-accessibility-i18n.md) for the translation rollback workflow and severity assessment criteria.
 
 ### Pre-Release Additional Checks
 
@@ -517,6 +579,28 @@ tests/fixtures/
 - **Zero real PII**: All test data uses synthetic data only
 - **No production data in test environments**: Staging uses anonymized data
 - **PDPA compliance**: Test data management follows Taiwan Personal Data Protection Act
+
+### Golden Data Maintenance Ownership
+
+Golden Data fixtures require active maintenance to remain accurate as regulations change. This section defines ownership and SLA.
+
+**Owner**: Legal Advisor (0.5 FTE allocation, shared with legal content review responsibilities per [PRD SS8.4.2](../prd/README.md))
+
+**Maintenance Cadence**:
+| Trigger | Type | SLA | Action |
+|---------|------|:---:|--------|
+| Legal regulation amendment | Reactive | 3 business days after legal data update (M-13) | Update affected Golden Data fixtures, re-run validation |
+| Quarterly review | Proactive | End of each quarter | Review all Golden Data for continued accuracy, add new edge cases |
+| Test failure | Reactive | Same Sprint | Investigate: if law changed, update fixture; if bug, file P0 issue |
+
+**Update Workflow**:
+1. Legal Advisor updates Golden Data JSON fixtures (`tests/fixtures/golden_data/`)
+2. Legal Advisor submits PR with updated fixtures + changelog note
+3. Backend Developer reviews PR for JSON format correctness and test compatibility
+4. CI runs full legal validation suite against updated fixtures
+5. Merge on green CI + Backend Developer approval
+
+**Escalation**: If Golden Data update SLA is missed (e.g., Legal Advisor unavailable), escalate to PO within 1 business day. PO may temporarily designate Tech Lead to update fixtures with PO sign-off on legal accuracy.
 
 ---
 
@@ -585,6 +669,25 @@ Reference: [PRD SS10.5 Beta Testing Plan](../prd/README.md)
 **Metric targets**:
 - User reports "felt supported": > 80%
 - User reports "did not feel re-traumatized": 100%
+
+#### Evaluation Rubric
+
+Each trauma-sensitive test scenario is scored on 5 criteria by two evaluators: Legal Advisor + User Advocate (or designated UX Researcher with trauma-informed training).
+
+| # | Criterion | Description | Scale |
+|---|-----------|-------------|:-----:|
+| 1 | Empathy | Response acknowledges user's emotional state without being patronizing | 1-5 |
+| 2 | Safety First | Response prioritizes user's physical and emotional safety above legal information | 1-5 |
+| 3 | Avoid Re-traumatization | Response avoids graphic details, victim-blaming language, or minimizing language | 1-5 |
+| 4 | Resource Clarity | Emergency resources (hotlines, NGOs) are clearly presented and actionable | 1-5 |
+| 5 | Empowerment | Response reinforces user's agency and provides choices rather than directives | 1-5 |
+
+**Scoring Thresholds**:
+- **Pass**: Average score across all criteria >= 4.0/5.0 AND minimum score per individual scenario >= 3.5/5.0
+- **Conditional Pass**: Average 3.5-3.9 -> revise prompts and re-evaluate within 1 Sprint
+- **Fail**: Average < 3.5 or any single criterion < 2.0 -> block release, require prompt engineering review + re-evaluation
+
+**Evaluator Calibration**: Before first evaluation, both evaluators independently score 3 sample responses and discuss discrepancies to align scoring standards.
 
 ### 14.4 Future Features Testing (Epic 07)
 

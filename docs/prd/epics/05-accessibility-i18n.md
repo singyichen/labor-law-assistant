@@ -44,6 +44,25 @@ The inclusive design layer ensuring the Labor Law Assistant is usable by all Tai
 | 768px (tablet) | Single column, centered (720px) | Side panel (collapsible) | Fixed bottom bar |
 | 1024px+ (desktop) | Two-column (sidebar + main) | Persistent sidebar | Inline at bottom of chat |
 
+#### Offline Capability Scope
+
+| Feature | Online Required | Offline Support | Strategy |
+|---------|:--------------:|:---------------:|----------|
+| AI Chat | Yes | No | Requires LLM API; show offline fallback page |
+| Calculator | No | Yes | Client-side JavaScript, no API dependency |
+| FAQ Cache | No | Yes | Service Worker pre-caches top 50 FAQ responses |
+| Conversation History | No | Yes | LocalStorage; sync when reconnected |
+| Legal DB Search | Yes | No | Requires pgvector API; show offline fallback |
+| Emergency Contacts | No | Yes | Static data cached in Service Worker |
+
+**Service Worker Caching Strategy**:
+- **Cache-first**: Static assets (CSS, JS, images), emergency contact data, calculator logic
+- **Network-first**: AI chat, RAG search, FAQ content (fallback to cached version if offline)
+- **Stale-while-revalidate**: FAQ list, legal article metadata
+- Cache storage limit: ~5 MB per origin (conservative for low-end devices)
+
+> **Cross-reference**: See [ADR-010: Deployment Infrastructure](../../adr/010-deployment-infrastructure.md) for PWA hosting and Service Worker deployment details.
+
 ---
 
 ### M-12: Accessibility Basics
@@ -148,6 +167,9 @@ The inclusive design layer ensuring the Labor Law Assistant is usable by all Tai
 - [ ] Translation version control: track when each translation was last updated
 - [ ] Automated CI check: all UI translation keys have values for all enabled languages (no missing keys)
 - [ ] Legal disclaimer translations verified by bilingual legal advisor
+- [ ] Playwright visual regression test passes for each enabled language (no layout regression between releases)
+- [ ] No text truncation or button overflow detected in any enabled language at all responsive breakpoints
+- [ ] Cross-lingual UI consistency test plan executed per [testing-strategy.md §8](../../testing/testing-strategy.md) detailed test procedures
 
 #### Translation Vendor Management
 
@@ -217,6 +239,8 @@ Rollback steps:
 4. Notify users viewing affected language: "Translation is being updated. Showing previous version."
 5. Root cause analysis within 48 hours
 6. Vendor feedback and preventive action documented
+
+> **CI/CD Integration**: Translation rollback is integrated into the CI/CD pipeline. See [testing-strategy.md §11](../../testing/testing-strategy.md) for pipeline design including automated translation coverage checks, merge blocking on incomplete translations, and staging rollback verification.
 
 **Continuous Improvement Metrics**
 

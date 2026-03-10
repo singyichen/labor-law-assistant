@@ -116,6 +116,35 @@ flowchart TD
 
 **Validation**: Each case must pass both automated scan (0 PII detections) AND manual review by a different person than the preparer (four-eyes principle).
 
+### NER Model Selection
+
+The automated NER scan in the De-identification Pipeline (Layer 1) requires a model optimized for Traditional Chinese text.
+
+**Recommended Model**: `spaCy zh_core_web_trf` (transformer-based, Traditional Chinese)
+
+**Target Entity Types**:
+| Entity Type | Description | Example |
+|-------------|-------------|---------|
+| PERSON | Personal names | "王大明" |
+| ORG | Organization / company names | "台積電股份有限公司" |
+| GPE | Geographic / political entities (cities, districts) | "台北市信義區" |
+| DATE | Date expressions | "2026年3月15日", "民國115年" |
+
+**Supplementary Regex Patterns** (Taiwan-specific, complementing NER):
+| Pattern | Regex | Example Match |
+|---------|-------|---------------|
+| National ID | `[A-Z][12]\d{8}` | A123456789 |
+| Mobile phone | `09\d{2}-?\d{3}-?\d{3}` | 0912-345-678 |
+| Company Tax ID (統一編號) | `\d{8}` (contextual) | 12345678 |
+| ARC Number (居留證號) | `[A-Z]{2}\d{8,10}` | AB12345678 |
+
+**Validation Criteria**:
+- 50 manually curated test cases covering all entity types and regex patterns
+- NER Recall target: >= 95% (missed PII is unacceptable; false positives are tolerable)
+- Validation performed before pipeline goes live, and quarterly thereafter
+
+**Fallback**: If automated NER Recall < 95% on validation set, all cases undergo full manual de-identification by Legal Advisor until model is retrained or replaced.
+
 ### Categorization Scheme
 
 | Dimension | Categories | Example |
@@ -404,6 +433,30 @@ flowchart TD
 | System configuration | Yes | No | No | No | No |
 | View audit trail | Yes | No | Yes | No | No |
 | Manage emergency resources | Yes | Yes | No | No | No |
+
+### RBAC Audit Trail
+
+All role and permission changes are logged to maintain security accountability and regulatory compliance.
+
+**Logged Events**:
+| Event Type | Logged Data | Triggered By |
+|------------|-------------|-------------|
+| Role assignment | Target user, new role, assigning admin, timestamp, reason (mandatory) | Super Admin assigns role |
+| Role revocation | Target user, removed role, revoking admin, timestamp, reason (mandatory) | Super Admin revokes role |
+| Permission matrix update | Changed permission, old value, new value, admin, timestamp | Super Admin modifies permissions |
+| Sensitive action | Action type (e.g., content deletion, user suspension), performing user, target, timestamp | Any admin performing destructive action |
+
+**Storage**:
+- Table: `admin_audit_log` in PostgreSQL
+- Retention: 5 years (aligned with Taiwan Personal Data Protection Act record-keeping requirements)
+- Indexing: by `event_type`, `performing_user`, `timestamp` for efficient querying
+
+**Access Control**:
+- View audit trail: Super Admin only (per Permission Matrix above)
+- Audit log records are append-only (no edit, no delete)
+- Export: CSV/JSON export available for Super Admin
+
+**Quarterly Review**: Product Owner + Tech Lead review audit log summary quarterly. Review focus: unusual patterns, privilege escalation attempts, role churn. Findings documented in quarterly security review report.
 
 ### Feature Modules
 

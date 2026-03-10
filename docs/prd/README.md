@@ -4,9 +4,9 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.5 |
+| **Version** | v2.6 |
 | **Created** | 2026-02-02 |
-| **Last Updated** | 2026-02-13 |
+| **Last Updated** | 2026-03-10 |
 | **Status** | Draft - Pending Stakeholder Review |
 | **Owner** | Product Owner |
 
@@ -412,6 +412,33 @@ These advanced features are not yet assigned to epics. Brief planning for future
 2. Month 3: update RICE scores with actual usage data
 3. Month 3: Product Owner + Tech Lead select top 2 features for Phase 4 development
 
+#### Phase 4 Decision Meeting Protocol
+
+**Required Participants**:
+| Role | Attendance | Decision Authority |
+|------|:----------:|-------------------|
+| Product Owner | Required (Chair) | Final decision authority |
+| Tech Lead | Required | Technical feasibility veto |
+| Legal Advisor | Required | Legal compliance veto |
+| UX Designer | Required | User impact assessment |
+| Support Manager | Optional | User feedback & support load input |
+| DevOps | Optional | Infrastructure & cost impact input |
+
+**Agenda** (90-minute meeting):
+| # | Item | Time | Owner |
+|---|------|:----:|-------|
+| 1 | Review updated RICE scores with real usage data | 20 min | PO |
+| 2 | Technical feasibility assessment for top candidates | 25 min | Tech Lead |
+| 3 | Legal & compliance review of candidate features | 15 min | Legal Advisor |
+| 4 | Prioritization vote and Go/No-Go decision | 30 min | All required |
+
+**Decision Method**:
+- PO-led discussion with structured input from all required participants
+- Tech Lead has **technical veto** (can block a feature if technically infeasible within budget/timeline)
+- Legal Advisor has **compliance veto** (can block a feature if it creates legal liability)
+- Consensus preferred; if no consensus after 30 minutes, PO makes final call
+- **Escalation**: If PO decision is vetoed by Tech Lead or Legal Advisor, escalate to Project Sponsor for resolution within 5 business days
+
 ### 5.4 Epic Dependency Map
 
 ```
@@ -630,6 +657,27 @@ flowchart TD
 
 **Total MVP infrastructure cost**: ~$6-11/month (see [ADR-010 Cost Analysis](../adr/010-deployment-infrastructure.md))
 
+#### Cost Monitoring & Alert Thresholds
+
+MVP LLM budget baseline: ~$40-50/month (per [ADR-008](../adr/008-llm-provider.md) cost analysis, assuming 5,000 queries/month with 70% cache hit rate).
+
+| Alert Level | Trigger | Notification | Action |
+|:-----------:|---------|:------------:|--------|
+| **Warning** | Daily LLM cost > $3 | Tech Lead (Slack/email) | Investigate spike; check for bot traffic or cache miss surge |
+| **Critical** | Daily LLM cost > $5 | PO + Tech Lead (Slack/email + PagerDuty) | Consider emergency cache optimization or temporary rate-limit reduction |
+
+**Escalation Rule**: If Warning level is triggered for 7 consecutive days, PO must make a decision within 48 hours:
+1. **Approve budget increase**: Adjust monthly budget ceiling and update Appendix L
+2. **Optimize costs**: Deploy aggressive caching (increase cache TTL, expand FAQ coverage to reduce LLM calls)
+3. **Reduce traffic**: Lower per-user rate limit from 20 queries/hour to 10 queries/hour
+
+**Monitoring Implementation**:
+- Daily cost aggregation from Anthropic billing API (or token-counting proxy)
+- Displayed in C-06 Analytics Dashboard (LLM Cost/Day metric, see [Epic 07](epics/07-future-features.md))
+- Alert delivery via existing Sentry notification channel (see [ADR-006](../adr/006-observability-stack.md))
+
+> **Cross-reference**: See [C-06 Dashboard Metrics](epics/07-future-features.md) for the LLM Cost/Day metric definition. See [ADR-008](../adr/008-llm-provider.md) for the LLM cost model and fallback strategy.
+
 #### 8.4.2 Development Team Resource Plan
 
 > Note: §J.2 covers the customer support team. This section covers the development team.
@@ -779,6 +827,19 @@ flowchart TD
 
 **Milestone**: User research report completed, requirement assumptions validated (including vulnerable group needs)
 
+#### Research Quality Validation
+
+To ensure Phase 0.5 research outputs are rigorous enough to base product decisions on:
+
+| Quality Metric | Target | Verification Method |
+|----------------|--------|---------------------|
+| Participant screening pass rate | >= 90% of recruits meet screening criteria | Screening questionnaire pass/fail log |
+| Research finding triangulation | Each key finding supported by >= 3 research methods (interview + survey + card sorting/prototype test) | Cross-method evidence matrix in research report |
+| Inter-rater reliability | >= 80% agreement between 2 independent coders on thematic analysis | Cohen's Kappa or percent agreement on 20% sample |
+| Stakeholder sign-off | PO + Tech Lead + Legal Advisor sign off on research report | Signed approval in research report appendix |
+
+Findings that do not meet triangulation threshold are flagged as "preliminary" and excluded from Go/No-Go decision criteria.
+
 **Go/No-Go Review (Week 8)**:
 - After interviews + card sorting, conduct requirement validation review
 - Decision criteria: if >30% of Must-Have features are invalidated by user research → pivot to alternative feature set
@@ -856,6 +917,23 @@ flowchart TD
 | Accessibility advocacy groups (e.g., TFCB) | Visually impaired users | 8-10 users | Daily screen reader users |
 | Senior centers, community colleges | Elderly workers (55+) | 8-10 users | Low-medium digital literacy |
 | University labor law courses | Students with legal knowledge (quality feedback) | 10-15 users | — |
+
+#### Recruitment Contingency
+
+**Minimum Viable Sample**: >= 50 Beta users total, with >= 20% from vulnerable groups (foreign workers, visually impaired, elderly)
+
+**Fallback Escalation Steps** (if recruitment target not met by Week 3 of Beta phase):
+
+| Step | Trigger | Action | Timeline |
+|:----:|---------|--------|----------|
+| 1 | < 80 users by Week 3 | Extend recruitment period by 2 weeks | Week 3-5 |
+| 2 | < 50 users after extension | Shift to depth interviews with 20 available users (qualitative-heavy approach) | Week 5-6 |
+| 3 | < 30 users after Step 2 | PO + Tech Lead assessment: proceed with limited sample or delay launch | Week 6 |
+
+**Alternative Recruitment Channels** (activated at Step 1):
+- Homepage banner on existing project website: "Help us test the Labor Law Assistant"
+- Participant compensation: NT$1,000 gift card per participant (budget from Appendix K contingency)
+- Social media outreach via labor rights Facebook groups and LINE groups
 
 **Test Focus by Epic**
 | Priority | Epic | Test Scenarios | Key Metrics |
@@ -1529,6 +1607,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 2.3 | 2026-02-13 | PO review v2 fixes: Timeline corrected to 21 months with phase table, Phase 0.5 Go/No-Go review + research budget (Appendix K), M-01/M-15 integration strategy (shared decision tree), S-10 privacy-preserving two-tier metrics, Sprint mapping feature-level notes + NFR testing schedule, Beta exit criteria & contingency plan, Could Have RICE decision framework | Product Owner |
 | 2.4 | 2026-02-13 | Senior PO review P1 supplements: S-01 translation vendor management in Epic 05, Epic 07 for C-03~C-07 future feature specifications (case database, community forum, expert referral, admin dashboard & CMS), Appendix L MVP development budget (~NT$ 6.96M total) | Product Owner |
 | 2.5 | 2026-02-13 | PO review round 2 P1 fixes: C-01/C-02 placeholder specs in Epic 07, Golden Data timeline in Sprint 1-2 mapping, Phase 0.5 budget breakdown clarification in Appendix L, ADR cross-references added to wireframes.md and testing-strategy.md, Epic 07 testing strategy preview in testing-strategy.md §14.4 | Product Owner |
+| 2.6 | 2026-03-10 | PO review P2 supplements (15 items): PWA offline scope (M-11), FAQ update workflow (S-09), Phase 0.5 research quality metrics, translation rollback CI/CD, confidence score continuous improvement (M-07), trauma-informed evaluation rubric, Phase 4 decision meeting protocol, Golden Data maintenance ownership, reminder implementation approach (S-10), RBAC audit trail (C-06), cross-lingual UI testing, NER model selection (C-03), Beta recruitment contingency, cost alert thresholds, cross-epic integration testing in testing-strategy.md | Product Owner |
 
 ---
 
