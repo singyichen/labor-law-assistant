@@ -95,3 +95,12 @@ Error response + Sentry alert
 - Must monitor Anthropic pricing changes — currently competitive but no long-term price guarantee.
 - Claude Sonnet 4.5 is not the cheapest option; if budget becomes constrained, may need to route simple queries to Haiku.
 - Legal citation validation adds backend complexity (must maintain article ID registry).
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack, §8.4 Cost Monitoring & Alert Thresholds
+- [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies
+- [Epic 02: RAG Legal Search](../prd/epics/02-rag-legal-search.md) — Related ADRs
+- [Epic 03: Response Quality](../prd/epics/03-response-quality.md) — Related ADRs
+- [Epic 04: Action Guide & Emergency](../prd/epics/04-action-guide-emergency.md) — Related ADRs
+- [Epic 05: Accessibility & i18n](../prd/epics/05-accessibility-i18n.md) — Related ADRs, multilingual response

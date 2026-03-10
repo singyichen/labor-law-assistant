@@ -34,3 +34,7 @@ Use **uv** as the project's package manager.
 - Team members need to install uv (`curl -LsSf https://astral.sh/uv/install.sh | sh`).
 - Relatively newer tool (2024), less established than pip/poetry.
 - Some CI environments may need explicit uv setup (`astral-sh/setup-uv` GitHub Action).
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack

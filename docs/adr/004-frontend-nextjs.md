@@ -73,3 +73,13 @@ Use **Next.js 15 (App Router)** with the following stack:
 - Requires Node.js runtime in production (unlike a static SPA).
 - Two package managers in the monorepo (uv for backend, pnpm for frontend).
 - Vercel deployment is optimal but creates vendor dependency; self-hosting requires extra configuration.
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack
+- [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies
+- [Epic 04: Action Guide & Emergency](../prd/epics/04-action-guide-emergency.md) — Related ADRs
+- [Epic 05: Accessibility & i18n](../prd/epics/05-accessibility-i18n.md) — Related ADRs, i18n routing
+- [Epic 06: Calculation Tools](../prd/epics/06-calculation-tools.md) — Related ADRs
+- [Wireframes](../design/wireframes.md) — Cross-References
+- [Testing Strategy](../testing/testing-strategy.md) — ADR References

@@ -35,3 +35,8 @@ Use **FastAPI** as the web framework.
 - No built-in admin interface (unlike Django).
 - Need to assemble components manually (ORM, auth, migrations).
 - Requires understanding of async Python patterns.
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack
+- [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies

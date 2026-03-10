@@ -75,3 +75,8 @@ Start: text-embedding-3-small (MVP validation)
 - Upgrading from small to large requires re-embedding all vectors (one-time migration ~$0.10).
 - Using a different provider than the LLM (Anthropic) means two API vendor dependencies.
 - Must ensure OpenAI data processing terms comply with legal industry requirements.
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — Appendix B Technology Stack
+- [Epic 02: RAG Legal Search](../prd/epics/02-rag-legal-search.md) — Technical Dependencies, RAG Pipeline

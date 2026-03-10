@@ -10,7 +10,7 @@
 | **Status** | Draft |
 | **Owner** | QA Lead |
 | **Reviewers** | Tech Lead, Product Owner, Legal Advisor |
-| **PRD Reference** | [PRD README.md](../prd/README.md) v2.6 |
+| **PRD Reference** | [PRD README.md](../prd/README.md) v2.7 |
 | **ADR References** | [ADR-004 Frontend](../adr/004-frontend-nextjs.md), [ADR-010 Deployment](../adr/010-deployment-infrastructure.md) |
 
 ---
@@ -384,6 +384,30 @@ These 5 core flows must be fully navigable via screen reader:
 4. **Emergency panel: trigger -> read content -> call hotline** (M-10)
 5. **Calculator: input -> calculate -> read result** (S-03)
 
+### Screen Reader Compatibility Matrix
+
+The 5 core screen reader test flows (above) must pass on each of the following platform combinations.
+
+| Screen Reader | OS | Browser | Test Phase | Priority |
+|--------------|-----|---------|:----------:|:--------:|
+| VoiceOver | macOS Sonoma 14+ | Safari 17+ | Weekly during development | P0 |
+| VoiceOver | iOS 17+ | Safari (mobile) | Sprint 7-8 | P0 |
+| NVDA 2024.1+ | Windows 11 | Chrome 120+ | Beta phase | P1 |
+| JAWS 2024 | Windows 11 | Chrome 120+ | Beta phase | P1 |
+| TalkBack | Android 14+ | Chrome (mobile) | Beta phase | P2 |
+
+**Pass/Fail Criteria per Flow**:
+
+| Flow | Pass Criteria |
+|------|--------------|
+| Identity selection -> chat | All elements announced with correct role; selection confirmed audibly |
+| Wizard mode | Each question announced; options navigable; result read in full |
+| Layered display expand/collapse | State change (expanded/collapsed) announced; content readable when expanded |
+| Emergency panel | Panel appearance announced immediately (ARIA live); hotline number readable and actionable |
+| Calculator | All input labels announced; calculation result read with currency formatting; legal basis accessible |
+
+**Defect Severity**: Screen reader navigation failures on P0 flows are treated as **release blockers**. P1/P2 flows are tracked as high-priority issues for the next Sprint.
+
 ### Beta A11y Testing
 
 Reference: [PRD SS10.5](../prd/README.md)
@@ -421,6 +445,22 @@ Golden Data = authoritative test cases derived from official government sources 
 3. Run system calculations against Golden Data
 4. Any mismatch = **P0 blocker** (immediate fix required)
 5. Legal advisor reviews Golden Data quarterly for regulation changes
+
+### Golden Data Source & Verification
+
+| Source Type | Description | Examples | Verification Method |
+|-------------|-------------|----------|-------------------|
+| MOL official calculators | Ministry of Labor online calculation tools | Overtime pay calculator, annual leave lookup table | Cross-validate system output against MOL calculator results |
+| Court judgments | Published labor court decisions with specific calculations | Supreme Court labor division rulings on overtime disputes | Legal Advisor extracts calculation from judgment text, converts to test fixture |
+| Legal Aid Foundation cases | Anonymized case outcomes from Legal Aid Foundation | Severance pay calculations from closed cases | Legal Advisor verifies against case documentation |
+| Official interpretation letters | MOL interpretation letters (函釋) clarifying law application | Interpretation on mixed pension system calculation | Legal Advisor confirms interpretation is current and not superseded |
+
+**Initial Golden Data Target**: 50 test cases covering all 3 calculators by Sprint 2:
+- Overtime pay: 20 cases (10 standard + 5 rest day + 5 holiday edge cases)
+- Annual leave: 15 cases (all LSA Art. 38 tiers + partial-year + calendar-year method)
+- Severance pay: 15 cases (new system + old system + mixed + partial-year)
+
+**Verification Process**: Each Golden Data case requires dual sign-off — Legal Advisor confirms legal accuracy, Backend Developer confirms test fixture format compatibility. Discrepancies between sources are resolved by referencing the most recent MOL official publication.
 
 ### Legal Compliance Weight
 
@@ -689,6 +729,27 @@ Each trauma-sensitive test scenario is scored on 5 criteria by two evaluators: L
 
 **Evaluator Calibration**: Before first evaluation, both evaluators independently score 3 sample responses and discuss discrepancies to align scoring standards.
 
+#### Psychological Safety Measurement
+
+User-perceived psychological safety is measured via a post-interaction survey administered to Beta testers who encountered trauma-sensitive scenarios.
+
+**Survey Instrument** (3-item Likert scale, 1=Strongly Disagree ~ 5=Strongly Agree):
+
+| # | Item | Measures |
+|---|------|----------|
+| Q1 | "I felt the system understood the seriousness of my situation." | Empathy perception |
+| Q2 | "The system's response made me feel safe to continue seeking help." | Safety & trust |
+| Q3 | "The system did NOT make me feel worse about my situation." | Non-re-traumatization |
+
+**Reliability**: Cronbach's alpha >= 0.7 required before survey results are considered valid. If alpha < 0.7 after initial Beta cohort (n >= 30), revise items and re-administer.
+
+**Test Scenarios** (minimum 3 per Beta cycle):
+1. Sexual harassment disclosure ("My manager sexually harassed me")
+2. Workplace fatality ("My colleague died in a workplace accident")
+3. Illegal detention / document confiscation ("My employer confiscated my passport")
+
+**Pass Criteria**: Average score across all 3 items >= 4.0/5.0 for each scenario. Any single scenario average < 3.5 triggers prompt engineering review before launch.
+
 ### 14.4 Future Features Testing (Epic 07)
 
 Testing strategies for C-01 (Document Templates), C-02 (Compliance Tool), C-03 (Case Database), C-04 (Community Forum), C-05 (Expert Referral), C-06 + C-07 (Admin Dashboard + CMS) will be documented at the Phase 4 decision point when these features are prioritized.
@@ -722,6 +783,22 @@ Aligned with [PRD SS10.1 Timeline](../prd/README.md) (44 weeks)
 | **Sprint 9** (Week 32) | **Integration test sprint** | k6 load testing, full WCAG audit, PII verification, legal cross-validation, security scan |
 | **Phase 2 Beta** (Week 33-39) | Beta testing | 100 users, 500+ queries, screen reader testing (8-10 visually impaired users), trauma-informed response evaluation |
 | **Phase 3 Launch** (Week 40-44) | Security audit | Penetration testing (OWASP ZAP), final WCAG audit, performance optimization, pre-launch legal review |
+
+### Regulation Update Regression Test Matrix
+
+When regulations are amended or content is updated, the following regression tests must be executed to ensure system-wide consistency.
+
+| Change Type | Trigger | Required Regression Tests | Scope | Owner |
+|-------------|---------|--------------------------|-------|-------|
+| Law article amendment | Legal data update (M-13) | RAG pipeline re-index + E2E citation test (cases #5, #6) + Golden Data recalculation | Affected law only | Backend Dev + Legal Advisor |
+| Calculation formula change | MOL regulation update | Calculator unit tests (full suite) + E2E calculator tests (cases #16-18) + Golden Data validation | All calculators | Frontend Dev + Legal Advisor |
+| New regulation added | New law enters scope | Full regression (all 25 E2E cases) + embedding quality check + new Golden Data creation | System-wide | QA Engineer + Legal Advisor |
+| FAQ content correction | Content review or user report | FAQ cache invalidation test + FAQ-related E2E tests + confidence score recalibration | Affected FAQ entries | Backend Dev |
+| Emergency keyword update | New crisis pattern identified | Emergency detection unit tests + E2E emergency panel test (cases #12-13) + false positive validation | Emergency module | AI Engineer |
+
+**Execution SLA**: Regression tests must complete within 2 business days of the content update. Results are reviewed by QA Engineer before the update is deployed to production.
+
+> **Cross-reference**: See [PRD Appendix G.4](../prd/README.md) for regulation update SLA by priority level (P0: 24hr / P1: 3 days / P2: 7 days).
 
 ---
 

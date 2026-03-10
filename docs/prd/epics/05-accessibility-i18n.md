@@ -271,6 +271,8 @@ Rollback steps:
 | AI generates response in wrong language | Detect language mismatch, re-prompt LLM | "Regenerating response in your selected language..." |
 | i18n route returns 404 for unsupported locale | Redirect to default locale (zh-TW) | "This language is not yet supported. Showing Traditional Chinese." |
 | PWA offline mode with missing translations | Cache critical translations in service worker | (Cached translations available offline) |
+| LLM generates Simplified Chinese instead of target language | Detect output language code mismatch; retry with explicit language instruction (max 1 retry) | "Regenerating response in your selected language..." |
+| Cross-language embedding similarity score < 0.2 | Translate user query to Traditional Chinese before embedding; use translated query for RAG retrieval | (Transparent to user; improves retrieval quality for non-Chinese queries) |
 
 ---
 
