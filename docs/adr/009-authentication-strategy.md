@@ -104,3 +104,14 @@ Returning User:
 - Cross-device sync only available after registration — anonymous sessions are per-browser.
 - Must comply with Taiwan Personal Data Protection Act (auto-sanitize PII, provide data deletion).
 - Rate limiting must handle both session_id and user_id identifiers.
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — §8 Tech Stack, Appendix B ADR Summary
+- [Epic 01: Chat Interface](../prd/epics/01-chat-interface.md) — Technical Dependencies
+- [Epic 03: Response Quality](../prd/epics/03-response-quality.md) — Related ADRs
+- [Epic 04: Action Guide & Emergency](../prd/epics/04-action-guide-emergency.md) — Reminder Implementation (S-10)
+- [Epic 06: Calculation Tools](../prd/epics/06-calculation-tools.md) — Related ADRs
+- [Epic 07: Future Features](../prd/epics/07-future-features.md) — Account System (C-04)
+- [Wireframes](../design/wireframes.md) — Cross-References
+- [Testing Strategy](../testing/testing-strategy.md) — ADR References

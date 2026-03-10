@@ -4,7 +4,7 @@
 
 | Document Info | |
 |---------|---------|
-| **Version** | v2.6 |
+| **Version** | v2.7 |
 | **Created** | 2026-02-02 |
 | **Last Updated** | 2026-03-10 |
 | **Status** | Draft - Pending Stakeholder Review |
@@ -825,6 +825,21 @@ MVP LLM budget baseline: ~$40-50/month (per [ADR-008](../adr/008-llm-provider.md
 | Week 8 | Online survey (150+ respondents, multi-language: zh-TW, Vietnamese, Indonesian) | Requirement priorities |
 | Week 9-10 | Low-fidelity prototype testing (9 people, mixed) + report writing | Usability issue list, research report |
 
+#### Mid-Point Review (Week 4)
+
+A structured checkpoint at the midpoint of Phase 0.5 to detect early signals that may require timeline or scope adjustment.
+
+| Review Item | Expected by Week 4 | Decision Criteria |
+|-------------|-------------------|-------------------|
+| Interview completion | >= 50% of planned interviews (10/20) | If < 50% completed → extend recruitment by 1 week (use buffer) |
+| Persona coverage | >= 3 of 5 target personas interviewed | If < 3 personas covered → prioritize missing personas in Week 5-6 |
+| Accessibility research | >= 1 visually impaired + 1 elderly participant | If 0 accessibility participants → escalate recruitment to NGO partners |
+| Key insight convergence | Initial pain point themes emerging | If no convergence → review interview guide with UX Researcher |
+
+**Participants**: PO + Tech Lead + UX Researcher
+**Output**: Mid-Point Review memo (1 page) documenting progress, risks, and any timeline adjustments
+**Pivot Signal**: If > 50% of interviews are incomplete AND primary persona (general worker) has not been interviewed → PO may invoke the 2-week buffer (Section 10.2) and adjust Week 5-10 schedule
+
 **Milestone**: User research report completed, requirement assumptions validated (including vulnerable group needs)
 
 #### Research Quality Validation
@@ -1141,6 +1156,18 @@ Level 3: Legal expert review (Legal Team)
 | **P0 Emergency** | Major regulation amendment | **24 hours** | Minimum wage adjustment |
 | **P1 Important** | General regulation amendment | **3 days** | Article text correction |
 | **P2 Routine** | Content optimization | **7 days** | FAQ supplement |
+
+#### G.4.1 Escalation Matrix
+
+If a regulation update SLA is at risk of being missed, the following escalation path applies:
+
+| Priority | Escalation Step 1 | Trigger | Escalation Step 2 | Trigger | Final Escalation |
+|:--------:|------------------|---------|-------------------|---------|-----------------|
+| P0 (24hr) | PO + Legal Advisor review | 8 hours elapsed | Project Sponsor notified | 16 hours elapsed | Emergency external legal consultant engaged |
+| P1 (3 days) | PO review | 2 days elapsed | Expedited review (skip peer review) | 3 days elapsed | Publish with "under review" flag |
+| P2 (7 days) | Content Team backlog | 5 days elapsed | Add to current Sprint backlog | 7 days elapsed | Carry to next Sprint with PO acknowledgment |
+
+**Notification Channels**: All escalations are communicated via Slack `#legal-updates` channel + email to affected role. P0 escalations additionally trigger PagerDuty alert.
 
 #### G.5 Multilingual Content Strategy
 
@@ -1595,6 +1622,36 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 
 ---
 
+## Document Maintenance
+
+### Review Cadence
+
+| Trigger | Scope | Lead | Participants | Output |
+|---------|-------|------|-------------|--------|
+| Sprint Review (biweekly) | Epic specs vs. implementation delta | Scrum Master | Dev Team + PO | Updated Epic acceptance criteria if needed |
+| Phase Completion | Full PRD + Epic + ADR review | Product Owner | PO + Tech Lead + Legal Advisor | Version bump + Change Log entry |
+| Major Regulation Change | Affected Epics + Golden Data + FAQ | Legal Advisor | Legal Advisor + PO + Backend Dev | Content update PR within SLA (see Appendix G.4) |
+| Quarterly (ongoing) | ADR relevance check + testing strategy alignment | Tech Lead | Tech Lead + QA Lead | ADR status update (Accepted/Superseded) |
+
+### Change Approval Requirements
+
+| Change Type | Approval Required | Turnaround |
+|-------------|------------------|:----------:|
+| Typo / formatting fix | Any team member | Same day |
+| Acceptance criteria update | PO sign-off | 1 business day |
+| New feature addition / removal | PO + Tech Lead joint sign-off | Sprint Planning |
+| ADR status change | Tech Lead + affected Epic owner | 3 business days |
+| Legal content modification | Legal Advisor sign-off mandatory | Per Appendix G.4 SLA |
+
+### Feature Deprecation Workflow
+
+1. **Proposal**: Feature owner submits deprecation rationale to PO (include usage data, maintenance cost, replacement plan)
+2. **Review**: PO + Tech Lead evaluate impact on active users and dependent features (1 Sprint)
+3. **Communication**: If approved, add deprecation notice to affected Epic spec + user-facing changelog (minimum 2 Sprints notice before removal)
+4. **Removal**: Remove feature code + update Epic spec + archive related test fixtures + update ADR if applicable
+
+---
+
 ## Change Log
 
 | Version | Date | Changes | Author |
@@ -1608,6 +1665,7 @@ Complete documentation established: `/docs/support/customer-support-framework.md
 | 2.4 | 2026-02-13 | Senior PO review P1 supplements: S-01 translation vendor management in Epic 05, Epic 07 for C-03~C-07 future feature specifications (case database, community forum, expert referral, admin dashboard & CMS), Appendix L MVP development budget (~NT$ 6.96M total) | Product Owner |
 | 2.5 | 2026-02-13 | PO review round 2 P1 fixes: C-01/C-02 placeholder specs in Epic 07, Golden Data timeline in Sprint 1-2 mapping, Phase 0.5 budget breakdown clarification in Appendix L, ADR cross-references added to wireframes.md and testing-strategy.md, Epic 07 testing strategy preview in testing-strategy.md §14.4 | Product Owner |
 | 2.6 | 2026-03-10 | PO review P2 supplements (15 items): PWA offline scope (M-11), FAQ update workflow (S-09), Phase 0.5 research quality metrics, translation rollback CI/CD, confidence score continuous improvement (M-07), trauma-informed evaluation rubric, Phase 4 decision meeting protocol, Golden Data maintenance ownership, reminder implementation approach (S-10), RBAC audit trail (C-06), cross-lingual UI testing, NER model selection (C-03), Beta recruitment contingency, cost alert thresholds, cross-epic integration testing in testing-strategy.md | Product Owner |
+| 2.7 | 2026-03-10 | PO review P2 round 2 (10 items): ADR bidirectional Referenced by sections (10 ADRs), multilingual edge cases (Epic 05), calculator input validation rules (Epic 06), screen reader compatibility matrix (testing-strategy), psychological safety measurement survey (testing-strategy), SLA escalation matrix (Appendix G.4.1), Phase 0.5 mid-point review (§10.2), Golden Data source verification (testing-strategy), regulation update regression test matrix (testing-strategy), document maintenance & review cadence | Product Owner |
 
 ---
 

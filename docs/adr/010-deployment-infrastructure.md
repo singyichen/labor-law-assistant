@@ -135,3 +135,12 @@ Merge to main
 - Fly.io requires credit card even for free tier allocation.
 - Cross-provider debugging is harder than single-vendor (mitigated by Sentry + OpenTelemetry).
 - Alembic migrations in CI/CD require careful handling (rollback strategy, migration testing).
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — §8 Tech Stack, §8.4.1 Infrastructure Costs, Appendix B ADR Summary
+- [Epic 02: RAG Legal Search](../prd/epics/02-rag-legal-search.md) — Related ADRs
+- [Epic 05: Accessibility & i18n](../prd/epics/05-accessibility-i18n.md) — PWA Offline Scope, Related ADRs
+- [Epic 07: Future Features](../prd/epics/07-future-features.md) — Technical Dependencies
+- [Wireframes](../design/wireframes.md) — Cross-References
+- [Testing Strategy](../testing/testing-strategy.md) — ADR References

@@ -45,6 +45,20 @@ Practical calculation tools that provide immediate, tangible value to users. Thi
 - [ ] "Why is it calculated this way?" explainer link for each multiplier (expandable, plain language)
 - [ ] Visual progress indicator showing calculation steps (not just final result)
 
+#### Input Validation Rules
+
+| Field | Valid Range | Basis | Error Behavior |
+|-------|-----------|-------|---------------|
+| Monthly salary | NT$ 27,470 ~ NT$ 1,000,000 | Minimum wage (2024); upper bound as reasonableness check | < minimum: warning (non-blocking, show current minimum wage); > upper: warning (non-blocking) |
+| Weekday overtime hours | 0 ~ 46 hours/month | LSA Art. 32 monthly overtime cap | > 46: warning (non-blocking, note legal violation) |
+| Rest day overtime hours | 0 ~ 24 hours/day | Physical maximum per single rest day | > 24: block input |
+| National holiday overtime hours | 0 ~ 24 hours/day | Physical maximum per single holiday | > 24: block input |
+| Years of service (annual leave) | 0.5 ~ 50 years | Minimum threshold for leave entitlement; 50-year reasonableness cap | < 0.5: show "No leave entitlement yet"; > 50: warning (non-blocking) |
+| Average monthly salary (severance) | NT$ 27,470 ~ NT$ 1,000,000 | Same as monthly salary | Same as monthly salary |
+| Employment start date | Not in the future; not > 50 years ago | Logical constraints | Future: block; > 50 years: warning |
+
+> **Note**: Minimum wage value (NT$ 27,470) should be configurable via environment variable to accommodate annual adjustments by the Ministry of Labor.
+
 **UI Mockup**
 ```
 +---------------------------------------------+

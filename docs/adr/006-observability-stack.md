@@ -105,3 +105,10 @@ Adopt a **layered observability stack** using open-source and free-tier tools:
 - Multiple tools to learn (Sentry, Grafana, PromQL, LogQL) vs single vendor (Datadog).
 - Alert tuning requires production traffic data — initial thresholds will need adjustment.
 - Sentry free tier has limited event quota (5K errors/month) — may need paid tier at scale.
+
+## Referenced by
+
+- [PRD README.md](../prd/README.md) — §8 Tech Stack, §8.4.1 Cost Alert Thresholds, Appendix B ADR Summary
+- [Epic 03: Response Quality](../prd/epics/03-response-quality.md) — Related ADRs
+- [Wireframes](../design/wireframes.md) — Cross-References
+- [Testing Strategy](../testing/testing-strategy.md) — ADR References
