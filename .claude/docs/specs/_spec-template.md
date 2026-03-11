@@ -4,6 +4,34 @@
 > Author: [Name]
 > Status: Draft | In Progress | Ready for Review | Approved
 
+## How to Use This Template
+
+### Required Sections (must complete)
+- **Section 1**: System Overview — always fill in PRD reference, problem, and solution
+- **Section 2**: Feature Description — at minimum: Functional Requirements, Acceptance Criteria
+- **Section 8**: Test Specification — at minimum: Test Plan table
+
+### Conditional Sections (complete if applicable)
+- **Section 4**: Data Model — if database changes are needed
+- **Section 5**: API Specification — if exposing new or modified endpoints
+- **Section 6.3**: Legal Calculation Logic — if implementing labor law calculations
+- **Section 8.3**: Legal Module Testing — if implementing legal features
+
+### Optional Sections (nice to have)
+- **Section 3**: Technical Architecture — can reference existing architecture docs
+- **Section 6.2**: Flowchart — recommended for complex business logic
+- **Section 7**: Performance Requirements — if performance-critical feature
+- **Appendix E**: Cost Estimation — recommended for AI/RAG features
+
+### Quick Start
+1. Copy this template to `.claude/docs/specs/pending/<feature-name>-spec.md`
+2. Replace all `[placeholders]` with actual content
+3. Delete sections marked "(if applicable)" that don't apply
+4. Check off acceptance criteria as you implement
+5. When done, move the file to `.claude/docs/specs/completed/`
+
+---
+
 ## 1. System Overview
 
 ### Related PRD Reference
@@ -35,6 +63,14 @@
 #### Legal Compliance (if applicable)
 - [ ] [Law article reference and compliance requirement]
 
+### Non-Functional Requirements
+- [ ] **Usability**: [e.g., response time < 3 seconds, mobile-friendly]
+- [ ] **Scalability**: [e.g., support 1000 concurrent users]
+- [ ] **Availability**: [e.g., 99.5% uptime]
+- [ ] **Maintainability**: [e.g., code coverage > 80%, clear logging]
+- [ ] **Accessibility**: [e.g., WCAG 2.1 AA compliance] (if frontend feature)
+- [ ] **Localization**: [e.g., support zh-TW, fallback to en]
+
 ### Input
 | Input | Source | Format | Validation Rules | Example |
 |-------|--------|--------|-----------------|---------|
@@ -57,6 +93,16 @@
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
 | | | |
+
+Example:
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Frontend | Next.js 15 + TypeScript | SSR, UI components |
+| Backend | FastAPI (Python 3.11) | REST API server |
+| Database | PostgreSQL 15 + pgvector | Relational data + vector embeddings |
+| Cache | Redis (Upstash) | Response caching, rate limiting |
+| AI/LLM | Claude Sonnet 4.5 | Legal Q&A generation |
+| Search | pgvector | Vector similarity search for RAG |
 
 ### Backend Components
 [Services, repositories, utilities to create or modify]
@@ -81,14 +127,31 @@
 ```sql
 -- Assumes PostgreSQL with pgvector extension. Adjust for other databases.
 -- Example:
--- CREATE TABLE table_name (
---   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
---   ...
--- );
+
+CREATE TABLE conversation_history (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  session_id UUID NOT NULL,
+  query_text TEXT NOT NULL,
+  response_text TEXT NOT NULL,
+  legal_articles JSONB,           -- Array of referenced law article IDs
+  confidence_score DECIMAL(3,2),  -- AI response confidence (0.00-1.00)
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+
+  CONSTRAINT query_not_empty CHECK (length(trim(query_text)) > 0),
+  CONSTRAINT valid_confidence CHECK (confidence_score BETWEEN 0 AND 1)
+);
+
+-- Indexes defined in Section 4.4 below
 ```
 
 ### Migration Requirements
 [Migration strategy, backward compatibility, data backfill needs]
+
+### Rollback Plan
+[How to revert this migration if issues are found in production]
+- Rollback SQL / Alembic downgrade command
+- Data recovery steps (if destructive migration)
+- Estimated rollback time
 
 ### Indexes
 | Table | Column(s) | Type | Purpose |
@@ -96,6 +159,12 @@
 | | | | |
 
 ## 5. API Specification
+
+### Versioning Policy
+- Current API version: `v1`
+- Breaking changes require version bump (`v1` → `v2`)
+- Non-breaking additions (new fields, new endpoints) stay in current version
+- Deprecated endpoints must be supported for at least 2 release cycles
 
 ### Endpoints
 
@@ -129,9 +198,19 @@
 [Detailed description of the key algorithm and its flow]
 
 ### Flowchart
+```mermaid
+flowchart TD
+    A[Receive user query] --> B{Input valid?}
+    B -->|No| C[Return validation error]
+    B -->|Yes| D[Retrieve context from RAG]
+    D --> E{Legal articles found?}
+    E -->|No| F[Return fallback response]
+    E -->|Yes| G[Generate AI response with citations]
+    G --> H[Apply PII sanitization]
+    H --> I[Return response to user]
 ```
-[Step-by-step flow using text-based diagram]
-```
+
+> Replace the above with your feature's actual flow. Use [Mermaid syntax](https://mermaid.js.org/syntax/flowchart.html).
 
 ### Legal Calculation Logic (if applicable)
 [Formulas, rules, and edge cases for labor law calculations.
@@ -144,6 +223,15 @@ Overtime pay = Base hourly wage x Overtime hours x Multiplier
 - Beyond 2 hours: multiplier = 1.67 (Labor Standards Act §24-2)
 - Base hourly wage = Monthly salary / 30 / 8
 ```
+
+### Edge Cases & Exception Handling
+
+| Edge Case | Expected Behavior | Reference |
+|-----------|------------------|-----------|
+| [e.g., Empty user input] | [e.g., Return validation error] | |
+| [e.g., Query exceeds max length] | [e.g., Truncate and warn user] | |
+| [e.g., External API timeout] | [e.g., Return error with retry option] | |
+| [e.g., No legal articles found] | [e.g., Return fallback response with disclaimer] | |
 
 ## 7. Performance Requirements
 
@@ -165,6 +253,24 @@ Overtime pay = Base hourly wage x Overtime hours x Multiplier
 | Logging | [Key events to log, log level, structured fields] |
 | Metrics | [Custom metrics to track, dashboard requirements] |
 | Alerts | [Alert conditions, thresholds, notification channels] |
+
+Example:
+```
+Logging:
+  Events: user_query_received, rag_search_completed, llm_response_generated
+  Level: INFO (normal flow), ERROR (failures)
+  Fields: {session_id, query_length, response_time_ms, legal_articles_count}
+
+Metrics:
+  - query_count_total (counter)
+  - response_time_seconds (histogram, P50/P95/P99)
+  - rag_cache_hit_ratio (gauge)
+
+Alerts:
+  - Response time P95 > 5s for 5 min → Slack #alerts
+  - Error rate > 5% for 2 min → PagerDuty
+  - LLM API quota > 90% → Email team lead
+```
 
 ## 8. Test Specification
 
@@ -232,6 +338,16 @@ Overtime pay = Base hourly wage x Overtime hours x Multiplier
 
 **Open Questions**:
 - [Questions that need answers before or during implementation]
+
+### E. Cost Estimation
+
+| Resource | Unit Cost | Estimated Usage | Monthly Cost |
+|----------|----------|----------------|-------------|
+| LLM API calls | [e.g., $0.003 per 1K input tokens] | [e.g., 500 queries/day] | |
+| Vector DB queries | [e.g., $0.10 per 1M queries] | | |
+| Database storage | [e.g., Neon free tier 10GB] | | |
+| Redis cache | [e.g., Upstash free tier 10K cmd/day] | | |
+| **Total** | | | **$X/month** |
 
 ---
 
