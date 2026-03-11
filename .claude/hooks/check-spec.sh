@@ -12,19 +12,22 @@
 
 set -euo pipefail
 
+# Deny message used when no spec is found
+readonly SPEC_REQUIRED_MSG='No spec found in .claude/docs/specs/pending/. Before writing source code, please create a spec document first.\n\n1. Use the template: .claude/docs/specs/_spec-template.md\n2. Save your spec to: .claude/docs/specs/pending/<feature-name>-spec.md\n3. Then retry your code changes.\n\nThis project follows a \"write docs before code\" workflow.'
+
 INPUT=$(cat)
 
 # Extract file_path from tool_input (Write and Edit both have file_path)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 
-# If no file_path, allow (safety fallback)
-if [ -z "$FILE_PATH" ]; then
+# If no file_path or null, allow (safety fallback)
+if [ -z "$FILE_PATH" ] || [ "$FILE_PATH" = "null" ]; then
   exit 0
 fi
 
 # Get the project directory
 PROJECT_DIR=$(echo "$INPUT" | jq -r '.cwd // empty')
-if [ -z "$PROJECT_DIR" ]; then
+if [ -z "$PROJECT_DIR" ] || [ "$PROJECT_DIR" = "null" ]; then
   exit 0
 fi
 
@@ -81,30 +84,28 @@ esac
 
 SPEC_DIR="$PROJECT_DIR/.claude/docs/specs/pending"
 
-# If the pending directory does not exist, block
-if [ ! -d "$SPEC_DIR" ]; then
-  jq -n '{
+# Helper: output deny JSON and exit
+deny_no_spec() {
+  jq -n --arg msg "$SPEC_REQUIRED_MSG" '{
     hookSpecificOutput: {
       hookEventName: "PreToolUse",
       permissionDecision: "deny",
-      permissionDecisionReason: "No spec found. Before writing source code, please create a spec document first.\n\n1. Use the template: .claude/docs/specs/_spec-template.md\n2. Save your spec to: .claude/docs/specs/pending/<feature-name>-spec.md\n3. Then retry your code changes.\n\nThis project follows a \"write docs before code\" workflow."
+      permissionDecisionReason: $msg
     }
   }'
   exit 0
+}
+
+# If the pending directory does not exist, block
+if [ ! -d "$SPEC_DIR" ]; then
+  deny_no_spec
 fi
 
 # Count markdown files in pending/ (excluding .gitkeep)
 SPEC_COUNT=$(find "$SPEC_DIR" -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
 
 if [ "$SPEC_COUNT" -eq 0 ]; then
-  jq -n '{
-    hookSpecificOutput: {
-      hookEventName: "PreToolUse",
-      permissionDecision: "deny",
-      permissionDecisionReason: "No spec found in .claude/docs/specs/pending/. Before writing source code, please create a spec document first.\n\n1. Use the template: .claude/docs/specs/_spec-template.md\n2. Save your spec to: .claude/docs/specs/pending/<feature-name>-spec.md\n3. Then retry your code changes.\n\nThis project follows a \"write docs before code\" workflow."
-    }
-  }'
-  exit 0
+  deny_no_spec
 fi
 
 # Spec exists in pending/ -- allow code writing
