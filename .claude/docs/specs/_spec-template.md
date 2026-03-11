@@ -60,6 +60,11 @@
 - [ ] [Criterion 2]
 - [ ] [Criterion 3]
 
+Example:
+- [ ] System returns a response within 3 seconds for 95% of queries (P95 latency)
+- [ ] Response includes at least one cited legal article when confidence score > 0.7
+- [ ] User can view conversation history for the current session
+
 #### Legal Compliance (if applicable)
 - [ ] [Law article reference and compliance requirement]
 
@@ -147,6 +152,18 @@ CREATE TABLE conversation_history (
 ### Migration Requirements
 [Migration strategy, backward compatibility, data backfill needs]
 
+Example:
+```bash
+# Generate migration
+alembic revision --autogenerate -m "add_conversation_history"
+
+# Apply migration (zero-downtime: additive changes only, no column drops)
+alembic upgrade head
+
+# Backfill existing data (if needed)
+python scripts/backfill_conversation_history.py --batch-size 1000
+```
+
 ### Rollback Plan
 [How to revert this migration if issues are found in production]
 - Rollback SQL / Alembic downgrade command
@@ -192,10 +209,44 @@ CREATE TABLE conversation_history (
 | 404 | NOT_FOUND | [When/why this occurs] |
 | 500 | INTERNAL_ERROR | [When/why this occurs] |
 
+Example:
+
+#### `POST /api/v1/chat/query`
+- **Description**: Submit a legal question and receive an AI-generated response
+- **Authentication**: Public
+
+**Request**:
+| Parameter | Location | Type | Required | Default | Description |
+|-----------|----------|------|----------|---------|-------------|
+| query | body | string | Yes | | User's legal question (max 1000 chars) |
+| language | body | string | No | "zh-TW" | Response language code |
+| session_id | body | string | No | auto-generated | Conversation session ID |
+
+```json
+{
+  "query": "加班費怎麼計算？",
+  "language": "zh-TW"
+}
+```
+
+**Response** (`200 OK`):
+```json
+{
+  "answer": "根據勞基法第24條...",
+  "legal_articles": ["勞基法第24條"],
+  "confidence": 0.85,
+  "session_id": "abc-123"
+}
+```
+
 ## 6. Algorithm Description
 
 ### Core Algorithm
 [Detailed description of the key algorithm and its flow]
+
+Example: "Use cosine similarity to rank law articles against the user query embedding.
+Retrieve top-k articles (k=5) with similarity score > 0.3, then pass them as context
+to the LLM for response generation with citations."
 
 ### Flowchart
 ```mermaid
@@ -285,12 +336,28 @@ Alerts:
 
 ### BDD Scenarios
 ```gherkin
-# Example:
-# Feature: [Feature name]
-#   Scenario: [Scenario name]
-#     Given [precondition]
-#     When [action]
-#     Then [expected result]
+Feature: [Feature name]
+  Scenario: [Scenario name]
+    Given [precondition]
+    When [action]
+    Then [expected result]
+```
+
+Example:
+```gherkin
+Feature: Legal Question Query
+  Scenario: Successful overtime pay inquiry
+    Given a user is on the chat interface
+    When the user asks "How is overtime pay calculated?"
+    Then the system returns a response within 3 seconds
+    And the response cites Labor Standards Act §24
+    And the response includes a confidence score above 0.7
+
+  Scenario: Query with no matching legal articles
+    Given a user is on the chat interface
+    When the user asks a question unrelated to labor law
+    Then the system returns a fallback message with disclaimer
+    And the response suggests contacting 1955 hotline for further help
 ```
 
 ### Legal Module Testing (if applicable)
@@ -311,6 +378,13 @@ Alerts:
 | Upstream | [What must be completed first] | | |
 | Downstream | [What depends on this] | | |
 | External | [Third-party APIs, services] | | |
+
+Example:
+| Type | Dependency | Version | Notes |
+|------|-----------|---------|-------|
+| Upstream | RAG indexing pipeline (Epic 02) | | Must complete before search works |
+| Downstream | Action Guide (M-06) | | Uses legal articles from this feature |
+| External | Anthropic Claude API | Sonnet 4.5 | API key required in env |
 
 ### B. Risks and Mitigation
 
