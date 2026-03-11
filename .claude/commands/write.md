@@ -8,6 +8,17 @@ Implement a new feature by orchestrating skills from requirements through develo
 
 ## Workflow Steps
 
+### Step 0: Create Feature Spec
+
+Before any implementation, create a specification document:
+
+1. Copy the template from `.claude/docs/specs/_spec-template.md`
+2. Fill in all sections based on `$ARGUMENTS`
+3. Save to `.claude/docs/specs/pending/<feature-slug>-spec.md`
+4. Present the spec to the user for review before proceeding
+
+This is enforced by the PreToolUse hook — source code files cannot be written until a spec exists in `pending/`.
+
 ### Step 1: Define User Story
 
 Use the **user-story** skill to create a well-structured User Story for `$ARGUMENTS`.
