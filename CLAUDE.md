@@ -220,11 +220,11 @@ labor-law-assistant/
 
 ### RAG/LLM 規則
 - **Prompt 可測試性**：所有 prompt template 統一放置於 `app/prompts/` 目錄，每個 prompt 配套測試驗證變數替換正確性
-- **幻覺預防**：LLM 回應必須包含 `confidence_score` 和 `source_articles`；confidence < 0.7 或 source 為空時，強制附加免責聲明（threshold 依據需記錄於 ADR，含 precision/recall 分析，季度複審）
-- **快取策略**：分層快取——向量搜尋結果 Redis key: `qa:hash:{question_hash}:{context_hash}`, TTL: 1h；LLM 回應 TTL: 1h；法規內容更新時透過 admin 端點主動 invalidate；目標 cache hit rate > 60%
+- **幻覺預防**：LLM 回應必須包含 `confidence_score` 和 `source_articles`；confidence < 0.7 或 source 為空時，強制附加免責聲明（初始目標值，待 beta 上線後依實際 precision/recall 數據調整，記錄於 ADR，季度複審）
+- **快取策略**：分層快取——向量搜尋結果 Redis key: `qa:hash:{question_hash}:{context_hash}`, TTL: 1h；LLM 回應 TTL: 1h；法規內容更新時透過 admin 端點主動 invalidate；目標 cache hit rate > 60%（初始目標值，依上線後實際數據調整）
 - **Fallback 機制**：主要 LLM timeout（>45s）、rate limit（429）、service unavailable（503）時自動切換至 GPT-4o-mini（fallback timeout: 30s），並記錄 fallback event 至 structlog
 - **Streaming 回應**：使用 SSE 串流 LLM 回應，Backend 使用 `async for chunk in llm.stream()`，Frontend 使用 Vercel AI SDK `useChat`；目標 TTFB < 2s，chunk latency < 200ms，streaming timeout: 60s
-- **RAG 查詢品質**：法條文本 chunk size 設為 1024 tokens，overlap 20%；hybrid search（pgvector cosine + full-text search）以 RRF 合併（k=60）；Top-K=5，rerank 後保留 Top-3（高 confidence > 0.9 可縮減至 Top-2，複雜查詢擴展至 Top-5）
+- **RAG 查詢品質**：法條文本 chunk size 設為 1024 tokens，overlap 20%；hybrid search（pgvector cosine + full-text search）以 RRF 合併（k=60）；Top-K=5，rerank 後保留 Top-3（高 confidence > 0.9 可縮減至 Top-2，複雜查詢擴展至 Top-5）。以上為初始參數，須在 beta 階段透過 A/B test 驗證並記錄於 ADR
 - **Batch Embedding**：批量向量化操作每次最多 100 chunks，使用 `asyncio.gather` 並行處理多批次；embedding API latency 目標 p99 < 500ms
 
 ### 錯誤處理與 Logging
@@ -249,7 +249,7 @@ labor-law-assistant/
 - **完成前清理**：任務結束前，必須刪除無用的冗餘代碼、偵錯用的 `print`/`console.log`，以及被駁回方案的遺留程式碼；允許保留 `# TODO` 但必須包含 issue number（如 `# TODO(#123): implement rate limiting`），不得保留無 context 的 `# FIXME`
 
 ### API 設計規範
-- **版本控制**：breaking change 必須增加版本號（`/api/v2/`），舊版本保留至少 3 個月並在 response header 加入 `X-Deprecation-Warning`
+- **版本控制**：MVP 階段（pre-v1.0）breaking change 可在 `/api/v1/` 內迭代，搭配 changelog 記錄；正式上線後 breaking change 必須增加版本號（`/api/v2/`），舊版本保留至少 3 個月並在 response header 加入 `X-Deprecation-Warning`
 - **一致性**：所有 endpoint 回傳統一的 JSON 結構（`data`, `error`, `meta`），error 格式包含 `code` 和 `message`
 - **Nested Resources**：API 回傳含巢狀資源時，必須在 docstring 標註使用的 loader（`selectinload` / `joinedload`），目標每 endpoint 查詢數 < 5
 
@@ -307,14 +307,14 @@ labor-law-assistant/
 
 ### PR 完整流程
 
-開發完成後，依序執行以下步驟（全部自動完成，不需等待使用者指示）：
+開發完成後，依序執行以下步驟（步驟 1-5 自動完成，步驟 6 Merge 需使用者確認）：
 
 1. **Commit** — 使用正確的 type 提交變更
 2. **Code Review** — 執行 `/review` command 審查所有變更（組合 code-review-checklist → code-review → code-smell → pr-review 四個 skill），根據審查結果修正問題
 3. **測試驗證**（程式碼變更時）— 執行 `/test` command 驗證測試覆蓋率和品質（組合 test-plan → bdd-scenario → test-data-strategy → test-coverage 等六個 skill）
 4. **Push** — 推送到遠端分支
 5. **建立 PR** — Test Plan 中每個檢查項必須逐一驗證，已通過標記為 `[x]`，未通過保留 `[ ]` 並說明原因
-6. **Merge + 清理** — 自動執行以下步驟：
+6. **Merge + 清理** — 確認使用者同意後執行以下步驟：
    1. `gh pr merge <number> --merge` — merge PR
    2. `git checkout main && git pull` — 切回 main 並拉取最新
    3. `git fetch --prune` — 清理已刪除的遠端分支追蹤
