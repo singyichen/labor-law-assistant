@@ -115,6 +115,7 @@ labor-law-assistant/
 │   │   ├── api/routes/      # API route handlers
 │   │   ├── core/            # Core logic, middleware, exceptions
 │   │   ├── models/          # SQLAlchemy models
+│   │   ├── prompts/         # LLM prompt templates (testable, version-controlled)
 │   │   ├── schemas/         # Pydantic request/response schemas
 │   │   ├── services/        # Service layer
 │   │   ├── utils/           # Utility functions
@@ -141,6 +142,12 @@ labor-law-assistant/
     ├── commands/             # 5 workflow commands (write, review, test, fix, release)
     ├── skills/               # 28 knowledge-domain skills (6 categories)
     ├── agents/               # Agent definitions
+    ├── hooks/                # Git hooks (check-spec.sh, remind-spec.sh)
+    ├── docs/specs/           # Feature specifications
+    │   ├── _spec-template.md # Spec template (8 sections + appendices)
+    │   ├── pending/          # In-progress specs (enforced by PreToolUse hook)
+    │   └── completed/        # Archived specs
+    ├── settings.json         # Hooks configuration (shared via git)
     ├── SKILLS.md             # Skills & commands directory
     └── AGENTS.md             # Agents reference
 ```
@@ -235,6 +242,7 @@ labor-law-assistant/
 - 安全性或錯誤預測類提示（如 memory leak、潛在 null pointer），應先向使用者回報再修改
 
 ### AI 工作流程
+- **Spec-first**：寫入程式碼前，必須先在 `.claude/docs/specs/pending/` 建立 spec 文件（PreToolUse hook 強制執行，無 spec 時程式碼寫入會被阻擋）；功能完成後將 spec 移至 `completed/`
 - **最小增量**：每次僅修改必要部分，確保每次編輯後程式碼仍可運作
 - **環境感知**：修改前必先閱讀相關檔案內容，確保新程式碼與整體架構相容
 - **測試優先**：若專案已有 `/tests` 目錄，主動詢問是否同步撰寫或更新測試
@@ -343,7 +351,5 @@ labor-law-assistant/
 
 ## Important Notes
 
-- 法律內容必須準確且符合台灣最新勞動法規
-- 所有法律資訊應附上適當的免責聲明
-- 用戶輸入需要驗證和清理
+- 本專案為法律諮詢輔助系統，所有法律相關規則詳見：安全性規則（PII 保護）、RAG/LLM 規則（幻覺預防與免責聲明）、法律模組特殊要求（coverage 95%、法條驗證）
 
