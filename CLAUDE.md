@@ -169,6 +169,32 @@ labor-law-assistant/
 - 優先使用 functional components + hooks
 - 使用 `interface` 定義 props，使用 `type` 定義聯合/交叉類型
 
+## General Coding Rules
+
+### Naming
+- Use meaningful English words following language ecosystem conventions
+- Prioritize consistency with existing codebase naming; if optimization is needed, complete the feature first and then suggest renaming to the user
+
+### Code Structure & Quality
+- **Single Responsibility**: Each function does exactly one thing
+- **Robustness**: Critical logic must include error handling and boundary checks
+- **Dependency Management**: Prefer existing libraries; do not introduce unnecessary external packages or duplicate installations
+
+### Comments & Documentation
+- Comments explain "Why", not "What" — the code itself should be self-explanatory
+- Do not proactively create external Markdown documentation files unless the user requests it
+
+### Lint Fixes
+- Skip non-security lint rules (formatting, import order, etc.)
+- For security or error-prediction warnings (memory leaks, potential null pointers), report to the user before making changes
+
+### AI Workflow
+- **Minimal Increments**: Only modify what is necessary per change; ensure code remains runnable after each edit
+- **Context Awareness**: Always read related files before modifying code to ensure compatibility with the overall architecture
+- **Test First**: If the project has a `/tests` directory, proactively ask whether to write or update tests alongside the implementation
+- **Cleanup Before Completion**: Before finishing a task, remove all dead code, debug `print`/`console.log` statements, and leftover code from rejected approaches
+- **No Hardcoded Secrets**: Never hardcode API keys, tokens, or credentials in source code; use environment variables or secret managers
+
 ## Git Workflow
 
 ### Commit 規範
