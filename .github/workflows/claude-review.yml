@@ -1,0 +1,80 @@
+name: Claude Code Review（手動備援）
+
+# 使用時機：qodo-code-review 免費額度用完時的備援 code review
+# 觸發方式：
+#   1. 在 PR 留言輸入 `/claude review`（需為 repo collaborator）
+#   2. 至 GitHub Actions 頁面手動執行，輸入 PR number
+
+on:
+  issue_comment:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: "PR number to review（例如：42）"
+        required: true
+        type: string
+
+jobs:
+  claude-review:
+    name: Claude Code Review
+    runs-on: ubuntu-latest
+
+    # 觸發條件：
+    # - workflow_dispatch：手動執行
+    # - issue_comment：PR 留言含 "/claude review"，且留言者為 collaborator
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request != null &&
+        contains(github.event.comment.body, '/claude review') &&
+        (
+          github.event.comment.author_association == 'OWNER' ||
+          github.event.comment.author_association == 'MEMBER' ||
+          github.event.comment.author_association == 'COLLABORATOR'
+        )
+      )
+
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # workflow_dispatch：根據輸入的 PR number checkout 對應分支
+      - name: Checkout PR branch（workflow_dispatch）
+        if: github.event_name == 'workflow_dispatch'
+        run: gh pr checkout "${{ inputs.pr_number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # issue_comment：checkout 觸發留言所在的 PR 分支
+      - name: Checkout PR branch（issue_comment）
+        if: github.event_name == 'issue_comment'
+        run: gh pr checkout "${{ github.event.issue.number }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 回覆 PR 留言，告知 Claude 已開始審查
+      - name: Post "reviewing" comment
+        if: github.event_name == 'issue_comment'
+        run: |
+          gh pr comment "${{ github.event.issue.number }}" \
+            --body "🤖 Claude Code Review 已啟動，審查結果將在幾分鐘後更新…"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Claude Code Review
+        uses: anthropics/claude-code-action@beta
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          prompt_file: .github/prompts/claude-review.md
+          # Claude 只需讀取檔案與 PR diff，不需要寫入或執行指令
+          allowed_tools: "Read,Glob,Grep,Bash(git diff HEAD~1:,git log --oneline -10)"
