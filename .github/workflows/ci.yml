@@ -61,8 +61,9 @@ jobs:
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
       # CLAUDE.md 規定：Critical/High 漏洞阻斷部署
+      # pip-audit 已加入 dev dependency group，透過 uv.lock 鎖定版本
       - name: Audit dependencies for known CVEs
-        run: uv export --frozen | uvx pip-audit -r /dev/stdin
+        run: uv export --frozen | uv run pip-audit -r /dev/stdin
 
   test:
     name: Test
@@ -90,71 +91,6 @@ jobs:
           name: test-results
           path: backend/test-results.xml
 
-  # Frontend CI：frontend/ 目錄建立後自動啟用（無需修改此 workflow）
-  frontend-lint:
-    name: Frontend Lint & Type Check
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    if: hashFiles('frontend/package.json') != ''
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: frontend/pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm lint
-      - run: pnpm tsc --noEmit
-
-  frontend-security:
-    name: Frontend Security Audit
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    # CLAUDE.md 規定：pnpm audit Critical/High 漏洞阻斷部署
-    if: hashFiles('frontend/package.json') != ''
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: frontend/pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm audit --audit-level high
-
-  frontend-test:
-    name: Frontend Test
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-    if: hashFiles('frontend/package.json') != ''
-    defaults:
-      run:
-        working-directory: frontend
-    steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
-      - uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "pnpm"
-          cache-dependency-path: frontend/pnpm-lock.yaml
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+  # Frontend CI：frontend/ 開發啟動後再新增此區塊
+  # 預計包含：lint（ESLint + Prettier）、typecheck（tsc --noEmit）、
+  # security（pnpm audit --audit-level high）、test（Vitest）
