@@ -40,8 +40,8 @@ if [ -z "$PENDING_SPECS" ]; then
   exit 0
 fi
 
-printf "[Spec Reminder] Active specs in specs/:\n"
-printf "$PENDING_SPECS"
-printf "\nIf a feature is complete, mark it with: touch specs/<feature-dir>/.completed\n"
+printf '[Spec Reminder] Active specs in specs/:\n'
+printf '%b' "$PENDING_SPECS"
+printf '\nIf a feature is complete, mark it with: touch specs/<feature-dir>/.completed\n'
 
 exit 0
