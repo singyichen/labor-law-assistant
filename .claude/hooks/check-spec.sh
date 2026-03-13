@@ -117,13 +117,13 @@ fi
 
 # Search recursively for spec.md files, excluding completed specs (those with .completed marker)
 ACTIVE_SPECS=0
-for spec_file in $(find "$SPEC_DIR" -name "spec.md" -type f 2>/dev/null); do
+while read -r spec_file; do
   spec_dir=$(dirname "$spec_file")
   # Check if this spec directory has a .completed marker
   if [ ! -f "$spec_dir/.completed" ]; then
     ACTIVE_SPECS=$((ACTIVE_SPECS + 1))
   fi
-done
+done < <(find "$SPEC_DIR" -name "spec.md" -type f 2>/dev/null)
 
 if [ "$ACTIVE_SPECS" -eq 0 ]; then
   deny_no_spec

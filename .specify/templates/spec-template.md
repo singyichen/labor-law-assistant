@@ -113,3 +113,86 @@
 - **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
 - **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
 - **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+## Legal Compliance *(if feature involves legal content)*
+
+<!--
+  Include this section when the feature touches labor law content,
+  legal calculations, or legal advice display.
+-->
+
+### Legal Requirements
+
+- Applicable laws: [e.g., Labor Standards Act, Act of Gender Equality in Employment]
+- Specific articles referenced: [e.g., LSA §24 (overtime), LSA §38 (annual leave)]
+- Legal accuracy validation: [How will correctness be verified? e.g., cross-check with MOL calculator]
+
+### Legal Calculation Logic *(if feature involves calculations)*
+
+<!--
+  Document the exact calculation formulas, citing specific law articles.
+  Include worked examples for validation.
+-->
+
+- **Calculation**: [e.g., Overtime pay for weekdays]
+  - **Formula**: [e.g., hourly_wage × 1.34 for first 2 hours, hourly_wage × 1.67 for next 2 hours]
+  - **Legal basis**: [e.g., LSA §24, Paragraph 1]
+  - **Example**: [e.g., Monthly salary 30,000 → hourly wage 125 → 2h OT = 125 × 1.34 × 2 = 335]
+  - **Edge cases**: [e.g., Part-time workers, foreign workers, workers on probation]
+
+### Disclaimer Requirements
+
+- LLM responses MUST include `confidence_score` and `source_articles`
+- Confidence < 0.7 or empty sources → mandatory disclaimer
+- Disclaimer text: [Define or reference standard disclaimer template]
+
+## Legal Module Testing *(if feature involves legal calculations)*
+
+<!--
+  Legal modules require 95% test coverage (vs. 80% general).
+  Include golden dataset validation for calculators.
+-->
+
+### Test Requirements
+
+- Coverage target: 95% minimum
+- Golden dataset: [Source of truth, e.g., MOL online calculator results]
+- Cross-validation cases: [List specific scenarios to validate against government tools]
+
+| Scenario | Input | Expected Output | Legal Basis | Source |
+|----------|-------|-----------------|-------------|--------|
+| [e.g., Weekday OT 2h] | [e.g., salary=30000, hours=2] | [e.g., 335] | [LSA §24] | [MOL calculator] |
+
+## Localization *(if feature involves user-facing content)*
+
+<!--
+  Include when the feature has user-visible text or legal terminology.
+-->
+
+- UI language: Traditional Chinese (zh-TW)
+- Legal terminology: Official MOL terminology (勞動部官方用語)
+- Technical terms: Retain English form (e.g., API, JWT, P-value)
+- Date format: YYYY-MM-DD (ISO 8601)
+- Currency format: NT$ with thousands separator (e.g., NT$30,000)
+
+## Cost Estimation *(if feature involves AI/RAG)*
+
+<!--
+  Include when the feature uses LLM calls, embedding generation, or vector search.
+  Helps estimate operational costs before implementation.
+-->
+
+### AI Resource Usage
+
+| Operation | Provider | Model | Est. Calls/Day | Est. Cost/Day |
+|-----------|----------|-------|-----------------|---------------|
+| [e.g., Legal Q&A] | [Anthropic] | [Claude Sonnet 4.5] | [500] | [~$X.XX] |
+| [e.g., Embedding] | [OpenAI] | [text-embedding-3-large] | [100] | [~$X.XX] |
+| [e.g., Fallback] | [OpenAI] | [GPT-4o-mini] | [50] | [~$X.XX] |
+
+### Caching Strategy
+
+- Cache key pattern: [e.g., `qa:hash:{question_hash}:{context_hash}`]
+- TTL: [e.g., 1 hour]
+- Expected cache hit rate: [e.g., >60%]
+- Estimated cost savings: [e.g., 40% reduction in LLM calls]

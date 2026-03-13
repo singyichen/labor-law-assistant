@@ -28,13 +28,13 @@ fi
 
 # Collect active (non-completed) spec directories
 PENDING_SPECS=""
-for spec_file in $(find "$SPEC_DIR" -name "spec.md" -type f 2>/dev/null); do
+while read -r spec_file; do
   spec_dir=$(dirname "$spec_file")
   if [ ! -f "$spec_dir/.completed" ]; then
     dir_name=$(basename "$spec_dir")
     PENDING_SPECS="$PENDING_SPECS  - $dir_name\n"
   fi
-done
+done < <(find "$SPEC_DIR" -name "spec.md" -type f 2>/dev/null)
 
 if [ -z "$PENDING_SPECS" ]; then
   exit 0
