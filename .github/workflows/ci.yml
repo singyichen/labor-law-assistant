@@ -9,15 +9,17 @@ on:
 jobs:
   lint:
     name: Lint & Format
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
           enable-cache: true
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
@@ -26,32 +28,69 @@ jobs:
 
   typecheck:
     name: Type Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
           enable-cache: true
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
       - run: uv run mypy .
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
+  security:
+    name: Security Audit
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
           enable-cache: true
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
-      - run: uv run pytest -v --tb=short --cov=app --cov-report=term-missing
+      # CLAUDE.md 規定：Critical/High 漏洞阻斷部署
+      # pip-audit 已加入 dev dependency group，透過 uv.lock 鎖定版本
+      - name: Audit dependencies for known CVEs
+        run: uv export --frozen | uv run pip-audit -r /dev/stdin
+
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
+        with:
+          python-version: "3.12.13"
+          enable-cache: true
+          cache-dependency-glob: "backend/uv.lock"
+      - run: uv sync --locked --dev
+      # -v --tb=short 已在 pyproject.toml [tool.pytest.ini_options].addopts 設定，不重複傳遞
+      - name: Run tests with coverage
+        run: uv run pytest --cov=app --cov-report=term-missing --cov-fail-under=80 --junit-xml=test-results.xml
+      - name: Upload test results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        if: always()
+        with:
+          name: test-results
+          path: backend/test-results.xml
+
+  # Frontend CI：frontend/ 開發啟動後再新增此區塊
+  # 預計包含：lint（ESLint + Prettier）、typecheck（tsc --noEmit）、
+  # security（pnpm audit --audit-level high）、test（Vitest）
