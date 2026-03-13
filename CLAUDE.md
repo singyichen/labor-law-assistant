@@ -165,9 +165,9 @@ labor-law-assistant/
 
 ## Communication
 
-- **繁體中文優先**：新產出的文件、註解、commit message、spec 文件皆以繁體中文撰寫；既有基礎設定檔（constitution、templates、scripts）維持英文
+- **繁體中文優先**：新產出的文件、註解、commit message、spec 文件皆以繁體中文撰寫；既有基礎設定檔（constitution、templates、scripts）維持英文；spec 模板標題維持英文結構，填寫內容用繁中
 - 對話總是用繁體中文回覆、唯有專有技術名詞以英文呈現（例如 P-value）
-- 程式碼中的變數名、函數名、string literals 以英文撰寫；註解（含 docstring 與 inline comment）以繁體中文撰寫
+- 程式碼中的變數名、函數名、string literals 以英文撰寫；新寫或修改的註解（含 docstring 與 inline comment）以繁體中文撰寫，既有英文註解不強制回溯修改
 
 ## Code Style
 
@@ -175,7 +175,7 @@ labor-law-assistant/
 
 - 使用 4 格縮排
 - 變數命名使用 snake_case（禁止單字母變數）
-- 所有函數必須有 docstring（Google style：`Args:`, `Returns:`, `Raises:`，以繁體中文撰寫），清楚定義用途、參數、依賴關係、和預期回傳類型
+- 所有函數必須有 docstring（Google style：`Args:`, `Returns:`, `Raises:`，新寫或修改時以繁體中文撰寫），清楚定義用途、參數、依賴關係、和預期回傳類型
 - 使用 pytest 而非 unittest
 - 函數必須有完整的 type hints
 - 優先使用 f-string 而非 format()
@@ -187,7 +187,7 @@ labor-law-assistant/
 - 使用 TypeScript strict mode，禁止 `any` 類型
 - 優先使用 functional components + hooks
 - 使用 `interface` 定義 props，使用 `type` 定義聯合/交叉類型
-- JSDoc 使用 `@param`, `@returns`, `@throws` 標籤，以繁體中文撰寫
+- JSDoc 使用 `@param`, `@returns`, `@throws` 標籤，新寫或修改時以繁體中文撰寫
 
 ## General Coding Rules
 
@@ -246,7 +246,7 @@ labor-law-assistant/
 
 ### 註解與文件
 - 註解僅限於解釋「為什麼（Why）」而非「做什麼（What）」——程式碼本身應具備自解釋性
-- Docstring 用於定義函式的用途與契約（參數、回傳值），inline 註解用於解釋非直覺的邏輯；兩者皆以繁體中文撰寫
+- Docstring 用於定義函式的用途與契約（參數、回傳值），inline 註解用於解釋非直覺的邏輯；新寫或修改時以繁體中文撰寫
 - 除非使用者要求，否則不主動撰寫外部 Markdown 文件
 
 ### Lint 修復
