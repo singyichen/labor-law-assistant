@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
     inputs:
       pr_number:
-        description: "PR number to review（例如：42）"
+        description: "PR number to review (e.g. 42)"
         required: true
         type: string
 
@@ -20,9 +20,9 @@ jobs:
     name: Claude Code Review
     runs-on: ubuntu-latest
 
-    # 觸發條件：
-    # - workflow_dispatch：手動執行
-    # - issue_comment：PR 留言以 "/claude review" 開頭，且留言者為 collaborator
+    # Trigger conditions:
+    # - workflow_dispatch: manual execution
+    # - issue_comment: comment starts with "/claude review", author is collaborator or above
     if: |
       github.event_name == 'workflow_dispatch' ||
       (
@@ -42,20 +42,29 @@ jobs:
       issues: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (base branch)
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 合併兩種觸發來源的 PR number，透過 env var 橋接避免 expression injection
+      # Save prompt to /tmp before PR checkout to prevent PR author from overriding the prompt file.
+      # Note: this prompt lives in .github/prompts/ (not app/prompts/) because it is a CI tooling
+      # prompt for GitHub Actions, not an LLM prompt template used by the application runtime.
+      # The app/prompts/ rule in CLAUDE.md applies to RAG/LLM templates in the backend service.
+      # If prompt_file were read after gh pr checkout, the PR branch version would take effect,
+      # allowing the PR author to weaken or bypass review rules.
+      - name: Save prompt file before PR checkout
+        run: cp .github/prompts/claude-review.md /tmp/claude-review-prompt.md
+
+      # Merge PR number from both trigger sources via env var to prevent expression injection.
       - name: Checkout PR branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # workflow_dispatch：使用輸入的 pr_number；issue_comment：使用 issue number
+          # workflow_dispatch: use inputs.pr_number; issue_comment: use issue number
           PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || github.event.issue.number }}
         run: gh pr checkout "$PR_NUMBER"
 
-      # 回覆 PR 留言，告知 Claude 已開始審查（僅 issue_comment 觸發時）
+      # Post status comment to PR when triggered via issue_comment
       - name: Post "reviewing" comment
         if: github.event_name == 'issue_comment'
         env:
@@ -63,16 +72,16 @@ jobs:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
         run: |
           gh pr comment "$ISSUE_NUMBER" \
-            --body "🤖 Claude Code Review 已啟動，審查結果將在幾分鐘後更新…"
+            --body "Claude Code Review started. Results will be posted shortly."
 
       - name: Run Claude Code Review
-        # TODO: 釘到具體 commit SHA 以避免 supply chain 風險
-        # 升級前請至 https://github.com/anthropics/claude-code-action/releases 取得最新 SHA
-        # 並將 @beta 替換為 @<full-commit-sha>
+        # pin to SHA: tracked in issue #35
+        # https://github.com/singyichen/labor-law-assistant/issues/35
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          prompt_file: .github/prompts/claude-review.md
-          # Claude 只需讀取檔案與 PR diff，不需要寫入或執行指令
-          allowed_tools: "Read,Glob,Grep,Bash(git diff HEAD~1,git log --oneline -10)"
+          # Use the prompt saved before PR checkout to prevent prompt tampering.
+          prompt_file: /tmp/claude-review-prompt.md
+          # Allow read-only operations and full PR diff (base..HEAD covers all commits in the PR).
+          allowed_tools: "Read,Glob,Grep,Bash(git diff origin/main...HEAD,git log --oneline origin/main..HEAD)"
