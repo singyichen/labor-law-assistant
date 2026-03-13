@@ -187,7 +187,7 @@ labor-law-assistant/
 - 使用 TypeScript strict mode，禁止 `any` 類型
 - 優先使用 functional components + hooks
 - 使用 `interface` 定義 props，使用 `type` 定義聯合/交叉類型
-- JSDoc 使用 `@param`, `@returns`, `@throws` 標籤
+- JSDoc 使用 `@param`, `@returns`, `@throws` 標籤，以繁體中文撰寫
 
 ## General Coding Rules
 
@@ -246,7 +246,7 @@ labor-law-assistant/
 
 ### 註解與文件
 - 註解僅限於解釋「為什麼（Why）」而非「做什麼（What）」——程式碼本身應具備自解釋性
-- Docstring 用於定義函式的用途與契約（參數、回傳值），inline 註解用於解釋非直覺的邏輯
+- Docstring 用於定義函式的用途與契約（參數、回傳值），inline 註解用於解釋非直覺的邏輯；兩者皆以繁體中文撰寫
 - 除非使用者要求，否則不主動撰寫外部 Markdown 文件
 
 ### Lint 修復
