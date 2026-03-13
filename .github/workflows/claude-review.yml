@@ -22,13 +22,13 @@ jobs:
 
     # 觸發條件：
     # - workflow_dispatch：手動執行
-    # - issue_comment：PR 留言含 "/claude review"，且留言者為 collaborator
+    # - issue_comment：PR 留言以 "/claude review" 開頭，且留言者為 collaborator
     if: |
       github.event_name == 'workflow_dispatch' ||
       (
         github.event_name == 'issue_comment' &&
         github.event.issue.pull_request != null &&
-        contains(github.event.comment.body, '/claude review') &&
+        startsWith(github.event.comment.body, '/claude review') &&
         (
           github.event.comment.author_association == 'OWNER' ||
           github.event.comment.author_association == 'MEMBER' ||
@@ -47,34 +47,32 @@ jobs:
         with:
           fetch-depth: 0
 
-      # workflow_dispatch：根據輸入的 PR number checkout 對應分支
-      - name: Checkout PR branch（workflow_dispatch）
-        if: github.event_name == 'workflow_dispatch'
-        run: gh pr checkout "${{ inputs.pr_number }}"
+      # 合併兩種觸發來源的 PR number，透過 env var 橋接避免 expression injection
+      - name: Checkout PR branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # workflow_dispatch：使用輸入的 pr_number；issue_comment：使用 issue number
+          PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || github.event.issue.number }}
+        run: gh pr checkout "$PR_NUMBER"
 
-      # issue_comment：checkout 觸發留言所在的 PR 分支
-      - name: Checkout PR branch（issue_comment）
-        if: github.event_name == 'issue_comment'
-        run: gh pr checkout "${{ github.event.issue.number }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 回覆 PR 留言，告知 Claude 已開始審查
+      # 回覆 PR 留言，告知 Claude 已開始審查（僅 issue_comment 觸發時）
       - name: Post "reviewing" comment
         if: github.event_name == 'issue_comment'
-        run: |
-          gh pr comment "${{ github.event.issue.number }}" \
-            --body "🤖 Claude Code Review 已啟動，審查結果將在幾分鐘後更新…"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh pr comment "$ISSUE_NUMBER" \
+            --body "🤖 Claude Code Review 已啟動，審查結果將在幾分鐘後更新…"
 
       - name: Run Claude Code Review
+        # TODO: 釘到具體 commit SHA 以避免 supply chain 風險
+        # 升級前請至 https://github.com/anthropics/claude-code-action/releases 取得最新 SHA
+        # 並將 @beta 替換為 @<full-commit-sha>
         uses: anthropics/claude-code-action@beta
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           prompt_file: .github/prompts/claude-review.md
           # Claude 只需讀取檔案與 PR diff，不需要寫入或執行指令
-          allowed_tools: "Read,Glob,Grep,Bash(git diff HEAD~1:,git log --oneline -10)"
+          allowed_tools: "Read,Glob,Grep,Bash(git diff HEAD~1,git log --oneline -10)"
