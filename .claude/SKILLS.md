@@ -6,12 +6,21 @@ This document provides a comprehensive overview of all available Workflow Comman
 
 ```
 .claude/
-├── commands/              # Workflow Commands (orchestrate multiple skills)
+├── commands/              # Workflow Commands + Spec-Kit Commands
 │   ├── write.md           # New feature implementation
 │   ├── review.md          # Code review
 │   ├── test.md            # Test planning & execution
 │   ├── release.md         # Release preparation
-│   └── fix.md             # Bug fix
+│   ├── fix.md             # Bug fix
+│   ├── speckit.specify.md       # Create feature spec
+│   ├── speckit.plan.md          # Create implementation plan
+│   ├── speckit.tasks.md         # Generate task list
+│   ├── speckit.implement.md     # Execute implementation
+│   ├── speckit.constitution.md  # Update project constitution
+│   ├── speckit.clarify.md       # Clarify spec ambiguities
+│   ├── speckit.analyze.md       # Cross-artifact analysis
+│   ├── speckit.checklist.md     # Generate quality checklist
+│   └── speckit.taskstoissues.md # Convert tasks to GitHub Issues
 ├── skills/                # Knowledge-Domain Skills (28 total)
 │   ├── requirements-engineering/
 │   │   ├── user-story/
@@ -59,7 +68,7 @@ Workflow Commands orchestrate multiple skills in sequence to accomplish common d
 
 | Command | Purpose | Skills Orchestrated |
 |---------|---------|---------------------|
-| `/write` | Implement a new feature end-to-end | user-story → requirement-to-ac → ac-to-feature → bdd-feature → system-design → code-review |
+| `/write` | Implement a new feature end-to-end | speckit.specify → user-story → requirement-to-ac → ac-to-feature → bdd-feature → system-design → code-review |
 | `/review` | Comprehensive code review | code-review-checklist → code-review → code-smell → pr-review |
 | `/test` | Test planning and execution | test-plan → bdd-scenario → test-data-strategy → bdd-step-definition → test-coverage → test-tracking |
 | `/release` | Release readiness verification | regression-suite → traceability-matrix → test-coverage → quality-gate → test-report |
@@ -83,6 +92,39 @@ Workflow Commands orchestrate multiple skills in sequence to accomplish common d
 # Fix a bug in severance calculation
 /fix severance pay calculation returns incorrect result for part-time workers
 ```
+
+---
+
+## Spec-Kit Commands
+
+Spec-Kit commands provide a spec-driven development workflow powered by [GitHub spec-kit](https://github.com/github/spec-kit). Specs are stored in `specs/NNN-feature-name/` directories.
+
+| Command | Purpose | Example Usage |
+|---------|---------|---------------|
+| `/speckit.specify` | Create or update feature spec from natural language | `/speckit.specify overtime pay calculation` |
+| `/speckit.plan` | Create technical implementation plan from spec | `/speckit.plan` |
+| `/speckit.tasks` | Generate actionable task list from plan | `/speckit.tasks` |
+| `/speckit.implement` | Execute implementation following task list | `/speckit.implement` |
+| `/speckit.constitution` | Create or update project constitution | `/speckit.constitution` |
+| `/speckit.clarify` | Identify and resolve spec ambiguities (max 5 questions) | `/speckit.clarify` |
+| `/speckit.analyze` | Cross-artifact consistency analysis (read-only) | `/speckit.analyze` |
+| `/speckit.checklist` | Generate quality validation checklist | `/speckit.checklist security` |
+| `/speckit.taskstoissues` | Convert tasks.md to GitHub Issues | `/speckit.taskstoissues` |
+
+### Spec-Kit Workflow
+
+```
+/speckit.specify → /speckit.clarify → /speckit.plan → /speckit.tasks → /speckit.analyze → /speckit.implement
+                                                                              ↓
+                                                                    /speckit.checklist
+```
+
+### Related Files
+
+- **Constitution**: `.specify/memory/constitution.md` (6 core principles)
+- **Templates**: `.specify/templates/` (spec, plan, tasks, checklist templates)
+- **Scripts**: `scripts/bash/` (create-new-feature, check-prerequisites, etc.)
+- **Specs**: `specs/` (feature specifications, one directory per feature)
 
 ---
 
@@ -201,5 +243,5 @@ For the Labor Law Assistant project, these skills have special considerations fo
 
 ---
 
-*Last Updated: 2026-02-13*
-*Total Skills: 28 | Workflow Commands: 5*
+*Last Updated: 2026-03-12*
+*Total Skills: 28 | Workflow Commands: 5 | Spec-Kit Commands: 9*

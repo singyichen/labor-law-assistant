@@ -8,16 +8,16 @@ Implement a new feature by orchestrating skills from requirements through develo
 
 ## Workflow Steps
 
-### Step 0: Create Feature Spec
+### Step 0: Create Feature Spec (Spec-Kit)
 
-Before any implementation, create a specification document:
+Before any implementation, create a specification using spec-kit:
 
-1. Copy the template from `.claude/docs/specs/_spec-template.md`
-2. Fill in all sections based on `$ARGUMENTS`
-3. Save to `.claude/docs/specs/pending/<feature-slug>-spec.md`
+1. Execute `/speckit.specify $ARGUMENTS` to create `specs/NNN-feature-name/spec.md`
+2. (Optional) Execute `/speckit.plan` to create an implementation plan
+3. (Optional) Execute `/speckit.tasks` to generate a task list
 4. Present the spec to the user for review before proceeding
 
-This is enforced by the PreToolUse hook — source code files cannot be written until a spec exists in `pending/`.
+This is enforced by the PreToolUse hook — source code files cannot be written until a spec exists in `specs/`.
 
 ### Step 1: Define User Story
 
