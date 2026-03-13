@@ -130,6 +130,21 @@ labor-law-assistant/
 │   ├── components/          # React components
 │   ├── lib/                 # Utilities and API client
 │   └── stores/              # Zustand stores
+├── specs/                   # Feature specifications (spec-kit)
+│   └── NNN-feature-name/    # Each feature gets a numbered directory
+│       ├── spec.md           # Feature specification
+│       ├── plan.md           # Implementation plan
+│       ├── tasks.md          # Task breakdown
+│       ├── research.md       # Research notes
+│       ├── data-model.md     # Data model design
+│       ├── contracts/        # API contracts
+│       ├── checklists/       # Quality checklists
+│       └── .completed        # Marker file when feature is done
+├── .specify/                # Spec-kit configuration
+│   ├── memory/
+│   │   └── constitution.md  # Project constitution (6 core principles)
+│   └── templates/           # Spec-kit templates (spec, plan, tasks, checklist)
+├── scripts/bash/            # Spec-kit shell scripts
 ├── docs/                    # Project documentation
 │   ├── adr/                 # Architecture Decision Records (10 ADRs)
 │   ├── prd/                 # Product Requirements Document
@@ -139,14 +154,10 @@ labor-law-assistant/
 │   ├── testing/             # Testing strategy
 │   └── strategy/            # Strategic planning documents
 └── .claude/                 # Claude Code configuration
-    ├── commands/             # 5 workflow commands (write, review, test, fix, release)
+    ├── commands/             # 5 workflow + 9 spec-kit commands
     ├── skills/               # 28 knowledge-domain skills (6 categories)
     ├── agents/               # Agent definitions
-    ├── hooks/                # Git hooks (check-spec.sh, remind-spec.sh)
-    ├── docs/specs/           # Feature specifications
-    │   ├── _spec-template.md # Spec template (8 sections + appendices)
-    │   ├── pending/          # In-progress specs (enforced by PreToolUse hook)
-    │   └── completed/        # Archived specs
+    ├── hooks/                # Spec enforcement hooks (check-spec.sh, remind-spec.sh)
     ├── settings.json         # Hooks configuration (shared via git)
     ├── SKILLS.md             # Skills & commands directory
     └── AGENTS.md             # Agents reference
@@ -242,7 +253,7 @@ labor-law-assistant/
 - 安全性或錯誤預測類提示（如 memory leak、潛在 null pointer），應先向使用者回報再修改
 
 ### AI 工作流程
-- **Spec-first**：寫入程式碼前，必須先在 `.claude/docs/specs/pending/` 建立 spec 文件（PreToolUse hook 強制執行，無 spec 時程式碼寫入會被阻擋）；功能完成後將 spec 移至 `completed/`
+- **Spec-first**：寫入程式碼前，必須先透過 `/speckit.specify` 在 `specs/` 建立 spec 文件（PreToolUse hook 強制執行，無 spec 時程式碼寫入會被阻擋）；功能完成後執行 `touch specs/<feature-dir>/.completed` 標記完成
 - **最小增量**：每次僅修改必要部分，確保每次編輯後程式碼仍可運作
 - **環境感知**：修改前必先閱讀相關檔案內容，確保新程式碼與整體架構相容
 - **測試優先**：若專案已有 `/tests` 目錄，主動詢問是否同步撰寫或更新測試
@@ -330,15 +341,31 @@ labor-law-assistant/
 
 ## Workflow Commands
 
-本專案提供 5 個 workflow commands，每個 command 會自動組合多個 skill 執行。詳細說明見 [.claude/SKILLS.md](.claude/SKILLS.md)。
+本專案提供 5 個 workflow commands 和 9 個 spec-kit commands。詳細說明見 [.claude/SKILLS.md](.claude/SKILLS.md)。
+
+### Workflow Commands
 
 | Command | 用途 | 觸發時機 |
 |---------|------|---------|
-| `/write` | 新功能實作（需求 → 設計 → BDD → Code Review） | 開發新功能時 |
+| `/write` | 新功能實作（spec-kit → 需求 → 設計 → BDD → Code Review） | 開發新功能時 |
 | `/review` | 程式碼審查（checklist → review → code smell → PR review） | PR 前自動執行 |
 | `/test` | 測試規劃與執行（test plan → BDD → coverage → tracking） | 程式碼變更時自動執行 |
 | `/fix` | Bug 修復（defect report → 探索測試 → regression） | 修復 bug 時 |
 | `/release` | 發布準備（regression → traceability → quality gate） | 版本發布前 |
+
+### Spec-Kit Commands
+
+| Command | 用途 |
+|---------|------|
+| `/speckit.specify` | 從自然語言描述建立 feature spec |
+| `/speckit.plan` | 建立技術實作計畫 |
+| `/speckit.tasks` | 產生可執行的任務清單 |
+| `/speckit.implement` | 依任務清單執行實作 |
+| `/speckit.constitution` | 建立或更新專案 constitution |
+| `/speckit.clarify` | 識別並釐清 spec 中的模糊點 |
+| `/speckit.analyze` | 跨文件一致性分析 |
+| `/speckit.checklist` | 產生品質驗證清單 |
+| `/speckit.taskstoissues` | 將任務轉換為 GitHub Issues |
 
 ### 法律模組特殊要求
 

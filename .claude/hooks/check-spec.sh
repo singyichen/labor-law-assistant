@@ -2,8 +2,7 @@
 # check-spec.sh - PreToolUse hook to enforce "write docs before code"
 #
 # Blocks source code file creation/editing when no spec exists
-# in .claude/docs/specs/pending/. Allows documentation, config,
-# and infrastructure files unconditionally.
+# in specs/. Uses spec-kit convention: specs/NNN-feature-name/spec.md
 #
 # Exit behavior:
 #   exit 0 with no stdout   = allow
@@ -13,7 +12,7 @@
 set -euo pipefail
 
 # Deny message used when no spec is found
-readonly SPEC_REQUIRED_MSG='No spec found in .claude/docs/specs/pending/. Before writing source code, please create a spec document first.\n\n1. Use the template: .claude/docs/specs/_spec-template.md\n2. Save your spec to: .claude/docs/specs/pending/<feature-name>-spec.md\n3. Then retry your code changes.\n\nThis project follows a \"write docs before code\" workflow.'
+readonly SPEC_REQUIRED_MSG='No spec found in specs/. Before writing source code, please create a spec document first.\n\n1. Run /speckit.specify <feature description> to create a spec\n2. This will create specs/NNN-feature-name/spec.md\n3. Then retry your code changes.\n\nThis project follows a \"write docs before code\" workflow (spec-kit).'
 
 INPUT=$(cat)
 
@@ -43,19 +42,34 @@ if [[ "$FILE_PATH" == *"/docs/"* ]] || [[ "$FILE_PATH" == "docs/"* ]]; then
   exit 0
 fi
 
-# 3. Any markdown file anywhere
+# 3. Anything under specs/ directory (spec-kit spec files)
+if [[ "$FILE_PATH" == *"/specs/"* ]] || [[ "$FILE_PATH" == "specs/"* ]]; then
+  exit 0
+fi
+
+# 4. Anything under .specify/ directory (spec-kit config)
+if [[ "$FILE_PATH" == *"/.specify/"* ]] || [[ "$FILE_PATH" == ".specify/"* ]]; then
+  exit 0
+fi
+
+# 5. Anything under scripts/ directory (spec-kit scripts)
+if [[ "$FILE_PATH" == *"/scripts/"* ]] || [[ "$FILE_PATH" == "scripts/"* ]]; then
+  exit 0
+fi
+
+# 6. Any markdown file anywhere
 if [[ "$FILE_PATH" == *.md ]]; then
   exit 0
 fi
 
-# 4. Config files
+# 7. Config files
 case "$FILE_PATH" in
   *.json|*.yaml|*.yml|*.toml|*.cfg|*.ini|*.env|*.env.*)
     exit 0
     ;;
 esac
 
-# 5. Git scaffolding
+# 8. Git scaffolding
 BASENAME=$(basename "$FILE_PATH")
 case "$BASENAME" in
   .gitkeep|.gitignore|.gitattributes|.pre-commit-config.yaml)
@@ -63,7 +77,7 @@ case "$BASENAME" in
     ;;
 esac
 
-# 6. Build infrastructure files
+# 9. Build infrastructure files
 case "$BASENAME" in
   Dockerfile|Makefile|Procfile|Taskfile.yml)
     exit 0
@@ -73,16 +87,16 @@ if [[ "$BASENAME" == docker-compose* ]]; then
   exit 0
 fi
 
-# 7. Dependency / lock files
+# 10. Dependency / lock files
 case "$BASENAME" in
-  requirements*.txt|pyproject.toml|uv.lock|poetry.lock|Pipfile|Pipfile.lock|package.json|package-lock.json)
+  requirements*.txt|pyproject.toml|uv.lock|poetry.lock|Pipfile|Pipfile.lock|package.json|package-lock.json|pnpm-lock.yaml)
     exit 0
     ;;
 esac
 
-# --- Check for active specs in pending/ ---
+# --- Check for active specs in specs/ ---
 
-SPEC_DIR="$PROJECT_DIR/.claude/docs/specs/pending"
+SPEC_DIR="$PROJECT_DIR/specs"
 
 # Helper: output deny JSON and exit
 deny_no_spec() {
@@ -96,17 +110,24 @@ deny_no_spec() {
   exit 0
 }
 
-# If the pending directory does not exist, block
+# If the specs directory does not exist, block
 if [ ! -d "$SPEC_DIR" ]; then
   deny_no_spec
 fi
 
-# Count markdown files in pending/ (excluding .gitkeep)
-SPEC_COUNT=$(find "$SPEC_DIR" -maxdepth 1 -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
+# Search recursively for spec.md files, excluding completed specs (those with .completed marker)
+ACTIVE_SPECS=0
+for spec_file in $(find "$SPEC_DIR" -name "spec.md" -type f 2>/dev/null); do
+  spec_dir=$(dirname "$spec_file")
+  # Check if this spec directory has a .completed marker
+  if [ ! -f "$spec_dir/.completed" ]; then
+    ACTIVE_SPECS=$((ACTIVE_SPECS + 1))
+  fi
+done
 
-if [ "$SPEC_COUNT" -eq 0 ]; then
+if [ "$ACTIVE_SPECS" -eq 0 ]; then
   deny_no_spec
 fi
 
-# Spec exists in pending/ -- allow code writing
+# Active spec exists -- allow code writing
 exit 0
