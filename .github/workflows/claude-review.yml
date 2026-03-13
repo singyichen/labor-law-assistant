@@ -74,6 +74,18 @@ jobs:
           gh pr comment "$ISSUE_NUMBER" \
             --body "Claude Code Review started. Results will be posted shortly."
 
+      # Read trusted prompt content (saved before PR checkout) into a step output.
+      # Using direct_prompt bypasses the action's internal "@claude" trigger check —
+      # our workflow-level if: condition already handles authorization.
+      - name: Load prompt content
+        id: load_prompt
+        run: |
+          {
+            echo 'content<<PROMPT_EOF'
+            cat /tmp/claude-review-prompt.md
+            echo 'PROMPT_EOF'
+          } >> "$GITHUB_OUTPUT"
+
       - name: Run Claude Code Review
         # pin to SHA: tracked in issue #35
         # https://github.com/singyichen/labor-law-assistant/issues/35
@@ -81,7 +93,8 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Use the prompt saved before PR checkout to prevent prompt tampering.
-          prompt_file: /tmp/claude-review-prompt.md
+          # direct_prompt bypasses the action's internal trigger check (@claude mention).
+          # Prompt content was read from the base branch before PR checkout to prevent tampering.
+          direct_prompt: ${{ steps.load_prompt.outputs.content }}
           # Allow read-only operations and full PR diff (base..HEAD covers all commits in the PR).
           allowed_tools: "Read,Glob,Grep,Bash(git diff origin/main...HEAD,git log --oneline origin/main..HEAD)"
