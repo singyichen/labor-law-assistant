@@ -9,15 +9,17 @@ on:
 jobs:
   lint:
     name: Lint & Format
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
           enable-cache: true
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
@@ -26,32 +28,133 @@ jobs:
 
   typecheck:
     name: Type Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
           enable-cache: true
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
       - run: uv run mypy .
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
+  security:
+    name: Security Audit
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: backend
     steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v7
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
         with:
-          python-version: "3.12"
+          python-version: "3.12.13"
           enable-cache: true
           cache-dependency-glob: "backend/uv.lock"
       - run: uv sync --locked --dev
-      - run: uv run pytest -v --tb=short --cov=app --cov-report=term-missing
+      # CLAUDE.md 規定：Critical/High 漏洞阻斷部署
+      - name: Audit dependencies for known CVEs
+        run: uv export --frozen | uvx pip-audit -r /dev/stdin
+
+  test:
+    name: Test
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: astral-sh/setup-uv@e06108dd0aef18192324c70427afc47652e63a82  # v7
+        with:
+          python-version: "3.12.13"
+          enable-cache: true
+          cache-dependency-glob: "backend/uv.lock"
+      - run: uv sync --locked --dev
+      # -v --tb=short 已在 pyproject.toml [tool.pytest.ini_options].addopts 設定，不重複傳遞
+      - name: Run tests with coverage
+        run: uv run pytest --cov=app --cov-report=term-missing --cov-fail-under=80 --junit-xml=test-results.xml
+      - name: Upload test results
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
+        if: always()
+        with:
+          name: test-results
+          path: backend/test-results.xml
+
+  # Frontend CI：frontend/ 目錄建立後自動啟用（無需修改此 workflow）
+  frontend-lint:
+    name: Frontend Lint & Type Check
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    if: hashFiles('frontend/package.json') != ''
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm tsc --noEmit
+
+  frontend-security:
+    name: Frontend Security Audit
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    # CLAUDE.md 規定：pnpm audit Critical/High 漏洞阻斷部署
+    if: hashFiles('frontend/package.json') != ''
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm audit --audit-level high
+
+  frontend-test:
+    name: Frontend Test
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    if: hashFiles('frontend/package.json') != ''
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
+      - uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: frontend/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test

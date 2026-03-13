@@ -15,10 +15,15 @@ on:
         required: true
         type: string
 
+# 防止同一個 PR 同時跑多個 review，節省 API quota
+concurrency:
+  group: claude-review-pr-${{ github.event.issue.number || inputs.pr_number }}
+  cancel-in-progress: true
+
 jobs:
   claude-review:
     name: Claude Code Review
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     # Trigger conditions:
     # - workflow_dispatch: manual execution
@@ -43,7 +48,8 @@ jobs:
 
     steps:
       - name: Checkout repository (base branch)
-        uses: actions/checkout@v4
+        # fetch-depth: 0 是必要的，git diff origin/main...HEAD 需要完整 commit 歷史
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4
         with:
           fetch-depth: 0
 
@@ -55,6 +61,16 @@ jobs:
       # allowing the PR author to weaken or bypass review rules.
       - name: Save prompt file before PR checkout
         run: cp .github/prompts/claude-review.md /tmp/claude-review-prompt.md
+
+      # Validate PR number format before use to catch non-numeric input early
+      - name: Validate PR number
+        env:
+          PR_NUMBER: ${{ github.event_name == 'workflow_dispatch' && inputs.pr_number || github.event.issue.number }}
+        run: |
+          if ! [[ "$PR_NUMBER" =~ ^[0-9]+$ ]]; then
+            echo "Error: PR_NUMBER must be a positive integer, got: $PR_NUMBER" >&2
+            exit 1
+          fi
 
       # Merge PR number from both trigger sources via env var to prevent expression injection.
       - name: Checkout PR branch
@@ -87,9 +103,8 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Run Claude Code Review
-        # pin to SHA: tracked in issue #35
-        # https://github.com/singyichen/labor-law-assistant/issues/35
-        uses: anthropics/claude-code-action@beta
+        # pinned to SHA: issue #35 resolved
+        uses: anthropics/claude-code-action@28f83620103c48a57093dcc2837eec89e036bb9f  # beta 2026-03-13
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
