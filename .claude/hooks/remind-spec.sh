@@ -27,21 +27,25 @@ if [ ! -d "$SPEC_DIR" ]; then
 fi
 
 # Collect active (non-completed) spec directories
-PENDING_SPECS=""
+ACTIVE_COUNT=0
+PENDING_LINES=""
 while read -r spec_file; do
   spec_dir=$(dirname "$spec_file")
   if [ ! -f "$spec_dir/.completed" ]; then
     dir_name=$(basename "$spec_dir")
-    PENDING_SPECS="$PENDING_SPECS  - $dir_name\n"
+    # Use %s to treat dir_name as pure data (no format/escape interpretation)
+    PENDING_LINES="${PENDING_LINES}  - ${dir_name}
+"
+    ACTIVE_COUNT=$((ACTIVE_COUNT + 1))
   fi
 done < <(find "$SPEC_DIR" -name "spec.md" -type f 2>/dev/null)
 
-if [ -z "$PENDING_SPECS" ]; then
+if [ "$ACTIVE_COUNT" -eq 0 ]; then
   exit 0
 fi
 
 printf '[Spec Reminder] Active specs in specs/:\n'
-printf '%b' "$PENDING_SPECS"
-printf '\nIf a feature is complete, mark it with: touch specs/<feature-dir>/.completed\n'
+printf '%s\n' "$PENDING_LINES"
+printf 'If a feature is complete, mark it with: touch specs/<feature-dir>/.completed\n'
 
 exit 0
