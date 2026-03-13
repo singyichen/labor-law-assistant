@@ -165,8 +165,9 @@ labor-law-assistant/
 
 ## Communication
 
+- **繁體中文優先**：新產出的文件、註解、commit message、spec 文件皆以繁體中文撰寫；既有基礎設定檔（constitution、templates、scripts）維持英文
 - 對話總是用繁體中文回覆、唯有專有技術名詞以英文呈現（例如 P-value）
-- 程式碼內容（包括 string）以及註解總是以英文撰寫
+- 程式碼中的變數名、函數名、string literals 以英文撰寫；註解（含 docstring 與 inline comment）以繁體中文撰寫
 
 ## Code Style
 
@@ -174,7 +175,7 @@ labor-law-assistant/
 
 - 使用 4 格縮排
 - 變數命名使用 snake_case（禁止單字母變數）
-- 所有函數必須有 docstring（Google style：`Args:`, `Returns:`, `Raises:`），清楚定義用途、參數、依賴關係、和預期回傳類型
+- 所有函數必須有 docstring（Google style：`Args:`, `Returns:`, `Raises:`，以繁體中文撰寫），清楚定義用途、參數、依賴關係、和預期回傳類型
 - 使用 pytest 而非 unittest
 - 函數必須有完整的 type hints
 - 優先使用 f-string 而非 format()
@@ -195,7 +196,7 @@ labor-law-assistant/
 - 優先參考既有程式碼命名風格；如需優化，先完成功能後再向使用者建議
 
 ### 程式碼結構與品質
-- **設計原則**：遵循 SOLID（適用 service layer）、DRY、KISS 原則——當 DRY 導致過度抽象時，KISS 優先
+- **設計原則**：遵循 SOLID（適用 service layer）、DRY、KISS、YAGNI 原則——當 DRY 導致過度抽象時，KISS 優先；不為假設性未來需求編寫程式碼（YAGNI）
 - **單一職責**：每個函式只做一件事，每個模組只負責一個關注點
 - **穩健性**：關鍵邏輯必須包含基本的錯誤處理（Error Handling）與邊界檢查
 - **依賴管理**：優先使用現有函式庫，避免不必要的外部套件引入或重複安裝
@@ -253,11 +254,50 @@ labor-law-assistant/
 - 安全性或錯誤預測類提示（如 memory leak、潛在 null pointer），應先向使用者回報再修改
 
 ### AI 工作流程
-- **Spec-first**：寫入程式碼前，必須先透過 `/speckit.specify` 在 `specs/` 建立 spec 文件（PreToolUse hook 強制執行，無 spec 時程式碼寫入會被阻擋）；功能完成後執行 `touch specs/<feature-dir>/.completed` 標記完成
-- **最小增量**：每次僅修改必要部分，確保每次編輯後程式碼仍可運作
-- **環境感知**：修改前必先閱讀相關檔案內容，確保新程式碼與整體架構相容
-- **測試優先**：若專案已有 `/tests` 目錄，主動詢問是否同步撰寫或更新測試
-- **完成前清理**：任務結束前，必須刪除無用的冗餘代碼、偵錯用的 `print`/`console.log`，以及被駁回方案的遺留程式碼；允許保留 `# TODO` 但必須包含 issue number（如 `# TODO(#123): implement rate limiting`），不得保留無 context 的 `# FIXME`
+
+#### Spec-Kit Workflow
+
+新功能開發必須依照以下流程進行：
+
+```
+/speckit.specify <功能描述>  → specs/NNN-feature/spec.md（規格文件）
+/speckit.clarify             → 釐清規格疑問（可選）
+/speckit.plan                → specs/NNN-feature/plan.md（實作計畫）
+/speckit.tasks               → specs/NNN-feature/tasks.md（任務清單）
+/speckit.analyze             → 跨文件一致性分析（可選）
+/speckit.implement           → 執行實作
+```
+
+**重要規則**：
+- 不可跳過 `/speckit.specify` 直接寫程式碼（PreToolUse hook 強制執行，無 spec 時程式碼寫入會被阻擋）
+- 每個 spec 目錄包含：spec.md, plan.md, tasks.md, checklists/
+- 遵循 User Story 優先順序（P1 → P2 → P3）進行實作
+- 功能完成後執行 `touch specs/<feature-dir>/.completed` 標記完成
+
+#### Constitution Reference
+
+所有開發必須遵循 [constitution.md](.specify/memory/constitution.md) 的 6 個核心原則：
+1. **Legal Accuracy**（NON-NEGOTIABLE）— 法律內容必須引用具體法條，confidence < 0.7 強制免責聲明
+2. **Spec-First Development**（NON-NEGOTIABLE）— 先寫 spec 再寫程式碼
+3. **Privacy by Design** — PII 匿名化、session 24h TTL、禁止硬編碼機密
+4. **Communication Protocol** — 繁中優先（新文件、註解、commit message；基礎設定檔維持英文）、英文變數/函數名、MOL 官方術語
+5. **Incremental Delivery** — 最小增量、測試優先、完成前清理
+6. **Observability and Resilience** — structlog context、LLM fallback、streaming SLO
+
+#### AI Agent 行為準則
+
+**禁止事項**：
+1. 不要擅自修改 `pyproject.toml` 或 `package.json` 中的版本號，除非使用者明確要求
+2. 不要使用 `pip install` 直接安裝套件，Backend 使用 `uv add`，Frontend 使用 `pnpm add`
+3. 不要擅自變更 linter、formatter、測試框架等工具設定
+4. 不要在未讀取檔案的情況下提出修改建議
+
+**必須遵守**：
+1. Backend 所有 Python 指令必須透過 `uv run` 執行（如 `uv run pytest`、`uv run mypy .`）
+2. 修改前必先閱讀相關檔案內容，確保新程式碼與整體架構相容
+3. 若專案已有 `/tests` 目錄，主動詢問是否同步撰寫或更新測試
+4. 任務結束前清理：刪除 debug 用的 `print`/`console.log`、被駁回方案的遺留程式碼
+5. `# TODO` 必須包含 issue number（如 `# TODO(#123): implement rate limiting`），不得保留無 context 的 `# FIXME`
 
 ### API 設計規範
 - **版本控制**：MVP 階段（pre-v1.0）breaking change 可在 `/api/v1/` 內迭代，搭配 changelog 記錄；正式上線後 breaking change 必須增加版本號（`/api/v2/`），舊版本保留至少 3 個月並在 response header 加入 `X-Deprecation-Warning`
@@ -318,14 +358,20 @@ labor-law-assistant/
 
 ### PR 完整流程
 
-開發完成後，依序執行以下步驟（步驟 1-5 自動完成，步驟 6 Merge 需使用者確認）：
+開發完成後，依序執行以下步驟（步驟 1-6 自動完成，步驟 7 Merge 需使用者確認）：
 
 1. **Commit** — 使用正確的 type 提交變更
 2. **Code Review** — 執行 `/review` command 審查所有變更（組合 code-review-checklist → code-review → code-smell → pr-review 四個 skill），根據審查結果修正問題
 3. **測試驗證**（程式碼變更時）— 執行 `/test` command 驗證測試覆蓋率和品質（組合 test-plan → bdd-scenario → test-data-strategy → test-coverage 等六個 skill）
 4. **Push** — 推送到遠端分支
 5. **建立 PR** — Test Plan 中每個檢查項必須逐一驗證，已通過標記為 `[x]`，未通過保留 `[ ]` 並說明原因
-6. **Merge + 清理** — 確認使用者同意後執行以下步驟：
+6. **Qodo Code Review 修正** — PR 建立後 qodo-code-review bot 會自動審查，依以下流程處理：
+   1. 取得 review findings：`gh api repos/{owner}/{repo}/pulls/{number}/comments --jq '.[] | {path, line, body}'`
+   2. 逐一修正 findings，commit 並 push 到同一分支
+   3. 取得 review thread IDs：`gh api graphql` 查詢 `reviewThreads`
+   4. Resolve 已修正的 threads：`gh api graphql` 呼叫 `resolveReviewThread(input: {threadId: "PRRT_xxx"})`
+   5. 注意：push 後 bot 會重新審查，需確認新一輪無新 findings 後再 merge
+7. **Merge + 清理** — 確認使用者同意後執行以下步驟：
    1. `gh pr merge <number> --merge` — merge PR
    2. `git checkout main && git pull` — 切回 main 並拉取最新
    3. `git fetch --prune` — 清理已刪除的遠端分支追蹤

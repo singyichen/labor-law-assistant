@@ -29,7 +29,8 @@
 
 - User-facing conversation MUST use Traditional Chinese (zh-TW)
 - Technical terms retain English form (e.g., P-value, API, JWT)
-- All source code, comments, and string literals MUST be written in English
+- Variable names, function names, and string literals MUST be written in English; comments (docstrings and inline) MUST be written in Traditional Chinese
+- All newly produced documents, commit messages, and spec files MUST be written in Traditional Chinese; existing base config files (constitution, templates, scripts) remain in English
 - Legal terminology MUST use official MOL terminology
 
 ### V. Incremental Delivery
@@ -112,7 +113,7 @@
 ### Code Quality
 
 - All code MUST pass Ruff check (Python) and ESLint (TypeScript)
-- Python functions MUST have type hints and Google-style docstrings
+- Python functions MUST have type hints and Google-style docstrings (written in Traditional Chinese)
 - TypeScript strict mode; `any` type is prohibited
 - pre-commit hooks enforce `ruff format` and `ruff check --fix`
 
@@ -133,4 +134,4 @@
 
 ---
 
-**Version**: 1.0.0 | **Ratified**: 2026-03-12 | **Last Amended**: 2026-03-12
+**Version**: 1.1.0 | **Ratified**: 2026-03-12 | **Last Amended**: 2026-03-12
