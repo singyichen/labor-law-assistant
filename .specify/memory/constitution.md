@@ -10,12 +10,13 @@
 - Legal calculation errors are automatically classified as Critical severity
 - Fabricated legal information is strictly prohibited; when uncertain, the system MUST direct users to the 1955 hotline or qualified legal professionals
 
-### II. Spec-First Development (NON-NEGOTIABLE)
+### II. Spec-First Development (RECOMMENDED)
 
-- Source code files MUST NOT be written until a specification exists in `specs/`
+- New feature development SHOULD begin with a specification in `specs/`
 - Use `/speckit.specify` to create feature specs before implementation
 - Completed features are marked with `touch specs/<feature-dir>/.completed`
-- PreToolUse hook enforces this rule; code writes are blocked without an active spec
+- Stop hook provides reminders for active specs; enforcement relies on code review and developer discipline
+- Bug fixes and emergency hotfixes may skip spec creation based on complexity and urgency
 
 ### III. Privacy by Design
 
@@ -134,4 +135,4 @@
 
 ---
 
-**Version**: 1.1.0 | **Ratified**: 2026-03-12 | **Last Amended**: 2026-03-12
+**Version**: 1.2.0 | **Ratified**: 2026-03-12 | **Last Amended**: 2026-03-17
