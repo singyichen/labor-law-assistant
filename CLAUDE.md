@@ -157,7 +157,7 @@ labor-law-assistant/
     ├── commands/             # 5 workflow + 9 spec-kit commands
     ├── skills/               # 28 knowledge-domain skills (6 categories)
     ├── agents/               # Agent definitions
-    ├── hooks/                # Spec enforcement hooks (check-spec.sh, remind-spec.sh)
+    ├── hooks/                # Spec reminder hooks (remind-spec.sh)
     ├── settings.json         # Hooks configuration (shared via git)
     ├── SKILLS.md             # Skills & commands directory
     └── AGENTS.md             # Agents reference
@@ -269,16 +269,17 @@ labor-law-assistant/
 ```
 
 **重要規則**：
-- 不可跳過 `/speckit.specify` 直接寫程式碼（PreToolUse hook 強制執行，無 spec 時程式碼寫入會被阻擋）
+- 新功能開發建議先使用 `/speckit.specify` 建立 spec（Stop hook 會在對話結束時提醒 active specs）
 - 每個 spec 目錄包含：spec.md, plan.md, tasks.md, checklists/
 - 遵循 User Story 優先順序（P1 → P2 → P3）進行實作
 - 功能完成後執行 `touch specs/<feature-dir>/.completed` 標記完成
+- Bug 修復和緊急 hotfix 可視複雜度決定是否需要建立 spec
 
 #### Constitution Reference
 
 所有開發必須遵循 [constitution.md](.specify/memory/constitution.md) 的 6 個核心原則：
 1. **Legal Accuracy**（NON-NEGOTIABLE）— 法律內容必須引用具體法條，confidence < 0.7 強制免責聲明
-2. **Spec-First Development**（NON-NEGOTIABLE）— 先寫 spec 再寫程式碼
+2. **Spec-First Development**（RECOMMENDED）— 新功能開發建議先寫 spec，bug 修復可視情況決定
 3. **Privacy by Design** — PII 匿名化、session 24h TTL、禁止硬編碼機密
 4. **Communication Protocol** — 繁中優先（新文件、註解、commit message；基礎設定檔維持英文）、英文變數/函數名、MOL 官方術語
 5. **Incremental Delivery** — 最小增量、測試優先、完成前清理
