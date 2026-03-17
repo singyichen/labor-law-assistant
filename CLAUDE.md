@@ -257,7 +257,7 @@ labor-law-assistant/
 
 #### Spec-Kit Workflow
 
-新功能開發必須依照以下流程進行：
+新功能開發建議遵循以下流程：
 
 ```
 /speckit.specify <功能描述>  → specs/NNN-feature/spec.md（規格文件）
